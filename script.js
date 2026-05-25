@@ -50,6 +50,7 @@ const translations = {
     project2Text:
       "Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.",
     contactLabel: "Contact",
+    followLabel: "Follow",
     contactTitle: "Ask me about robotics, control systems, AI tools, and LLMs.",
     footerText: "© 2026 Dingshuai Yang. Robotics, Control Engineering, AI.",
     backToTop: "Back to top"
@@ -105,6 +106,7 @@ const translations = {
     project2Text:
       "Inhalt: Laborstationen sind Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension und Magnetic Levitation System. Das Labor wendet Grundlagen aus Regelungstechnik A / dynamical systems and control auf Modellierung, Simulation, Reglerentwurf und experimentelle Beobachtung an.",
     contactLabel: "Kontakt",
+    followLabel: "Folgen",
     contactTitle: "Sprich mich an über Robotik, Control Systems, KI-Tools und LLMs.",
     footerText: "© 2026 Dingshuai Yang. Robotik, Regelungstechnik, KI.",
     backToTop: "Nach oben"
@@ -159,6 +161,7 @@ const translations = {
     project2Text:
       "内容：实验站点包括 Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension 和 Magnetic Levitation System。课程实验围绕自动控制基础，将 Regelungstechnik A / dynamical systems and control 的理论用于建模、仿真、控制器设计和实验观察。",
     contactLabel: "联系",
+    followLabel: "关注",
     contactTitle: "欢迎交流 Robotics、Control Systems、AI Tools 与 LLMs。",
     footerText: "© 2026 杨定帅. Robotics, Control Engineering, AI.",
     backToTop: "回到顶部"
@@ -214,6 +217,7 @@ const translations = {
     project2Text:
       "内容：実験ステーションは Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension、Magnetic Levitation System です。Regelungstechnik A / dynamical systems and control の基礎を、モデリング、シミュレーション、制御器設計、実験観察に応用しました。",
     contactLabel: "連絡先",
+    followLabel: "フォロー",
     contactTitle: "Robotics、Control Systems、AI Tools、LLMs について気軽に連絡してください。",
     footerText: "© 2026 ディンシュアイ・ヤン. Robotics, Control Engineering, AI.",
     backToTop: "上に戻る"
