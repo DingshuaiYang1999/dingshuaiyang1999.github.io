@@ -179,10 +179,11 @@ a {
 
 .hero-name {
   margin: 0;
+  padding-bottom: 0.12em;
   font-size: clamp(56px, 8.5vw, 110px);
   font-weight: 900;
   letter-spacing: -0.02em;
-  line-height: 1;
+  line-height: 1.1;
   background: linear-gradient(135deg, #1f7a5a 0%, #315f8c 60%, #d66b3d 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -579,6 +580,11 @@ a {
   height: 100%;
   display: block;
   object-fit: contain;
+}
+
+.contact-glyph.brand-x,
+.contact-glyph.brand-github {
+  opacity: 1;
 }
 
 
