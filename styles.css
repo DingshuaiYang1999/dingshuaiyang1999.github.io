@@ -583,8 +583,14 @@ a {
 }
 
 .contact-glyph.brand-x,
-.contact-glyph.brand-github {
+.contact-glyph.brand-github,
+.contact-glyph.brand-linkedin {
   opacity: 1;
+}
+
+.contact-glyph.brand-linkedin {
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 
