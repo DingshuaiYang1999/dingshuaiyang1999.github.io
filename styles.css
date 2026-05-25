@@ -581,13 +581,6 @@ a {
   object-fit: contain;
 }
 
-.contact-glyph.linkedin-glyph {
-  opacity: 1;
-  width: 26px;
-  height: 26px;
-  border-radius: 4px;
-  overflow: hidden;
-}
 
 .contact-link {
   display: flex;
