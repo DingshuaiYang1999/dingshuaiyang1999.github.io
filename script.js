@@ -52,7 +52,7 @@ const translations = {
     contactLabel: "Contact",
     followLabel: "Follow",
     contactTitle: "Ask me about robotics, control systems, AI tools, and LLMs.",
-    footerText: "© 2026 Dingshuai Yang. Robotics, Control Engineering, AI.",
+    footerText: "© 2026 Dingshuai Yang.",
     backToTop: "Back to top"
   },
   de: {
@@ -108,7 +108,7 @@ const translations = {
     contactLabel: "Kontakt",
     followLabel: "Folgen",
     contactTitle: "Sprich mich an über Robotik, Control Systems, KI-Tools und LLMs.",
-    footerText: "© 2026 Dingshuai Yang. Robotik, Regelungstechnik, KI.",
+    footerText: "© 2026 Dingshuai Yang.",
     backToTop: "Nach oben"
   },
   zh: {
@@ -163,7 +163,7 @@ const translations = {
     contactLabel: "联系",
     followLabel: "关注",
     contactTitle: "欢迎交流 Robotics、Control Systems、AI Tools 与 LLMs。",
-    footerText: "© 2026 杨定帅. Robotics, Control Engineering, AI.",
+    footerText: "© 2026 杨定帅.",
     backToTop: "回到顶部"
   },
   ja: {
@@ -219,7 +219,7 @@ const translations = {
     contactLabel: "連絡先",
     followLabel: "フォロー",
     contactTitle: "Robotics、Control Systems、AI Tools、LLMs について気軽に連絡してください。",
-    footerText: "© 2026 ディンシュアイ・ヤン. Robotics, Control Engineering, AI.",
+    footerText: "© 2026 ディンシュアイ・ヤン.",
     backToTop: "上に戻る"
   }
 };
