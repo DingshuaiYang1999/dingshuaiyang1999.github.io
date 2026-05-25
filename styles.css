@@ -169,6 +169,62 @@ a {
   font-size: clamp(44px, 7vw, 82px);
 }
 
+.hero-greeting {
+  margin: 8px 0 6px;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+.hero-name {
+  margin: 0;
+  font-size: clamp(56px, 8.5vw, 110px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(135deg, #1f7a5a 0%, #315f8c 60%, #d66b3d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0 0;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: 1.5px solid;
+}
+
+.pill-robotics {
+  color: #1f7a5a;
+  border-color: rgba(31, 122, 90, 0.45);
+  background: rgba(31, 122, 90, 0.08);
+}
+
+.pill-control {
+  color: #315f8c;
+  border-color: rgba(49, 95, 140, 0.45);
+  background: rgba(49, 95, 140, 0.08);
+}
+
+.pill-ai {
+  color: #c2531e;
+  border-color: rgba(214, 107, 61, 0.5);
+  background: rgba(214, 107, 61, 0.1);
+}
+
 .hero-text {
   max-width: 640px;
   margin: 26px 0 0;
@@ -527,6 +583,10 @@ a {
 
 .contact-glyph.linkedin-glyph {
   opacity: 1;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .contact-link {
