@@ -517,10 +517,16 @@ a {
   transform: translateY(-1px);
 }
 
-.contact-glyph svg {
+.contact-glyph svg,
+.contact-glyph img {
   width: 100%;
   height: 100%;
   display: block;
+  object-fit: contain;
+}
+
+.contact-glyph.linkedin-glyph {
+  opacity: 1;
 }
 
 .contact-link {
