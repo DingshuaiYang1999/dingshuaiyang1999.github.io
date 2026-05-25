@@ -461,15 +461,38 @@ a {
 
 .contact-section {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 32px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
   align-items: center;
-  padding: 42px;
+  padding: 56px 48px;
+}
+
+.contact-section h2 {
+  font-size: clamp(26px, 2.6vw, 38px);
+  max-width: 22ch;
+  line-height: 1.2;
 }
 
 .contact-actions {
   justify-content: flex-end;
+  align-content: center;
   margin-top: 0;
+  gap: 14px;
+}
+
+.contact-actions .button {
+  flex: 0 1 auto;
+}
+
+@media (max-width: 900px) {
+  .contact-section {
+    grid-template-columns: 1fr;
+    padding: 40px 28px;
+    gap: 28px;
+  }
+  .contact-actions {
+    justify-content: flex-start;
+  }
 }
 
 .site-footer {

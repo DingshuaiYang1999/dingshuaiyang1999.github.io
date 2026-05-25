@@ -16,11 +16,11 @@ const translations = {
     introLine: "Personal website",
     heroTitle: "Hi, I am Dingshuai Yang. I work across robotics, control engineering, and AI.",
     heroText:
-      "I am an M.Sc. Mechatronics student at Friedrich-Alexander-Universität Erlangen-Nürnberg, focused on Robotics, Control Engineering, Computer Science, AI, and LLMs.",
+      "I am an M.Sc. Mechatronics student at Friedrich-Alexander University Erlangen-Nürnberg, focused on Robotics, Control Engineering, Computer Science, AI, and LLMs.",
     viewProjects: "View projects",
     contactMe: "Contact me",
     profileTitle: "Mechatronics student focused on robotics and control",
-    profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
+    profileRole: "Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     focusLabel: "Focus",
     focusValue: "Robotics, Control Engineering, Computer Science, AI & LLMs",
     statusLabel: "Currently learning",
@@ -28,7 +28,7 @@ const translations = {
     aboutLabel: "About",
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
     aboutText1:
-      "I earned a B.Eng. in Materials Processing and Controlling Engineering from Guangdong University of Technology and now study M.Sc. Mechatronics at Friedrich-Alexander-Universität Erlangen-Nürnberg.",
+      "I earned a B.Eng. in Materials Processing and Controlling Engineering from Guangdong University of Technology and now study M.Sc. Mechatronics at Friedrich-Alexander University Erlangen-Nürnberg.",
     aboutText2:
       "My interests span Robotics, Control Systems, Computer Science, AI tools, and Large Language Models. I am currently building personal projects in AI and automation.",
     skillsLabel: "Skills",
