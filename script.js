@@ -46,7 +46,7 @@ const translations = {
     project1Text:
       "Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: kick-off 15.04.2026 · Wednesday 13:00-18:00 · room 02.028",
+    project2Timeline: "Time line: 15.04.2026 - 01.07.2026 · Wednesday 13:00-18:00 · room 02.028",
     project2Text:
       "Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.",
     contactLabel: "Contact",
@@ -101,7 +101,7 @@ const translations = {
     project1Text:
       "Inhalt: Static truss, Dynamic Crane, Measurement Data Analysis und Optimisation of the truss structure. Das Labor nutzte MATLAB für Strukturmechanik-Modellierung, ODE-Simulation, FFT-Signalanalyse, symbolische Berechnung und Optimierung.",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: Kick-off 15.04.2026 · Mittwoch 13:00-18:00 · Raum 02.028",
+    project2Timeline: "Time line: 15.04.2026 - 01.07.2026 · Mittwoch 13:00-18:00 · Raum 02.028",
     project2Text:
       "Inhalt: Laborstationen sind Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension und Magnetic Levitation System. Das Labor wendet Grundlagen aus Regelungstechnik A / dynamical systems and control auf Modellierung, Simulation, Reglerentwurf und experimentelle Beobachtung an.",
     contactLabel: "Kontakt",
@@ -155,7 +155,7 @@ const translations = {
     project1Text:
       "内容：Static truss、Dynamic Crane、Measurement Data Analysis 和 Optimisation of the truss structure。实验使用 MATLAB 完成结构力学建模、ODE 仿真、FFT 信号分析、符号计算和优化任务。",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: Kick-off 15.04.2026 · Wednesday 13:00-18:00 · room 02.028",
+    project2Timeline: "Time line: 15.04.2026 - 01.07.2026 · Wednesday 13:00-18:00 · room 02.028",
     project2Text:
       "内容：实验站点包括 Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension 和 Magnetic Levitation System。课程实验围绕自动控制基础，将 Regelungstechnik A / dynamical systems and control 的理论用于建模、仿真、控制器设计和实验观察。",
     contactLabel: "联系",
@@ -210,7 +210,7 @@ const translations = {
     project1Text:
       "内容：Static truss、Dynamic Crane、Measurement Data Analysis、Optimisation of the truss structure。MATLAB を用いて構造力学モデリング、ODE シミュレーション、FFT 信号解析、記号計算、最適化を行いました。",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: kick-off 15.04.2026 · Wednesday 13:00-18:00 · room 02.028",
+    project2Timeline: "Time line: 15.04.2026 - 01.07.2026 · Wednesday 13:00-18:00 · room 02.028",
     project2Text:
       "内容：実験ステーションは Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension、Magnetic Levitation System です。Regelungstechnik A / dynamical systems and control の基礎を、モデリング、シミュレーション、制御器設計、実験観察に応用しました。",
     contactLabel: "連絡先",
