@@ -1,18 +1,20 @@
 :root {
   color-scheme: light;
-  --bg: #f6f8f4;
+  --bg: #f7f6f2;
   --surface: #ffffff;
-  --ink: #1b2522;
-  --muted: #66736f;
-  --line: #dce4df;
-  --accent: #1f7a5a;
-  --accent-strong: #125a43;
-  --accent-soft: #dceee6;
-  --warm: #d66b3d;
-  --blue: #315f8c;
-  --shadow: 0 18px 50px rgba(27, 37, 34, 0.09);
-  --radius: 8px;
+  --ink: #14201b;
+  --muted: #6b7670;
+  --line: #e3e6e0;
+  --line-strong: #c9d0c8;
+  --accent: #2f5d4f;
+  --accent-strong: #1c4034;
+  --accent-soft: #e6ece9;
+  --warm: #b86a3f;
+  --blue: #355c81;
+  --shadow: 0 14px 40px rgba(20, 32, 27, 0.06);
+  --radius: 6px;
   --max: 1120px;
+  --font-serif: "Source Serif 4", "Source Serif Pro", "Iowan Old Style", "Apple Garamond", Garamond, "Times New Roman", serif;
 }
 
 * {
@@ -149,9 +151,13 @@ a {
 .intro-line,
 .section-label {
   margin: 0 0 14px;
-  color: var(--accent-strong);
-  font-size: 13px;
-  font-weight: 800;
+  color: var(--accent);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: none;
 }
 
 .hero h1,
@@ -160,9 +166,9 @@ a {
 .contact-section h2 {
   margin: 0;
   max-width: 780px;
-  font-weight: 850;
-  letter-spacing: 0;
-  line-height: 1.08;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
 }
 
 .hero h1 {
@@ -170,60 +176,67 @@ a {
 }
 
 .hero-greeting {
-  margin: 8px 0 6px;
-  font-size: clamp(20px, 2vw, 28px);
-  font-weight: 600;
+  margin: 8px 0 4px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 400;
   color: var(--muted);
   letter-spacing: 0;
 }
 
 .hero-name {
   margin: 0;
-  padding-bottom: 0.12em;
-  font-size: clamp(56px, 8.5vw, 110px);
-  font-weight: 900;
-  letter-spacing: -0.02em;
+  padding-bottom: 0.08em;
+  font-size: clamp(52px, 7.5vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
   line-height: 1.1;
-  background: linear-gradient(135deg, #1f7a5a 0%, #315f8c 60%, #d66b3d 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ink);
+}
+
+.hero-name::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 2px;
+  background: var(--accent);
+  margin-top: 18px;
 }
 
 .hero-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 22px 0 0;
+  gap: 0;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  letter-spacing: 0.02em;
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  border: 1.5px solid;
+  padding: 0;
+  font-weight: 500;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: 0;
 }
 
-.pill-robotics {
-  color: #1f7a5a;
-  border-color: rgba(31, 122, 90, 0.45);
-  background: rgba(31, 122, 90, 0.08);
+.pill + .pill::before {
+  content: "·";
+  margin: 0 12px;
+  color: var(--line-strong);
 }
 
-.pill-control {
-  color: #315f8c;
-  border-color: rgba(49, 95, 140, 0.45);
-  background: rgba(49, 95, 140, 0.08);
-}
-
+.pill-robotics,
+.pill-control,
 .pill-ai {
-  color: #c2531e;
-  border-color: rgba(214, 107, 61, 0.5);
-  background: rgba(214, 107, 61, 0.1);
+  color: var(--muted);
+  border: none;
+  background: none;
 }
 
 .hero-text {
