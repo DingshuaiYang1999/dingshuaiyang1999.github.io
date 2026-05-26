@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cube</title>
+    <style>
+      :root {
+        --bg-top: #06121f;
+        --bg-mid: #102f48;
+        --bg-bottom: #e5b66f;
+        --glow-a: rgba(104, 214, 255, 0.42);
+        --glow-b: rgba(255, 165, 76, 0.28);
+        --face-border: rgba(255, 255, 255, 0.16);
+        --text: #f7efe1;
+        --metal-a: #d9e7f2;
+        --metal-b: #6889a7;
+        --joint-core: #ffbf5e;
+        --cube-size: 11rem;
+        --half-cube: 5.5rem;
+        --base-tilt-x: -25deg;
+        --base-tilt-y: 35deg;
+        --pointer-tilt-x: 0deg;
+        --pointer-tilt-y: 0deg;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 20% 15%, rgba(130, 214, 255, 0.25), transparent 28%),
+          radial-gradient(circle at 80% 22%, rgba(255, 190, 118, 0.24), transparent 22%),
+          linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 54%, var(--bg-bottom) 100%);
+      }
+
+      .stage {
+        position: relative;
+        width: min(100vw, 54rem);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        perspective: 1200px;
+        isolation: isolate;
+      }
+
+      .stage::before,
+      .stage::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(48px);
+        z-index: -2;
+      }
+
+      .stage::before {
+        width: 20rem;
+        height: 20rem;
+        background: var(--glow-a);
+        top: 12%;
+        left: 12%;
+      }
+
+      .stage::after {
+        width: 18rem;
+        height: 18rem;
+        background: var(--glow-b);
+        right: 14%;
+        bottom: 14%;
+      }
+
+      .scene {
+        position: relative;
+        width: 22rem;
+        height: 22rem;
+        display: grid;
+        place-items: center;
+        transform-style: preserve-3d;
+        overflow: visible;
+      }
+
+      .cube-wrap {
+        position: relative;
+        width: var(--cube-size);
+        height: var(--cube-size);
+        transform-style: preserve-3d;
+        transform:
+          rotateX(calc(var(--base-tilt-x) + var(--pointer-tilt-x)))
+          rotateY(calc(var(--base-tilt-y) + var(--pointer-tilt-y)));
+        animation: orbit 14s linear infinite;
+      }
+
+      .cube {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: drift 6s ease-in-out infinite;
+      }
+
+      .face {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--face-border);
+        box-shadow:
+          inset 0 0 1.2rem rgba(255, 255, 255, 0.12),
+          0 0 1.6rem rgba(7, 15, 27, 0.2);
+        backdrop-filter: blur(6px);
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .front {
+        background: linear-gradient(135deg, rgba(133, 229, 255, 0.86), rgba(10, 115, 176, 0.72));
+        transform: translateZ(var(--half-cube));
+      }
+
+      .back {
+        background: linear-gradient(135deg, rgba(23, 51, 88, 0.84), rgba(7, 18, 35, 0.82));
+        transform: rotateY(180deg) translateZ(var(--half-cube));
+      }
+
+      .right {
+        background: linear-gradient(135deg, rgba(255, 190, 109, 0.88), rgba(184, 95, 24, 0.72));
+        transform: rotateY(90deg) translateZ(var(--half-cube));
+      }
+
+      .left {
+        background: linear-gradient(135deg, rgba(255, 113, 134, 0.82), rgba(147, 24, 72, 0.72));
+        transform: rotateY(-90deg) translateZ(var(--half-cube));
+      }
+
+      .top {
+        background: linear-gradient(135deg, rgba(255, 247, 189, 0.94), rgba(255, 188, 71, 0.8));
+        transform: rotateX(90deg) translateZ(var(--half-cube));
+        color: #342100;
+      }
+
+      .bottom {
+        background: linear-gradient(135deg, rgba(31, 46, 80, 0.9), rgba(9, 17, 31, 0.92));
+        transform: rotateX(-90deg) translateZ(var(--half-cube));
+      }
+
+      .shadow {
+        position: absolute;
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(6, 14, 24, 0.45) 0%, rgba(6, 14, 24, 0.08) 58%, transparent 74%);
+        transform: rotateX(90deg) translateZ(-8rem);
+        filter: blur(10px);
+        animation: shadow-pulse 6s ease-in-out infinite;
+      }
+
+      .grid {
+        position: absolute;
+        width: 28rem;
+        height: 28rem;
+        border-radius: 50%;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 2rem 2rem;
+        transform: rotateX(90deg) translateZ(-8.8rem);
+        opacity: 0.45;
+        mask-image: radial-gradient(circle, black 40%, transparent 75%);
+      }
+
+      .robot-arm {
+        position: absolute;
+        left: -4.25rem;
+        bottom: 4rem;
+        width: 15rem;
+        height: 10rem;
+        transform: translateZ(4rem) rotateZ(-8deg);
+        transform-style: preserve-3d;
+        filter: drop-shadow(-0.25rem 0.9rem 1.4rem rgba(5, 11, 20, 0.35));
+        pointer-events: none;
+      }
+
+      .robot-arm,
+      .robot-arm * {
+        transform-style: preserve-3d;
+      }
+
+      .arm-platform {
+        position: absolute;
+        left: 0.35rem;
+        bottom: -0.2rem;
+        width: 5.15rem;
+        height: 1.7rem;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(217, 231, 242, 0.92), rgba(79, 105, 133, 0.96));
+        box-shadow:
+          inset 0 0.1rem 0.25rem rgba(255, 255, 255, 0.45),
+          0 0.9rem 1.3rem rgba(4, 10, 19, 0.22);
+      }
+
+      .arm-pedestal {
+        position: absolute;
+        left: 1.85rem;
+        bottom: 1.1rem;
+        width: 1.8rem;
+        height: 2.6rem;
+        border-radius: 1rem;
+        background: linear-gradient(180deg, rgba(235, 243, 249, 0.96), rgba(101, 123, 147, 0.98));
+      }
+
+      .arm-pedestal::after {
+        content: "";
+        position: absolute;
+        inset: auto 0.3rem -0.45rem 0.3rem;
+        height: 0.55rem;
+        border-radius: 999px;
+        background: rgba(255, 191, 94, 0.52);
+        filter: blur(0.15rem);
+      }
+
+      .joint {
+        position: absolute;
+        width: 1.55rem;
+        height: 1.55rem;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 35% 35%, rgba(255, 244, 210, 0.95) 0%, rgba(255, 191, 94, 0.88) 34%, rgba(96, 67, 15, 0.92) 72%);
+        box-shadow:
+          0 0 0 0.22rem rgba(15, 30, 50, 0.68),
+          0 0 1rem rgba(255, 191, 94, 0.22);
+      }
+
+      .arm-shoulder {
+        left: 3.05rem;
+        bottom: 2.2rem;
+        animation: shoulder-reach 6.2s ease-in-out infinite;
+        transform-origin: 0.78rem 0.78rem;
+      }
+
+      .segment {
+        position: absolute;
+        left: 0.72rem;
+        top: 0.3rem;
+        height: 0.92rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: linear-gradient(180deg, rgba(231, 239, 246, 0.96), rgba(93, 122, 150, 0.94));
+        box-shadow: inset 0 0.08rem 0.18rem rgba(255, 255, 255, 0.4);
+      }
+
+      .segment::after {
+        content: "";
+        position: absolute;
+        inset: 0.16rem 0.55rem;
+        border-radius: inherit;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04));
+      }
+
+      .upper-arm {
+        width: 5.4rem;
+      }
+
+      .arm-elbow {
+        right: -0.55rem;
+        top: 50%;
+        transform: translateY(-50%) rotate(36deg);
+        transform-origin: 0.78rem 0.78rem;
+        animation: elbow-fold 6.2s ease-in-out infinite;
+      }
+
+      .forearm {
+        width: 4.7rem;
+      }
+
+      .arm-wrist {
+        right: -0.35rem;
+        top: 50%;
+        transform: translateY(-50%) rotate(22deg);
+        transform-origin: 0.78rem 0.78rem;
+        animation: wrist-turn 6.2s ease-in-out infinite;
+      }
+
+      .hand {
+        position: absolute;
+        left: 0.62rem;
+        top: 0.47rem;
+        width: 2rem;
+        height: 0.44rem;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(235, 243, 249, 0.96), rgba(100, 124, 150, 0.96));
+      }
+
+      .claw {
+        position: absolute;
+        right: -0.2rem;
+        width: 1.2rem;
+        height: 0.28rem;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(255, 248, 219, 0.96), rgba(255, 191, 94, 0.88));
+        transform-origin: 0 50%;
+      }
+
+      .claw.top {
+        top: -0.18rem;
+        transform: rotate(-34deg);
+      }
+
+      .claw.bottom {
+        bottom: -0.18rem;
+        transform: rotate(34deg);
+      }
+
+
+      .caption {
+        position: absolute;
+        bottom: max(2rem, 6vh);
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(90vw, 28rem);
+        text-align: center;
+      }
+
+      .caption h1 {
+        margin: 0;
+        font-size: clamp(2.5rem, 7vw, 4.25rem);
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+
+      .caption p {
+        margin: 0.75rem 0 0;
+        font-size: 0.95rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(247, 239, 225, 0.84);
+      }
+
+      @keyframes orbit {
+        from {
+          transform:
+            rotateX(calc(var(--base-tilt-x) + var(--pointer-tilt-x)))
+            rotateY(calc(var(--base-tilt-y) + var(--pointer-tilt-y)));
+        }
+
+        to {
+          transform:
+            rotateX(calc(var(--base-tilt-x) + var(--pointer-tilt-x)))
+            rotateY(calc(395deg + var(--pointer-tilt-y)));
+        }
+      }
+
+      @keyframes drift {
+        0%,
+        100% {
+          transform: translateY(-0.35rem);
+        }
+
+        50% {
+          transform: translateY(0.55rem);
+        }
+      }
+
+      @keyframes shadow-pulse {
+        0%,
+        100% {
+          opacity: 0.42;
+          transform: rotateX(90deg) translateZ(-8rem) scale(0.98);
+        }
+
+        50% {
+          opacity: 0.28;
+          transform: rotateX(90deg) translateZ(-8rem) scale(0.84);
+        }
+      }
+
+      @keyframes shoulder-reach {
+        0%,
+        100% {
+          transform: rotate(-24deg);
+        }
+
+        50% {
+          transform: rotate(-6deg);
+        }
+      }
+
+      @keyframes elbow-fold {
+        0%,
+        100% {
+          transform: translateY(-50%) rotate(42deg);
+        }
+
+        50% {
+          transform: translateY(-50%) rotate(18deg);
+        }
+      }
+
+      @keyframes wrist-turn {
+        0%,
+        100% {
+          transform: translateY(-50%) rotate(26deg);
+        }
+
+        50% {
+          transform: translateY(-50%) rotate(8deg);
+        }
+      }
+
+      @media (max-width: 720px) {
+        :root {
+          --cube-size: 8.5rem;
+          --half-cube: 4.25rem;
+        }
+
+        .scene {
+          width: 18rem;
+          height: 18rem;
+        }
+
+        .grid {
+          width: 22rem;
+          height: 22rem;
+          transform: rotateX(90deg) translateZ(-7rem);
+        }
+
+        .shadow {
+          width: 12rem;
+          height: 12rem;
+          transform: rotateX(90deg) translateZ(-6.25rem);
+        }
+
+        .face {
+          font-size: 1.9rem;
+        }
+
+        .robot-arm {
+          left: -1.4rem;
+          bottom: 1.8rem;
+          transform: translateZ(3rem) scale(0.72) rotateZ(-10deg);
+          transform-origin: left bottom;
+        }
+
+        .caption p {
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stage">
+      <section class="scene" aria-label="Rotating cube">
+        <div class="grid" aria-hidden="true"></div>
+        <div class="shadow" aria-hidden="true"></div>
+        <div class="robot-arm" aria-hidden="true">
+          <div class="arm-platform"></div>
+          <div class="arm-pedestal"></div>
+          <div class="joint arm-shoulder">
+            <div class="segment upper-arm">
+              <div class="joint arm-elbow">
+                <div class="segment forearm">
+                  <div class="joint arm-wrist">
+                    <div class="hand">
+                      <span class="claw top"></span>
+                      <span class="claw bottom"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cube-wrap">
+          <div class="cube">
+            <div class="face front">C</div>
+            <div class="face back">U</div>
+            <div class="face right">B</div>
+            <div class="face left">E</div>
+            <div class="face top">+</div>
+            <div class="face bottom">-</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="caption">
+        <h1>Cube</h1>
+        <p>Move the pointer to tilt the scene.</p>
+      </div>
+    </main>
+
+    <script>
+      const root = document.documentElement;
+
+      window.addEventListener("pointermove", (event) => {
+        const x = event.clientX / window.innerWidth - 0.5;
+        const y = event.clientY / window.innerHeight - 0.5;
+
+        root.style.setProperty("--pointer-tilt-y", `${x * 14}deg`);
+        root.style.setProperty("--pointer-tilt-x", `${y * -12}deg`);
+      });
+
+      window.addEventListener("pointerleave", () => {
+        root.style.setProperty("--pointer-tilt-y", "0deg");
+        root.style.setProperty("--pointer-tilt-x", "0deg");
+      });
+    </script>
+  </body>
+</html>

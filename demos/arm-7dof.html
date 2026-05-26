@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7-DOF Robot Arm Simulator</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #121417;
+        --panel: #1d2227;
+        --panel-2: #252b31;
+        --line: #38414a;
+        --text: #edf2f5;
+        --muted: #99a6b2;
+        --accent: #37b6a4;
+        --accent-2: #e8b14a;
+        --danger: #df6a5d;
+        --blue: #5aa7e8;
+        --joint: #f4c35f;
+        --link: #cbd6df;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 380px;
+      }
+
+      .viewport {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          radial-gradient(circle at 28% 18%, rgba(55, 182, 164, 0.12), transparent 30%),
+          radial-gradient(circle at 80% 70%, rgba(232, 177, 74, 0.1), transparent 28%),
+          #101316;
+        background-size: 28px 28px, 28px 28px, auto, auto, auto;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        cursor: grab;
+        touch-action: none;
+      }
+
+      canvas:active {
+        cursor: grabbing;
+      }
+
+      .hud {
+        position: absolute;
+        left: 22px;
+        top: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        pointer-events: none;
+      }
+
+      .metric {
+        min-width: 138px;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background: rgba(18, 22, 26, 0.74);
+        backdrop-filter: blur(10px);
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 18px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      aside {
+        min-height: 100vh;
+        padding: 18px;
+        border-left: 1px solid var(--line);
+        background: var(--panel);
+        overflow-y: auto;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 21px;
+        font-weight: 760;
+        letter-spacing: 0;
+      }
+
+      .sub {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.45;
+        font-size: 13px;
+      }
+
+      .toolbar,
+      .presets {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      button {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        color: var(--text);
+        background: var(--panel-2);
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        border-color: #52606c;
+        background: #2c333a;
+      }
+
+      button.primary {
+        border-color: rgba(55, 182, 164, 0.62);
+        background: #1d433e;
+      }
+
+      button.warn {
+        border-color: rgba(223, 106, 93, 0.56);
+        background: #4a2a28;
+      }
+
+      .group {
+        margin: 16px 0;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .group-title {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .joint-row {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr) 54px;
+        gap: 10px;
+        align-items: center;
+        min-height: 34px;
+      }
+
+      label {
+        color: var(--text);
+        font-size: 13px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      output {
+        color: var(--muted);
+        text-align: right;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .switches {
+        display: grid;
+        gap: 10px;
+      }
+
+      .check {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 9px 10px;
+        border-radius: 8px;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+      }
+
+      .check input {
+        accent-color: var(--accent);
+      }
+
+      .readout {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .readout div {
+        padding: 9px;
+        border-radius: 8px;
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+      }
+
+      .readout span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .readout strong {
+        display: block;
+        margin-top: 3px;
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .help {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 900px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .viewport,
+        canvas {
+          min-height: 58vh;
+        }
+
+        aside {
+          min-height: auto;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section class="viewport">
+        <canvas id="scene" aria-label="7 degree of freedom robot arm simulation"></canvas>
+        <div class="hud">
+          <div class="metric">
+            <span>Reach</span>
+            <strong id="reach">0.00 m</strong>
+          </div>
+          <div class="metric">
+            <span>End effector</span>
+            <strong id="toolHud">0, 0, 0</strong>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <h1>7-DOF Robot Arm</h1>
+        <p class="sub">Forward-kinematics simulator with seven revolute joints, live end-effector position, trail, and interactive orbit view.</p>
+
+        <div class="toolbar">
+          <button class="primary" id="playBtn" type="button">Play</button>
+          <button id="homeBtn" type="button">Home</button>
+          <button class="warn" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div class="presets">
+          <button data-preset="inspect" type="button">Inspect</button>
+          <button data-preset="reach" type="button">Reach</button>
+          <button data-preset="fold" type="button">Fold</button>
+        </div>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Joint Angles</span>
+            <span>degrees</span>
+          </div>
+          <div id="controls"></div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">Simulation</div>
+          <div class="switches">
+            <label class="check">Show trail <input id="trailToggle" type="checkbox" checked /></label>
+            <label class="check">Show frames <input id="frameToggle" type="checkbox" checked /></label>
+            <label class="check">Show workspace <input id="workspaceToggle" type="checkbox" checked /></label>
+          </div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">Tool Center Point</div>
+          <div class="readout">
+            <div><span>X</span><strong id="tcpX">0.00</strong></div>
+            <div><span>Y</span><strong id="tcpY">0.00</strong></div>
+            <div><span>Z</span><strong id="tcpZ">0.00</strong></div>
+          </div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">View</div>
+          <p class="help">Drag the scene to orbit. Use the sliders to pose each joint. The model uses alternating yaw, pitch, and roll axes so all 7 rotational degrees of freedom affect the chain.</p>
+        </section>
+      </aside>
+    </main>
+
+    <script>
+      const canvas = document.getElementById("scene");
+      const ctx = canvas.getContext("2d");
+
+      const lengths = [0.92, 0.82, 0.72, 0.58, 0.46, 0.34, 0.22];
+      const axes = ["z", "y", "x", "y", "x", "y", "x"];
+      const colors = ["#f4c35f", "#37b6a4", "#5aa7e8", "#e2777a", "#a4c96e", "#d79cff", "#f2a65e"];
+      const state = {
+        angles: [0, -35, 28, 48, -22, 32, 0],
+        playing: false,
+        t: 0,
+        yaw: -0.74,
+        pitch: 0.54,
+        drag: null,
+        trail: []
+      };
+
+      const presets = {
+        home: [0, -35, 28, 48, -22, 32, 0],
+        inspect: [38, -42, 64, 36, -58, 48, 24],
+        reach: [16, -18, 10, 12, -8, 16, 34],
+        fold: [-44, -78, 92, 86, -64, -52, 18]
+      };
+
+      const controls = document.getElementById("controls");
+      const playBtn = document.getElementById("playBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const homeBtn = document.getElementById("homeBtn");
+      const trailToggle = document.getElementById("trailToggle");
+      const frameToggle = document.getElementById("frameToggle");
+      const workspaceToggle = document.getElementById("workspaceToggle");
+      const reachText = document.getElementById("reach");
+      const toolHud = document.getElementById("toolHud");
+      const tcpX = document.getElementById("tcpX");
+      const tcpY = document.getElementById("tcpY");
+      const tcpZ = document.getElementById("tcpZ");
+
+      function makeControls() {
+        state.angles.forEach((angle, index) => {
+          const row = document.createElement("div");
+          row.className = "joint-row";
+          row.innerHTML = `
+            <label for="j${index}">J${index + 1}</label>
+            <input id="j${index}" type="range" min="-180" max="180" step="1" value="${angle}" />
+            <output for="j${index}">${angle}</output>
+          `;
+          const input = row.querySelector("input");
+          const output = row.querySelector("output");
+          input.addEventListener("input", () => {
+            state.angles[index] = Number(input.value);
+            output.value = input.value;
+            state.playing = false;
+            syncPlayButton();
+          });
+          controls.appendChild(row);
+        });
+      }
+
+      function syncSliders() {
+        state.angles.forEach((angle, index) => {
+          const input = document.getElementById(`j${index}`);
+          const output = input.nextElementSibling;
+          input.value = String(Math.round(angle));
+          output.value = String(Math.round(angle));
+        });
+      }
+
+      function syncPlayButton() {
+        playBtn.textContent = state.playing ? "Pause" : "Play";
+      }
+
+      const identity = () => [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+      const vAdd = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+      const mv = (m, v) => [
+        m[0][0] * v[0] + m[0][1] * v[1] + m[0][2] * v[2],
+        m[1][0] * v[0] + m[1][1] * v[1] + m[1][2] * v[2],
+        m[2][0] * v[0] + m[2][1] * v[1] + m[2][2] * v[2]
+      ];
+      const mm = (a, b) => a.map(row => b[0].map((_, col) => row.reduce((sum, value, i) => sum + value * b[i][col], 0)));
+
+      function rot(axis, deg) {
+        const r = deg * Math.PI / 180;
+        const c = Math.cos(r);
+        const s = Math.sin(r);
+        if (axis === "x") return [[1, 0, 0], [0, c, -s], [0, s, c]];
+        if (axis === "y") return [[c, 0, s], [0, 1, 0], [-s, 0, c]];
+        return [[c, -s, 0], [s, c, 0], [0, 0, 1]];
+      }
+
+      function kinematics() {
+        let rotation = identity();
+        let position = [0, 0, 0];
+        const joints = [{ p: position, r: rotation, axis: "z" }];
+        for (let i = 0; i < 7; i++) {
+          rotation = mm(rotation, rot(axes[i], state.angles[i]));
+          position = vAdd(position, mv(rotation, [lengths[i], 0, 0]));
+          joints.push({ p: position, r: rotation, axis: axes[i] });
+        }
+        return joints;
+      }
+
+      function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+        canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function viewTransform(p) {
+        const cy = Math.cos(state.yaw);
+        const sy = Math.sin(state.yaw);
+        const cp = Math.cos(state.pitch);
+        const sp = Math.sin(state.pitch);
+        const x1 = p[0] * cy - p[1] * sy;
+        const y1 = p[0] * sy + p[1] * cy;
+        const z1 = p[2];
+        const y2 = y1 * cp - z1 * sp;
+        const z2 = y1 * sp + z1 * cp;
+        return [x1, y2, z2];
+      }
+
+      function project(p) {
+        const rect = canvas.getBoundingClientRect();
+        const scale = Math.min(rect.width, rect.height) * 0.165;
+        const v = viewTransform(p);
+        return {
+          x: rect.width * 0.49 + v[0] * scale,
+          y: rect.height * 0.58 - v[1] * scale,
+          z: v[2],
+          scale
+        };
+      }
+
+      function drawLine(a, b, color, width = 2) {
+        const pa = project(a);
+        const pb = project(b);
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        ctx.lineTo(pb.x, pb.y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
+
+      function drawCircle(p, radius, fill, stroke = "rgba(0,0,0,0.35)") {
+        const pp = project(p);
+        const r = radius * pp.scale;
+        ctx.beginPath();
+        ctx.arc(pp.x, pp.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = stroke;
+        ctx.stroke();
+      }
+
+      function drawGrid() {
+        const size = 4;
+        for (let i = -size; i <= size; i++) {
+          drawLine([-size, i, 0], [size, i, 0], i === 0 ? "rgba(90,167,232,0.58)" : "rgba(255,255,255,0.08)", i === 0 ? 2 : 1);
+          drawLine([i, -size, 0], [i, size, 0], i === 0 ? "rgba(55,182,164,0.58)" : "rgba(255,255,255,0.08)", i === 0 ? 2 : 1);
+        }
+      }
+
+      function drawWorkspace() {
+        const reach = lengths.reduce((sum, value) => sum + value, 0);
+        const center = project([0, 0, 0]);
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, reach * center.scale, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(232,177,74,0.2)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      function drawFrame(joint, size = 0.18) {
+        const origin = joint.p;
+        drawLine(origin, vAdd(origin, mv(joint.r, [size, 0, 0])), "#df6a5d", 2);
+        drawLine(origin, vAdd(origin, mv(joint.r, [0, size, 0])), "#37b6a4", 2);
+        drawLine(origin, vAdd(origin, mv(joint.r, [0, 0, size])), "#5aa7e8", 2);
+      }
+
+      function drawRobot(joints) {
+        const segments = [];
+        for (let i = 0; i < joints.length - 1; i++) {
+          segments.push({ a: joints[i].p, b: joints[i + 1].p, z: (project(joints[i].p).z + project(joints[i + 1].p).z) / 2, index: i });
+        }
+        segments.sort((a, b) => a.z - b.z);
+        segments.forEach(segment => {
+          drawLine(segment.a, segment.b, "rgba(0,0,0,0.32)", 15);
+          drawLine(segment.a, segment.b, colors[segment.index], 9);
+          drawLine(segment.a, segment.b, "rgba(255,255,255,0.34)", 3);
+        });
+
+        const sortedJoints = joints.map((joint, index) => ({ joint, index, z: project(joint.p).z })).sort((a, b) => a.z - b.z);
+        sortedJoints.forEach(({ joint, index }) => {
+          drawCircle(joint.p, index === 0 ? 0.16 : 0.105, index === 0 ? "#66717c" : "#f4c35f");
+          if (frameToggle.checked && index > 0) drawFrame(joint, 0.2);
+        });
+
+        const tcp = joints[joints.length - 1].p;
+        drawCircle(tcp, 0.13, "#edf2f5", "rgba(55,182,164,0.9)");
+        drawLine(tcp, vAdd(tcp, mv(joints[joints.length - 1].r, [0.28, 0, 0])), "#edf2f5", 4);
+      }
+
+      function drawTrail() {
+        if (!trailToggle.checked || state.trail.length < 2) return;
+        for (let i = 1; i < state.trail.length; i++) {
+          const opacity = i / state.trail.length;
+          drawLine(state.trail[i - 1], state.trail[i], `rgba(55,182,164,${opacity * 0.55})`, 2);
+        }
+      }
+
+      function updateReadout(tcp) {
+        const reach = Math.hypot(tcp[0], tcp[1], tcp[2]);
+        reachText.textContent = `${reach.toFixed(2)} m`;
+        toolHud.textContent = `${tcp[0].toFixed(2)}, ${tcp[1].toFixed(2)}, ${tcp[2].toFixed(2)}`;
+        tcpX.textContent = tcp[0].toFixed(3);
+        tcpY.textContent = tcp[1].toFixed(3);
+        tcpZ.textContent = tcp[2].toFixed(3);
+      }
+
+      function animate(dt) {
+        if (!state.playing) return;
+        state.t += dt * 0.001;
+        state.angles = state.angles.map((_, i) => {
+          const phase = i * 0.76;
+          const amp = [72, 48, 62, 76, 54, 46, 88][i];
+          const bias = [0, -34, 22, 36, -18, 24, 0][i];
+          return bias + Math.sin(state.t * (0.62 + i * 0.08) + phase) * amp;
+        });
+        syncSliders();
+      }
+
+      function render(now) {
+        const dt = now - (render.last || now);
+        render.last = now;
+        animate(dt);
+
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        drawGrid();
+        if (workspaceToggle.checked) drawWorkspace();
+        const joints = kinematics();
+        const tcp = joints[joints.length - 1].p;
+        if (state.playing || state.trail.length === 0) {
+          state.trail.push([...tcp]);
+          if (state.trail.length > 280) state.trail.shift();
+        }
+        drawTrail();
+        drawRobot(joints);
+        updateReadout(tcp);
+        requestAnimationFrame(render);
+      }
+
+      function setPreset(name) {
+        state.angles = [...presets[name]];
+        state.playing = false;
+        state.trail = [];
+        syncPlayButton();
+        syncSliders();
+      }
+
+      canvas.addEventListener("pointerdown", event => {
+        canvas.setPointerCapture(event.pointerId);
+        state.drag = { x: event.clientX, y: event.clientY, yaw: state.yaw, pitch: state.pitch };
+      });
+
+      canvas.addEventListener("pointermove", event => {
+        if (!state.drag) return;
+        state.yaw = state.drag.yaw + (event.clientX - state.drag.x) * 0.008;
+        state.pitch = Math.max(-1.2, Math.min(1.2, state.drag.pitch + (event.clientY - state.drag.y) * 0.008));
+      });
+
+      canvas.addEventListener("pointerup", () => {
+        state.drag = null;
+      });
+
+      canvas.addEventListener("pointercancel", () => {
+        state.drag = null;
+      });
+
+      playBtn.addEventListener("click", () => {
+        state.playing = !state.playing;
+        syncPlayButton();
+      });
+
+      clearBtn.addEventListener("click", () => {
+        state.trail = [];
+      });
+
+      homeBtn.addEventListener("click", () => setPreset("home"));
+      document.querySelectorAll("[data-preset]").forEach(button => {
+        button.addEventListener("click", () => setPreset(button.dataset.preset));
+      });
+
+      window.addEventListener("resize", resize);
+      makeControls();
+      resize();
+      requestAnimationFrame(render);
+    </script>
+  </body>
+</html>

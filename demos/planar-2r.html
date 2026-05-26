@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planar 2R Robot Simulator</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #111418;
+        --panel: #1d2329;
+        --panel-2: #262d35;
+        --line: #39434d;
+        --text: #eef3f7;
+        --muted: #9ba8b4;
+        --accent: #28b7a0;
+        --link1: #f0b84f;
+        --link2: #5ba9e8;
+        --danger: #db6b60;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 360px;
+      }
+
+      .stage {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          radial-gradient(circle at 35% 25%, rgba(40, 183, 160, 0.14), transparent 34%),
+          #0f1216;
+        background-size: 36px 36px, 36px 36px, auto, auto;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        touch-action: none;
+      }
+
+      .hud {
+        position: absolute;
+        left: 20px;
+        top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .metric {
+        min-width: 132px;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background: rgba(18, 22, 27, 0.76);
+        backdrop-filter: blur(10px);
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 18px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      aside {
+        min-height: 100vh;
+        padding: 18px;
+        border-left: 1px solid var(--line);
+        background: var(--panel);
+        overflow-y: auto;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 21px;
+        font-weight: 760;
+      }
+
+      .sub {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      button {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-2);
+        color: var(--text);
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #303842;
+        border-color: #596673;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.48;
+      }
+
+      button.primary {
+        border-color: rgba(40, 183, 160, 0.64);
+        background: #1f4640;
+      }
+
+      button.warn {
+        border-color: rgba(219, 107, 96, 0.62);
+        background: #4d2b29;
+      }
+
+      .group {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .group-title {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr) 58px;
+        gap: 10px;
+        align-items: center;
+        min-height: 38px;
+      }
+
+      .row.wide {
+        grid-template-columns: 76px minmax(0, 1fr) 68px;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      output {
+        color: var(--muted);
+        text-align: right;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .readout {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .readout div,
+      .check {
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-2);
+      }
+
+      .readout span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .readout strong {
+        display: block;
+        margin-top: 3px;
+        font-size: 15px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .check {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .check + .check {
+        margin-top: 8px;
+      }
+
+      .check input {
+        accent-color: var(--accent);
+      }
+
+      .formula {
+        margin: 0;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: #151a1f;
+        color: #c9d5de;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-x: auto;
+      }
+
+      .status {
+        margin: 0;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #151a1f;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 860px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .stage,
+        canvas {
+          min-height: 58vh;
+        }
+
+        aside {
+          min-height: auto;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section class="stage">
+        <canvas id="scene" aria-label="Planar two revolute joint robot simulation"></canvas>
+        <div class="hud">
+          <div class="metric">
+            <span>Tool X</span>
+            <strong id="hudX">0.00 m</strong>
+          </div>
+          <div class="metric">
+            <span>Tool Y</span>
+            <strong id="hudY">0.00 m</strong>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <h1>Planar 2R Robot</h1>
+        <p class="sub">Two revolute joints rotating in one plane. J1 rotates link 1 from the base; J2 rotates link 2 relative to link 1.</p>
+
+        <div class="buttons">
+          <button class="primary" id="playBtn" type="button">Play</button>
+          <button id="homeBtn" type="button">Home</button>
+          <button class="warn" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div class="buttons">
+          <button data-preset="elbowUp" type="button">Elbow up</button>
+          <button data-preset="elbowDown" type="button">Elbow down</button>
+          <button data-preset="stretch" type="button">Stretch</button>
+        </div>
+
+        <div class="buttons">
+          <button class="primary" id="grabBtn" type="button">Grab</button>
+          <button id="pickPoseBtn" type="button">Pick pose</button>
+          <button id="dropPoseBtn" type="button">Drop pose</button>
+        </div>
+
+        <div class="buttons">
+          <button id="resetObjectBtn" type="button">Reset object</button>
+        </div>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Revolute Joints</span>
+            <span>degrees</span>
+          </div>
+          <div class="row">
+            <label for="theta1">Theta 1</label>
+            <input id="theta1" type="range" min="-180" max="180" step="1" value="35" />
+            <output id="theta1Out" for="theta1">35</output>
+          </div>
+          <div class="row">
+            <label for="theta2">Theta 2</label>
+            <input id="theta2" type="range" min="-180" max="180" step="1" value="55" />
+            <output id="theta2Out" for="theta2">55</output>
+          </div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Link Lengths</span>
+            <span>meters</span>
+          </div>
+          <div class="row">
+            <label for="link1">L1</label>
+            <input id="link1" type="range" min="0.4" max="2.2" step="0.05" value="1.55" />
+            <output id="link1Out" for="link1">1.55</output>
+          </div>
+          <div class="row">
+            <label for="link2">L2</label>
+            <input id="link2" type="range" min="0.4" max="2.2" step="0.05" value="1.15" />
+            <output id="link2Out" for="link2">1.15</output>
+          </div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">Display</div>
+          <label class="check">Show trail <input id="trailToggle" type="checkbox" checked /></label>
+          <label class="check">Show workspace <input id="workspaceToggle" type="checkbox" checked /></label>
+        </section>
+
+        <section class="group">
+          <div class="group-title">Forward Kinematics</div>
+          <div class="readout">
+            <div><span>X</span><strong id="xOut">0.000</strong></div>
+            <div><span>Y</span><strong id="yOut">0.000</strong></div>
+          </div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Target Position</span>
+            <span>meters</span>
+          </div>
+          <div class="row wide">
+            <label for="targetX">Target X</label>
+            <input id="targetX" type="range" min="-4.4" max="4.4" step="0.01" value="1.27" />
+            <output id="targetXOut" for="targetX">1.27</output>
+          </div>
+          <div class="row wide">
+            <label for="targetY">Target Y</label>
+            <input id="targetY" type="range" min="-4.4" max="4.4" step="0.01" value="2.04" />
+            <output id="targetYOut" for="targetY">2.04</output>
+          </div>
+          <div class="buttons">
+            <button class="primary" id="goTargetBtn" type="button">Go target</button>
+            <button id="elbowModeBtn" type="button">Elbow up</button>
+            <button id="targetObjectBtn" type="button">Use object</button>
+          </div>
+          <div class="buttons">
+            <button id="randomStartBtn" type="button">Random start</button>
+          </div>
+          <div class="readout">
+            <div><span>Key Theta 1</span><strong id="ikTheta1">0.000</strong></div>
+            <div><span>Key Theta 2</span><strong id="ikTheta2">0.000</strong></div>
+          </div>
+          <p class="status" id="ikStatus">Target is reachable. Press Go target to apply the key joint angles.</p>
+          <p class="status" id="motionStatus">Set your joint configuration, then press Play to move from that pose to the target.</p>
+        </section>
+
+        <section class="group">
+          <div class="group-title">Object</div>
+          <div class="readout">
+            <div><span>Distance</span><strong id="objectDistance">0.000</strong></div>
+            <div><span>State</span><strong id="objectState">Free</strong></div>
+          </div>
+          <p class="status" id="grabStatus">Move the tool close to the object, then press Grab.</p>
+        </section>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Inverse Dynamics</span>
+            <span>Nm</span>
+          </div>
+          <div class="readout">
+            <div><span>Torque 1</span><strong id="tau1Out">0.000</strong></div>
+            <div><span>Torque 2</span><strong id="tau2Out">0.000</strong></div>
+          </div>
+          <p class="status" id="dynamicsStatus">Model: tau = M(q) qdd + C(q, qd) + G(q). Gravity acts downward in the drawing plane.</p>
+        </section>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Mass Model</span>
+            <span>kg</span>
+          </div>
+          <div class="row wide">
+            <label for="mass1">Mass 1</label>
+            <input id="mass1" type="range" min="0.1" max="8" step="0.1" value="2.2" />
+            <output id="mass1Out" for="mass1">2.2</output>
+          </div>
+          <div class="row wide">
+            <label for="mass2">Mass 2</label>
+            <input id="mass2" type="range" min="0.1" max="8" step="0.1" value="1.6" />
+            <output id="mass2Out" for="mass2">1.6</output>
+          </div>
+          <div class="row wide">
+            <label for="payload">Payload</label>
+            <input id="payload" type="range" min="0" max="5" step="0.1" value="0.4" />
+            <output id="payloadOut" for="payload">0.4</output>
+          </div>
+          <div class="row wide">
+            <label for="gravity">Gravity</label>
+            <input id="gravity" type="range" min="0" max="9.81" step="0.01" value="9.81" />
+            <output id="gravityOut" for="gravity">9.81</output>
+          </div>
+        </section>
+
+        <section class="group">
+          <div class="group-title">
+            <span>Commanded Motion</span>
+            <span>rad/s</span>
+          </div>
+          <div class="row wide">
+            <label for="omega1">Omega 1</label>
+            <input id="omega1" type="range" min="-4" max="4" step="0.05" value="0" />
+            <output id="omega1Out" for="omega1">0.00</output>
+          </div>
+          <div class="row wide">
+            <label for="omega2">Omega 2</label>
+            <input id="omega2" type="range" min="-4" max="4" step="0.05" value="0" />
+            <output id="omega2Out" for="omega2">0.00</output>
+          </div>
+          <div class="group-title">
+            <span>Joint Acceleration</span>
+            <span>rad/s^2</span>
+          </div>
+          <div class="row wide">
+            <label for="alpha1">Alpha 1</label>
+            <input id="alpha1" type="range" min="-8" max="8" step="0.05" value="0" />
+            <output id="alpha1Out" for="alpha1">0.00</output>
+          </div>
+          <div class="row wide">
+            <label for="alpha2">Alpha 2</label>
+            <input id="alpha2" type="range" min="-8" max="8" step="0.05" value="0" />
+            <output id="alpha2Out" for="alpha2">0.00</output>
+          </div>
+        </section>
+
+        <section class="group">
+          <pre class="formula">x = L1 cos(theta1) + L2 cos(theta1 + theta2)
+y = L1 sin(theta1) + L2 sin(theta1 + theta2)
+
+IK key:
+c2 = (x^2 + y^2 - L1^2 - L2^2) / (2 L1 L2)
+theta2 = atan2(+/-sqrt(1 - c2^2), c2)
+theta1 = atan2(y, x) - atan2(L2 sin(theta2), L1 + L2 cos(theta2))
+
+tau = M(q) qdd + C(q, qd) + G(q)</pre>
+        </section>
+      </aside>
+    </main>
+
+    <script>
+      const canvas = document.getElementById("scene");
+      const ctx = canvas.getContext("2d");
+
+      const controls = {
+        theta1: document.getElementById("theta1"),
+        theta2: document.getElementById("theta2"),
+        link1: document.getElementById("link1"),
+        link2: document.getElementById("link2"),
+        mass1: document.getElementById("mass1"),
+        mass2: document.getElementById("mass2"),
+        payload: document.getElementById("payload"),
+        gravity: document.getElementById("gravity"),
+        omega1: document.getElementById("omega1"),
+        omega2: document.getElementById("omega2"),
+        alpha1: document.getElementById("alpha1"),
+        alpha2: document.getElementById("alpha2"),
+        targetX: document.getElementById("targetX"),
+        targetY: document.getElementById("targetY")
+      };
+
+      const outputs = {
+        theta1: document.getElementById("theta1Out"),
+        theta2: document.getElementById("theta2Out"),
+        link1: document.getElementById("link1Out"),
+        link2: document.getElementById("link2Out"),
+        mass1: document.getElementById("mass1Out"),
+        mass2: document.getElementById("mass2Out"),
+        payload: document.getElementById("payloadOut"),
+        gravity: document.getElementById("gravityOut"),
+        omega1: document.getElementById("omega1Out"),
+        omega2: document.getElementById("omega2Out"),
+        alpha1: document.getElementById("alpha1Out"),
+        alpha2: document.getElementById("alpha2Out"),
+        targetX: document.getElementById("targetXOut"),
+        targetY: document.getElementById("targetYOut"),
+        ikTheta1: document.getElementById("ikTheta1"),
+        ikTheta2: document.getElementById("ikTheta2"),
+        tau1: document.getElementById("tau1Out"),
+        tau2: document.getElementById("tau2Out"),
+        x: document.getElementById("xOut"),
+        y: document.getElementById("yOut"),
+        hudX: document.getElementById("hudX"),
+        hudY: document.getElementById("hudY")
+      };
+
+      const state = {
+        theta1: 35,
+        theta2: 55,
+        link1: 1.55,
+        link2: 1.15,
+        mass1: 2.2,
+        mass2: 1.6,
+        payload: 0.4,
+        gravity: 9.81,
+        omega1: 0,
+        omega2: 0,
+        alpha1: 0,
+        alpha2: 0,
+        targetX: 1.27,
+        targetY: 2.04,
+        elbowSign: 1,
+        playing: false,
+        t: 0,
+        trail: [],
+        trajectory: null,
+        object: { x: 1.27, y: 2.04 },
+        objectHeld: false,
+        grabRange: 0.18
+      };
+
+      const presets = {
+        home: { theta1: 35, theta2: 55 },
+        elbowUp: { theta1: 28, theta2: 104 },
+        elbowDown: { theta1: 82, theta2: -112 },
+        stretch: { theta1: 10, theta2: 0 },
+        drop: { theta1: -18, theta2: 92 }
+      };
+
+      function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+        canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function degToRad(degrees) {
+        return degrees * Math.PI / 180;
+      }
+
+      function radToDeg(radians) {
+        return radians * 180 / Math.PI;
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function normalizeAngleDelta(degrees) {
+        return ((degrees + 180) % 360 + 360) % 360 - 180;
+      }
+
+      function fk() {
+        const t1 = degToRad(state.theta1);
+        const t12 = degToRad(state.theta1 + state.theta2);
+        const elbow = {
+          x: state.link1 * Math.cos(t1),
+          y: state.link1 * Math.sin(t1)
+        };
+        const tool = {
+          x: elbow.x + state.link2 * Math.cos(t12),
+          y: elbow.y + state.link2 * Math.sin(t12)
+        };
+        return { base: { x: 0, y: 0 }, elbow, tool };
+      }
+
+      function inverseDynamics() {
+        const q1 = degToRad(state.theta1);
+        const q2 = degToRad(state.theta2);
+        const qd1 = state.omega1;
+        const qd2 = state.omega2;
+        const qdd1 = state.alpha1;
+        const qdd2 = state.alpha2;
+        const l1 = state.link1;
+        const l2 = state.link2;
+        const m1 = state.mass1;
+        const m2 = state.mass2 + (state.objectHeld ? state.payload : 0);
+        const lc1 = l1 / 2;
+        const lc2 = l2 / 2;
+        const i1 = m1 * l1 * l1 / 12;
+        const i2 = m2 * l2 * l2 / 12;
+        const c2 = Math.cos(q2);
+        const s2 = Math.sin(q2);
+
+        const m11 = i1 + i2 + m1 * lc1 * lc1 + m2 * (l1 * l1 + lc2 * lc2 + 2 * l1 * lc2 * c2);
+        const m12 = i2 + m2 * (lc2 * lc2 + l1 * lc2 * c2);
+        const m22 = i2 + m2 * lc2 * lc2;
+        const h = m2 * l1 * lc2 * s2;
+        const c1 = -h * (2 * qd1 * qd2 + qd2 * qd2);
+        const c2Term = h * qd1 * qd1;
+        const g1 = ((m1 * lc1 + m2 * l1) * Math.cos(q1) + m2 * lc2 * Math.cos(q1 + q2)) * state.gravity;
+        const g2 = m2 * lc2 * Math.cos(q1 + q2) * state.gravity;
+
+        return {
+          tau1: m11 * qdd1 + m12 * qdd2 + c1 + g1,
+          tau2: m12 * qdd1 + m22 * qdd2 + c2Term + g2
+        };
+      }
+
+      function inverseKinematics() {
+        const x = state.targetX;
+        const y = state.targetY;
+        const l1 = state.link1;
+        const l2 = state.link2;
+        const distance = Math.hypot(x, y);
+        const outer = l1 + l2;
+        const inner = Math.abs(l1 - l2);
+        const rawC2 = (x * x + y * y - l1 * l1 - l2 * l2) / (2 * l1 * l2);
+        const reachable = distance <= outer && distance >= inner && rawC2 >= -1 && rawC2 <= 1;
+        const c2 = Math.max(-1, Math.min(1, rawC2));
+        const s2 = state.elbowSign * Math.sqrt(Math.max(0, 1 - c2 * c2));
+        const theta2 = Math.atan2(s2, c2);
+        const theta1 = Math.atan2(y, x) - Math.atan2(l2 * s2, l1 + l2 * c2);
+        return {
+          reachable,
+          distance,
+          theta1: radToDeg(theta1),
+          theta2: radToDeg(theta2)
+        };
+      }
+
+      function scaleInfo() {
+        const rect = canvas.getBoundingClientRect();
+        const reach = state.link1 + state.link2;
+        const scale = Math.min(rect.width, rect.height) / (reach * 2.55);
+        return { rect, scale, cx: rect.width * 0.5, cy: rect.height * 0.56 };
+      }
+
+      function project(p) {
+        const { scale, cx, cy } = scaleInfo();
+        return {
+          x: cx + p.x * scale,
+          y: cy - p.y * scale
+        };
+      }
+
+      function drawLine(a, b, color, width) {
+        const pa = project(a);
+        const pb = project(b);
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        ctx.lineTo(pb.x, pb.y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
+
+      function drawCircle(p, radiusMeters, fill, stroke = "rgba(0,0,0,0.32)") {
+        const { scale } = scaleInfo();
+        const pp = project(p);
+        ctx.beginPath();
+        ctx.arc(pp.x, pp.y, radiusMeters * scale, 0, Math.PI * 2);
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = stroke;
+        ctx.stroke();
+      }
+
+      function drawGrid() {
+        const { rect, scale, cx, cy } = scaleInfo();
+        const spacing = 0.5 * scale;
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255,255,255,0.075)";
+        for (let x = cx % spacing; x < rect.width; x += spacing) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, rect.height);
+          ctx.stroke();
+        }
+        for (let y = cy % spacing; y < rect.height; y += spacing) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(rect.width, y);
+          ctx.stroke();
+        }
+        drawLine({ x: -10, y: 0 }, { x: 10, y: 0 }, "rgba(91,169,232,0.55)", 2);
+        drawLine({ x: 0, y: -10 }, { x: 0, y: 10 }, "rgba(40,183,160,0.55)", 2);
+      }
+
+      function drawWorkspace() {
+        const { scale } = scaleInfo();
+        const origin = project({ x: 0, y: 0 });
+        const outer = (state.link1 + state.link2) * scale;
+        const inner = Math.abs(state.link1 - state.link2) * scale;
+        ctx.setLineDash([8, 8]);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(240,184,79,0.32)";
+        ctx.beginPath();
+        ctx.arc(origin.x, origin.y, outer, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(219,107,96,0.28)";
+        ctx.beginPath();
+        ctx.arc(origin.x, origin.y, inner, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      function drawTrail() {
+        if (!document.getElementById("trailToggle").checked || state.trail.length < 2) return;
+        for (let i = 1; i < state.trail.length; i++) {
+          const opacity = i / state.trail.length;
+          drawLine(state.trail[i - 1], state.trail[i], `rgba(40,183,160,${opacity * 0.55})`, 2);
+        }
+      }
+
+      function drawObject(points) {
+        if (state.objectHeld) {
+          state.object.x = points.tool.x;
+          state.object.y = points.tool.y;
+        }
+        const object = project(state.object);
+        const { scale } = scaleInfo();
+        const radius = 0.105 * scale;
+        ctx.beginPath();
+        ctx.arc(object.x + radius * 0.35, object.y + radius * 0.45, radius * 0.9, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(0,0,0,0.34)";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(object.x, object.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = state.objectHeld ? "#28b7a0" : "#db6b60";
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#eef3f7";
+        ctx.stroke();
+
+        if (!state.objectHeld) {
+          ctx.beginPath();
+          ctx.arc(object.x, object.y, state.grabRange * scale, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(219,107,96,0.28)";
+          ctx.setLineDash([6, 6]);
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
+      function drawTarget(points) {
+        const target = { x: state.targetX, y: state.targetY };
+        const p = project(target);
+        const { scale } = scaleInfo();
+        const ik = inverseKinematics();
+        drawLine(points.tool, target, ik.reachable ? "rgba(40,183,160,0.36)" : "rgba(219,107,96,0.36)", 2);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 0.13 * scale, 0, Math.PI * 2);
+        ctx.strokeStyle = ik.reachable ? "#28b7a0" : "#db6b60";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(p.x - 0.18 * scale, p.y);
+        ctx.lineTo(p.x + 0.18 * scale, p.y);
+        ctx.moveTo(p.x, p.y - 0.18 * scale);
+        ctx.lineTo(p.x, p.y + 0.18 * scale);
+        ctx.strokeStyle = "#eef3f7";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      function drawRobot(points) {
+        drawLine(points.base, points.elbow, "rgba(0,0,0,0.36)", 22);
+        drawLine(points.base, points.elbow, "#f0b84f", 16);
+        drawLine(points.base, points.elbow, "rgba(255,255,255,0.32)", 5);
+        drawLine(points.elbow, points.tool, "rgba(0,0,0,0.36)", 18);
+        drawLine(points.elbow, points.tool, "#5ba9e8", 12);
+        drawLine(points.elbow, points.tool, "rgba(255,255,255,0.32)", 4);
+
+        drawCircle(points.base, 0.13, "#69737d");
+        drawCircle(points.elbow, 0.1, "#f0b84f");
+        drawCircle(points.tool, 0.09, "#eef3f7", "rgba(40,183,160,0.9)");
+
+        const tipAngle = degToRad(state.theta1 + state.theta2);
+        const gripperA = {
+          x: points.tool.x + 0.2 * Math.cos(tipAngle + 0.28),
+          y: points.tool.y + 0.2 * Math.sin(tipAngle + 0.28)
+        };
+        const gripperB = {
+          x: points.tool.x + 0.2 * Math.cos(tipAngle - 0.28),
+          y: points.tool.y + 0.2 * Math.sin(tipAngle - 0.28)
+        };
+        drawLine(points.tool, gripperA, "#eef3f7", 4);
+        drawLine(points.tool, gripperB, "#eef3f7", 4);
+      }
+
+      function updateReadout(points) {
+        const distance = Math.hypot(points.tool.x - state.object.x, points.tool.y - state.object.y);
+        const dynamics = inverseDynamics();
+        const ik = inverseKinematics();
+        outputs.x.textContent = points.tool.x.toFixed(3);
+        outputs.y.textContent = points.tool.y.toFixed(3);
+        outputs.hudX.textContent = `${points.tool.x.toFixed(2)} m`;
+        outputs.hudY.textContent = `${points.tool.y.toFixed(2)} m`;
+        outputs.ikTheta1.textContent = ik.reachable ? `${ik.theta1.toFixed(2)} deg` : "--";
+        outputs.ikTheta2.textContent = ik.reachable ? `${ik.theta2.toFixed(2)} deg` : "--";
+        outputs.tau1.textContent = dynamics.tau1.toFixed(3);
+        outputs.tau2.textContent = dynamics.tau2.toFixed(3);
+        document.getElementById("objectDistance").textContent = `${distance.toFixed(3)} m`;
+        document.getElementById("objectState").textContent = state.objectHeld ? "Held" : "Free";
+        document.getElementById("grabBtn").textContent = state.objectHeld ? "Release" : "Grab";
+        document.getElementById("goTargetBtn").disabled = !ik.reachable;
+        document.getElementById("elbowModeBtn").textContent = state.elbowSign > 0 ? "Elbow up" : "Elbow down";
+        document.getElementById("ikStatus").textContent = ik.reachable
+          ? `Reachable. Distance from base ${ik.distance.toFixed(2)} m. Press Go target to apply the key joint angles.`
+          : `Unreachable. Target distance ${ik.distance.toFixed(2)} m must be between ${Math.abs(state.link1 - state.link2).toFixed(2)} m and ${(state.link1 + state.link2).toFixed(2)} m.`;
+      }
+
+      function syncControls() {
+        controls.theta1.value = String(Math.round(state.theta1));
+        controls.theta2.value = String(Math.round(state.theta2));
+        controls.link1.value = state.link1.toFixed(2);
+        controls.link2.value = state.link2.toFixed(2);
+        controls.mass1.value = state.mass1.toFixed(1);
+        controls.mass2.value = state.mass2.toFixed(1);
+        controls.payload.value = state.payload.toFixed(1);
+        controls.gravity.value = state.gravity.toFixed(2);
+        controls.omega1.value = state.omega1.toFixed(2);
+        controls.omega2.value = state.omega2.toFixed(2);
+        controls.alpha1.value = state.alpha1.toFixed(2);
+        controls.alpha2.value = state.alpha2.toFixed(2);
+        controls.targetX.value = state.targetX.toFixed(2);
+        controls.targetY.value = state.targetY.toFixed(2);
+        outputs.theta1.value = String(Math.round(state.theta1));
+        outputs.theta2.value = String(Math.round(state.theta2));
+        outputs.link1.value = state.link1.toFixed(2);
+        outputs.link2.value = state.link2.toFixed(2);
+        outputs.mass1.value = state.mass1.toFixed(1);
+        outputs.mass2.value = state.mass2.toFixed(1);
+        outputs.payload.value = state.payload.toFixed(1);
+        outputs.gravity.value = state.gravity.toFixed(2);
+        outputs.omega1.value = state.omega1.toFixed(2);
+        outputs.omega2.value = state.omega2.toFixed(2);
+        outputs.alpha1.value = state.alpha1.toFixed(2);
+        outputs.alpha2.value = state.alpha2.toFixed(2);
+        outputs.targetX.value = state.targetX.toFixed(2);
+        outputs.targetY.value = state.targetY.toFixed(2);
+        document.getElementById("playBtn").textContent = state.playing ? "Pause" : "Play";
+      }
+
+      function setPose(name) {
+        Object.assign(state, presets[name]);
+        state.playing = false;
+        state.trajectory = null;
+        state.trail = [];
+        syncControls();
+      }
+
+      function resetObject() {
+        state.object = { x: 1.27, y: 2.04 };
+        state.objectHeld = false;
+        state.trail = [];
+        document.getElementById("grabStatus").textContent = "Object reset. The home pose is close enough to grab it.";
+      }
+
+      function toggleGrab() {
+        const points = fk();
+        if (state.objectHeld) {
+          state.objectHeld = false;
+          document.getElementById("grabStatus").textContent = "Released object at the current tool position.";
+          return;
+        }
+        const distance = Math.hypot(points.tool.x - state.object.x, points.tool.y - state.object.y);
+        if (distance <= state.grabRange) {
+          state.objectHeld = true;
+          state.playing = false;
+          syncControls();
+          document.getElementById("grabStatus").textContent = "Object grabbed. Move the joints or press Drop pose to carry it.";
+        } else {
+          document.getElementById("grabStatus").textContent = `Too far to grab. Move within ${state.grabRange.toFixed(2)} m of the object.`;
+        }
+      }
+
+      function goToTarget() {
+        const ik = inverseKinematics();
+        if (!ik.reachable) return;
+        state.theta1 = ik.theta1;
+        state.theta2 = ik.theta2;
+        state.omega1 = 0;
+        state.omega2 = 0;
+        state.alpha1 = 0;
+        state.alpha2 = 0;
+        state.playing = false;
+        state.trajectory = null;
+        state.trail = [];
+        syncControls();
+      }
+
+      function setRandomStartPose() {
+        state.theta1 = Math.round(-150 + Math.random() * 300);
+        state.theta2 = Math.round(-140 + Math.random() * 280);
+        state.omega1 = 0;
+        state.omega2 = 0;
+        state.alpha1 = 0;
+        state.alpha2 = 0;
+        state.playing = false;
+        state.trajectory = null;
+        state.trail = [];
+        syncControls();
+        document.getElementById("motionStatus").textContent = "Random start pose selected. Press Play to move to the target.";
+      }
+
+      function startTrajectoryFromCurrent() {
+        const ik = inverseKinematics();
+        if (!ik.reachable) {
+          state.playing = false;
+          document.getElementById("motionStatus").textContent = "Target is unreachable, so no trajectory was started.";
+          syncControls();
+          return;
+        }
+
+        const startTheta1 = state.theta1;
+        const startTheta2 = state.theta2;
+        const d1 = normalizeAngleDelta(ik.theta1 - startTheta1);
+        const d2 = normalizeAngleDelta(ik.theta2 - startTheta2);
+        const distanceScale = Math.max(Math.abs(d1), Math.abs(d2)) / 180;
+
+        state.theta1 = startTheta1;
+        state.theta2 = startTheta2;
+        state.omega1 = 0;
+        state.omega2 = 0;
+        state.alpha1 = 0;
+        state.alpha2 = 0;
+        state.trail = [];
+        state.trajectory = {
+          elapsed: 0,
+          duration: 2.5 + distanceScale * 2,
+          start: [startTheta1, startTheta2],
+          delta: [d1, d2],
+          target: [startTheta1 + d1, startTheta2 + d2]
+        };
+        state.playing = true;
+        syncControls();
+        document.getElementById("motionStatus").textContent = "Moving from your current configuration to the target. The green trail shows the end-effector trajectory.";
+      }
+
+      function animate(dt) {
+        if (!state.playing || !state.trajectory) return;
+        const trajectory = state.trajectory;
+        trajectory.elapsed = Math.min(trajectory.duration, trajectory.elapsed + dt * 0.001);
+        const u = clamp(trajectory.elapsed / trajectory.duration, 0, 1);
+        const s = 10 * u ** 3 - 15 * u ** 4 + 6 * u ** 5;
+        const ds = (30 * u ** 2 - 60 * u ** 3 + 30 * u ** 4) / trajectory.duration;
+        const d2s = (60 * u - 180 * u ** 2 + 120 * u ** 3) / (trajectory.duration * trajectory.duration);
+
+        state.theta1 = trajectory.start[0] + trajectory.delta[0] * s;
+        state.theta2 = trajectory.start[1] + trajectory.delta[1] * s;
+        state.omega1 = degToRad(trajectory.delta[0]) * ds;
+        state.omega2 = degToRad(trajectory.delta[1]) * ds;
+        state.alpha1 = degToRad(trajectory.delta[0]) * d2s;
+        state.alpha2 = degToRad(trajectory.delta[1]) * d2s;
+
+        if (u >= 1) {
+          state.theta1 = trajectory.target[0];
+          state.theta2 = trajectory.target[1];
+          state.omega1 = 0;
+          state.omega2 = 0;
+          state.alpha1 = 0;
+          state.alpha2 = 0;
+          state.playing = false;
+          state.trajectory = null;
+          document.getElementById("motionStatus").textContent = "Target reached. Change the joint sliders or press Random start, then press Play again.";
+        }
+        syncControls();
+      }
+
+      function render(now) {
+        const dt = now - (render.last || now);
+        render.last = now;
+        animate(dt);
+
+        const { rect } = scaleInfo();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        drawGrid();
+        if (document.getElementById("workspaceToggle").checked) drawWorkspace();
+        const points = fk();
+        if (state.playing || state.trail.length === 0) {
+          state.trail.push({ ...points.tool });
+          if (state.trail.length > 420) state.trail.shift();
+        }
+        drawTrail();
+        drawTarget(points);
+        drawObject(points);
+        drawRobot(points);
+        updateReadout(points);
+        requestAnimationFrame(render);
+      }
+
+      Object.entries(controls).forEach(([key, input]) => {
+        input.addEventListener("input", () => {
+          state[key] = Number(input.value);
+          state.playing = false;
+          state.trajectory = null;
+          state.trail = [];
+          syncControls();
+        });
+      });
+
+      document.getElementById("playBtn").addEventListener("click", () => {
+        if (state.playing) {
+          state.playing = false;
+          document.getElementById("motionStatus").textContent = "Trajectory paused. Press Play to restart from the current configuration.";
+          syncControls();
+          return;
+        }
+        startTrajectoryFromCurrent();
+      });
+      document.getElementById("homeBtn").addEventListener("click", () => setPose("home"));
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        state.trail = [];
+      });
+      document.getElementById("grabBtn").addEventListener("click", toggleGrab);
+      document.getElementById("pickPoseBtn").addEventListener("click", () => {
+        setPose("home");
+        document.getElementById("grabStatus").textContent = "Pick pose selected. Press Grab to attach the object.";
+      });
+      document.getElementById("dropPoseBtn").addEventListener("click", () => {
+        setPose("drop");
+        document.getElementById("grabStatus").textContent = state.objectHeld ? "Drop pose selected. Press Release to place the object." : "Drop pose selected.";
+      });
+      document.getElementById("goTargetBtn").addEventListener("click", goToTarget);
+      document.getElementById("elbowModeBtn").addEventListener("click", () => {
+        state.elbowSign *= -1;
+        syncControls();
+      });
+      document.getElementById("targetObjectBtn").addEventListener("click", () => {
+        state.targetX = state.object.x;
+        state.targetY = state.object.y;
+        state.playing = false;
+        state.trajectory = null;
+        syncControls();
+      });
+      document.getElementById("randomStartBtn").addEventListener("click", setRandomStartPose);
+      document.getElementById("resetObjectBtn").addEventListener("click", resetObject);
+      document.querySelectorAll("[data-preset]").forEach(button => {
+        button.addEventListener("click", () => setPose(button.dataset.preset));
+      });
+      window.addEventListener("resize", resize);
+
+      resize();
+      syncControls();
+      requestAnimationFrame(render);
+    </script>
+  </body>
+</html>

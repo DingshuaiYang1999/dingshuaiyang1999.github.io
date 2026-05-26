@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pendel-Wagen Visualizer</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #111316;
+        --stage: #161a1f;
+        --panel: #20252b;
+        --panel-2: #2a3037;
+        --line: #404952;
+        --text: #f1f5f8;
+        --muted: #9da8b2;
+        --accent: #39b89f;
+        --accent-2: #e8bb5a;
+        --danger: #df6b63;
+        --blue: #69aee9;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 390px;
+      }
+
+      main {
+        min-width: 0;
+        display: grid;
+        grid-template-rows: minmax(360px, 1fr) 240px;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          radial-gradient(circle at 28% 20%, rgba(57, 184, 159, 0.12), transparent 30%),
+          radial-gradient(circle at 76% 75%, rgba(232, 187, 90, 0.09), transparent 28%),
+          var(--stage);
+        background-size: 44px 44px, 44px 44px, auto, auto, auto;
+      }
+
+      .stage {
+        position: relative;
+        min-height: 360px;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .hud {
+        position: absolute;
+        left: 18px;
+        top: 16px;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(118px, auto));
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .metric {
+        padding: 9px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        background: rgba(18, 21, 25, 0.78);
+        backdrop-filter: blur(10px);
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 3px;
+        font-size: 18px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .charts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 1px;
+        border-top: 1px solid var(--line);
+        background: var(--line);
+        min-height: 0;
+      }
+
+      .chart-card {
+        position: relative;
+        min-width: 0;
+        background: rgba(20, 24, 29, 0.92);
+      }
+
+      .chart-title {
+        position: absolute;
+        left: 14px;
+        top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      aside {
+        min-height: 100vh;
+        overflow-y: auto;
+        padding: 18px;
+        border-left: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        line-height: 1.15;
+      }
+
+      .sub {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .button-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      button,
+      select {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-2);
+        color: var(--text);
+        font: inherit;
+        font-size: 13px;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      button:hover,
+      select:hover {
+        border-color: #64707a;
+        background: #323942;
+      }
+
+      button.primary {
+        border-color: rgba(57, 184, 159, 0.65);
+        background: #224942;
+      }
+
+      button.warn {
+        border-color: rgba(223, 107, 99, 0.7);
+        background: #4a2c2b;
+      }
+
+      .group {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .group-title {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 88px minmax(0, 1fr) 70px;
+        gap: 10px;
+        align-items: center;
+        min-height: 38px;
+      }
+
+      .row + .row {
+        margin-top: 6px;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      output {
+        color: var(--muted);
+        text-align: right;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .select-row {
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .readout {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .readout div,
+      .note {
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-2);
+      }
+
+      .readout span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .readout strong {
+        display: block;
+        margin-top: 3px;
+        font-size: 15px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .note {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .formula {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid rgba(57, 184, 159, 0.28);
+        border-radius: 8px;
+        background: rgba(57, 184, 159, 0.08);
+        color: #ccebe5;
+        font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        line-height: 1.55;
+      }
+
+      @media (max-width: 980px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        aside {
+          min-height: auto;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+
+        .hud {
+          grid-template-columns: repeat(2, minmax(118px, auto));
+        }
+
+        main {
+          grid-template-rows: 62vh auto;
+        }
+
+        .charts {
+          grid-template-columns: 1fr;
+          grid-template-rows: repeat(6, 180px);
+        }
+
+        .chart-card {
+          min-height: 180px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main>
+        <section class="stage">
+          <canvas id="sceneCanvas"></canvas>
+          <div class="hud">
+            <div class="metric"><span>phi</span><strong id="phiHud">0.00 deg</strong></div>
+            <div class="metric"><span>x Wagen</span><strong id="xHud">0.00 m</strong></div>
+            <div class="metric"><span>Weg</span><strong id="distanceHud">0.00 m</strong></div>
+            <div class="metric"><span>F</span><strong id="forceHud">0.0 N</strong></div>
+            <div class="metric"><span>Status</span><strong id="statusHud">bereit</strong></div>
+          </div>
+        </section>
+
+        <section class="charts">
+          <div class="chart-card">
+            <div class="chart-title">x1 = phi</div>
+            <canvas id="phiChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">x2 = phi dot</div>
+            <canvas id="phiDotChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">x3 = xW</div>
+            <canvas id="xChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">x4 = xW dot</div>
+            <canvas id="xDotChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Eingang u = F</div>
+            <canvas id="forceChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Ausgang y = xW + l sin(phi)</div>
+            <canvas id="tipChart"></canvas>
+          </div>
+        </section>
+      </main>
+
+      <aside>
+        <h1>Pendel-Wagen Experiment</h1>
+        <p class="sub">
+          Nichtlineares Modell aus D1-D10: obere Ruhelage stabilisieren, Winkel-Stoerung testen und Zustandsregler mit Wagenposition vergleichen.
+        </p>
+
+        <div class="button-row">
+          <button id="playBtn" class="primary">Start</button>
+          <button id="kickBtn">Anstupsen</button>
+          <button id="resetBtn" class="warn">Reset</button>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Regler</div>
+          <div class="select-row">
+            <label for="controller">Modus</label>
+            <select id="controller">
+              <option value="pd">PD/PDT1 Winkel</option>
+              <option value="lqr">LQR Zustand</option>
+              <option value="off">ohne Regler</option>
+            </select>
+          </div>
+          <div class="row">
+            <label for="kp">Kp</label>
+            <input id="kp" type="range" min="0" max="45" step="0.1" value="18" />
+            <output id="kpOut"></output>
+          </div>
+          <div class="row">
+            <label for="kd">Kd</label>
+            <input id="kd" type="range" min="0" max="16" step="0.1" value="6" />
+            <output id="kdOut"></output>
+          </div>
+          <div class="row">
+            <label for="tau">T1</label>
+            <input id="tau" type="range" min="0.01" max="0.35" step="0.01" value="0.06" />
+            <output id="tauOut"></output>
+          </div>
+          <div class="row">
+            <label for="qPhi">Q phi</label>
+            <input id="qPhi" type="range" min="1" max="240" step="1" value="60" />
+            <output id="qPhiOut"></output>
+          </div>
+          <div class="row">
+            <label for="qPhiDot">Q phidot</label>
+            <input id="qPhiDot" type="range" min="1" max="80" step="1" value="8" />
+            <output id="qPhiDotOut"></output>
+          </div>
+          <div class="row">
+            <label for="qX">Q xW</label>
+            <input id="qX" type="range" min="0" max="120" step="1" value="8" />
+            <output id="qXOut"></output>
+          </div>
+          <div class="row">
+            <label for="qXDot">Q xdot</label>
+            <input id="qXDot" type="range" min="0" max="80" step="1" value="5" />
+            <output id="qXDotOut"></output>
+          </div>
+          <div class="row">
+            <label for="rWeight">R</label>
+            <input id="rWeight" type="range" min="0.2" max="10" step="0.1" value="1" />
+            <output id="rWeightOut"></output>
+          </div>
+          <div class="formula" id="lawText"></div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Anfangsstoerung</div>
+          <div class="row">
+            <label for="x0">xW0</label>
+            <input id="x0" type="range" min="-1.5" max="1.5" step="0.05" value="0" />
+            <output id="x0Out"></output>
+          </div>
+          <div class="row">
+            <label for="kick">Kick</label>
+            <input id="kick" type="range" min="-55" max="55" step="1" value="10" />
+            <output id="kickOut"></output>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Systemparameter</div>
+          <div class="row">
+            <label for="massCart">M</label>
+            <input id="massCart" type="range" min="0.1" max="2" step="0.05" value="0.5" />
+            <output id="massCartOut"></output>
+          </div>
+          <div class="row">
+            <label for="massPend">m</label>
+            <input id="massPend" type="range" min="0.1" max="2" step="0.05" value="0.5" />
+            <output id="massPendOut"></output>
+          </div>
+          <div class="row">
+            <label for="length">l</label>
+            <input id="length" type="range" min="0.35" max="1.6" step="0.05" value="1" />
+            <output id="lengthOut"></output>
+          </div>
+          <div class="row">
+            <label for="forceLimit">F max</label>
+            <input id="forceLimit" type="range" min="3" max="60" step="1" value="25" />
+            <output id="forceLimitOut"></output>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Messwerte</div>
+          <div class="readout">
+            <div><span>phi dot</span><strong id="phiDotRead">0.00 rad/s</strong></div>
+            <div><span>x dot</span><strong id="xDotRead">0.00 m/s</strong></div>
+            <div><span>Tip x</span><strong id="tipRead">0.00 m</strong></div>
+            <div><span>Weg</span><strong id="distanceRead">0.00 m</strong></div>
+            <div><span>Zeit</span><strong id="timeRead">0.00 s</strong></div>
+          </div>
+          <p class="note" id="experimentNote">
+            Kick ist die Anfangsstoerung des Pendelwinkels. Der Button Anstupsen addiert denselben Winkel waehrend des laufenden Versuchs.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      const sceneCanvas = document.getElementById("sceneCanvas");
+      const scene = sceneCanvas.getContext("2d");
+      const chartCanvases = {
+        phi: document.getElementById("phiChart"),
+        phiDot: document.getElementById("phiDotChart"),
+        x: document.getElementById("xChart"),
+        xDot: document.getElementById("xDotChart"),
+        force: document.getElementById("forceChart"),
+        tip: document.getElementById("tipChart"),
+      };
+      const chartContexts = Object.fromEntries(Object.entries(chartCanvases).map(([key, canvas]) => [key, canvas.getContext("2d")]));
+
+      const ids = [
+        "controller",
+        "kp",
+        "kd",
+        "tau",
+        "qPhi",
+        "qPhiDot",
+        "qX",
+        "qXDot",
+        "rWeight",
+        "x0",
+        "kick",
+        "massCart",
+        "massPend",
+        "length",
+        "forceLimit",
+      ];
+      const controls = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+
+      const outputs = {
+        kp: document.getElementById("kpOut"),
+        kd: document.getElementById("kdOut"),
+        tau: document.getElementById("tauOut"),
+        qPhi: document.getElementById("qPhiOut"),
+        qPhiDot: document.getElementById("qPhiDotOut"),
+        qX: document.getElementById("qXOut"),
+        qXDot: document.getElementById("qXDotOut"),
+        rWeight: document.getElementById("rWeightOut"),
+        x0: document.getElementById("x0Out"),
+        kick: document.getElementById("kickOut"),
+        massCart: document.getElementById("massCartOut"),
+        massPend: document.getElementById("massPendOut"),
+        length: document.getElementById("lengthOut"),
+        forceLimit: document.getElementById("forceLimitOut"),
+      };
+
+      const state = {
+        running: false,
+        t: 0,
+        x: [degToRad(10), 0, 0, 0],
+        derivFiltered: 0,
+        force: 0,
+        distance: 0,
+        history: [],
+        unstable: false,
+        lqrGain: [-40.0636, -9.6421, -2.8284, -4.7377],
+        lqrError: "",
+      };
+
+      function degToRad(v) {
+        return (v * Math.PI) / 180;
+      }
+
+      function radToDeg(v) {
+        return (v * 180) / Math.PI;
+      }
+
+      function parameterValues() {
+        return {
+          M: Number(controls.massCart.value),
+          m: Number(controls.massPend.value),
+          l: Number(controls.length.value),
+          g: 9.81,
+          limit: Number(controls.forceLimit.value),
+        };
+      }
+
+      function linearizedUpperMatrices(p) {
+        const a = (6 * p.g * (p.m + p.M)) / (p.l * (p.m + 4 * p.M));
+        const b = -6 / (p.l * (p.m + 4 * p.M));
+        const c = (-6 * p.m * p.g) / (5 * p.m + 8 * p.M - 3 * p.m);
+        const d = 8 / (5 * p.m + 8 * p.M - 3 * p.m);
+        return {
+          A: [
+            [0, 1, 0, 0],
+            [a, 0, 0, 0],
+            [0, 0, 0, 1],
+            [c, 0, 0, 0],
+          ],
+          B: [[0], [b], [0], [d]],
+          a,
+          b,
+        };
+      }
+
+      function computeLqrGain() {
+        const p = parameterValues();
+        const { A, B } = linearizedUpperMatrices(p);
+        const q = [Number(controls.qPhi.value), Number(controls.qPhiDot.value), Number(controls.qX.value), Number(controls.qXDot.value)];
+        const r = Number(controls.rWeight.value);
+        let P = zeroMatrix(4, 4);
+        const Q = [
+          [q[0], 0, 0, 0],
+          [0, q[1], 0, 0],
+          [0, 0, q[2], 0],
+          [0, 0, 0, q[3]],
+        ];
+        const AT = transpose(A);
+        const BT = transpose(B);
+        const dt = 0.01;
+
+        try {
+          for (let step = 0; step < 1200; step++) {
+            const PB = multiply(P, B);
+            const PBRBP = multiplyScalar(multiply(PB, multiply(BT, P)), 1 / r);
+            const dP = add(add(subtract(multiply(AT, P), PBRBP), multiply(P, A)), Q);
+            P = symmetrize(add(P, multiplyScalar(dP, dt)));
+            if (!P.flat().every(Number.isFinite)) {
+              throw new Error("Riccati iteration diverged");
+            }
+          }
+          const K = multiplyScalar(multiply(BT, P), 1 / r)[0];
+          if (K.some(value => !Number.isFinite(value))) {
+            state.lqrError = "ungueltige K-Werte";
+            return;
+          }
+          state.lqrGain = K;
+          state.lqrError = "";
+        } catch (error) {
+          state.lqrError = "CARE-Iteration nicht konvergiert";
+        }
+      }
+
+      function zeroMatrix(rows, cols) {
+        return Array.from({ length: rows }, () => Array(cols).fill(0));
+      }
+
+      function transpose(A) {
+        return A[0].map((_, col) => A.map(row => row[col]));
+      }
+
+      function multiply(A, B) {
+        const rows = A.length;
+        const cols = B[0].length;
+        const inner = B.length;
+        const out = zeroMatrix(rows, cols);
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            let sum = 0;
+            for (let k = 0; k < inner; k++) sum += A[i][k] * B[k][j];
+            out[i][j] = sum;
+          }
+        }
+        return out;
+      }
+
+      function add(A, B) {
+        return A.map((row, i) => row.map((value, j) => value + B[i][j]));
+      }
+
+      function subtract(A, B) {
+        return A.map((row, i) => row.map((value, j) => value - B[i][j]));
+      }
+
+      function multiplyScalar(A, scalar) {
+        return A.map(row => row.map(value => value * scalar));
+      }
+
+      function symmetrize(A) {
+        return A.map((row, i) => row.map((value, j) => 0.5 * (value + A[j][i])));
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function wrapPi(angle) {
+        let a = angle;
+        while (a > Math.PI) a -= 2 * Math.PI;
+        while (a < -Math.PI) a += 2 * Math.PI;
+        return a;
+      }
+
+      function dynamics(x, force, p) {
+        const [phi, phiDot, xw, xDot] = x;
+        const { M, m, l, g } = p;
+        const sin = Math.sin(phi);
+        const cos = Math.cos(phi);
+        const sin2 = Math.sin(2 * phi);
+        const phiDen = l * (m + 4 * M + 3 * m * sin * sin);
+        const xDen = 5 * m + 8 * M - 3 * m * Math.cos(2 * phi);
+        const phiDDot = (6 * g * (m + M) * sin - 3 * cos * (2 * force + l * m * phiDot * phiDot * sin)) / phiDen;
+        const xDDot = (8 * force + 4 * l * m * phiDot * phiDot * sin - 3 * m * g * sin2) / xDen;
+        return [phiDot, phiDDot, xDot, xDDot];
+      }
+
+      function rk4Step(x, force, dt, p) {
+        const k1 = dynamics(x, force, p);
+        const k2 = dynamics(x.map((v, i) => v + 0.5 * dt * k1[i]), force, p);
+        const k3 = dynamics(x.map((v, i) => v + 0.5 * dt * k2[i]), force, p);
+        const k4 = dynamics(x.map((v, i) => v + dt * k3[i]), force, p);
+        return x.map((v, i) => v + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+      }
+
+      function controllerForce(dt) {
+        const p = parameterValues();
+        const mode = controls.controller.value;
+        if (mode === "off") return 0;
+
+        if (mode === "lqr") {
+          const x = [wrapPi(state.x[0]), state.x[1], state.x[2], state.x[3]];
+          const raw = -state.lqrGain.reduce((sum, gain, index) => sum + gain * x[index], 0);
+          return clamp(raw, -p.limit, p.limit);
+        }
+
+        const kp = Number(controls.kp.value);
+        const kd = Number(controls.kd.value);
+        const tau = Number(controls.tau.value);
+        const alpha = dt / Math.max(tau, dt);
+        state.derivFiltered += alpha * (state.x[1] - state.derivFiltered);
+        const raw = kp * wrapPi(state.x[0]) + kd * state.derivFiltered;
+        return clamp(raw, -p.limit, p.limit);
+      }
+
+      function resetSimulation() {
+        state.running = false;
+        state.t = 0;
+        state.x = [degToRad(Number(controls.kick.value)), 0, Number(controls.x0.value), 0];
+        state.derivFiltered = 0;
+        state.force = 0;
+        state.distance = 0;
+        state.history = [];
+        state.unstable = false;
+        document.getElementById("playBtn").textContent = "Start";
+        pushHistory();
+        sync();
+      }
+
+      function pushHistory() {
+        const p = parameterValues();
+        state.history.push({
+          t: state.t,
+          phi: radToDeg(wrapPi(state.x[0])),
+          phiDot: state.x[1],
+          x: state.x[2],
+          xDot: state.x[3],
+          force: state.force,
+          tip: state.x[2] + p.l * Math.sin(state.x[0]),
+        });
+        if (state.history.length > 5000) state.history.shift();
+      }
+
+      function simulate(dt) {
+        const p = parameterValues();
+        const fixed = Math.min(dt, 1 / 30);
+        let remaining = fixed;
+        while (remaining > 0) {
+          const h = Math.min(1 / 240, remaining);
+          state.force = controllerForce(h);
+          const oldX = state.x[2];
+          state.x = rk4Step(state.x, state.force, h, p);
+          state.x[0] = wrapPi(state.x[0]);
+          state.distance += Math.abs(state.x[2] - oldX);
+          state.t += h;
+          remaining -= h;
+        }
+
+        if (Math.abs(radToDeg(state.x[0])) > 86) {
+          state.unstable = true;
+          state.running = false;
+          document.getElementById("playBtn").textContent = "Start";
+        }
+        pushHistory();
+      }
+
+      function resizeCanvas(canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = Math.max(1, Math.floor(rect.width * ratio));
+        canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+        const ctx = canvas.getContext("2d");
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      function resize() {
+        resizeCanvas(sceneCanvas);
+        Object.values(chartCanvases).forEach(resizeCanvas);
+      }
+
+      function drawScene() {
+        const rect = sceneCanvas.getBoundingClientRect();
+        const w = rect.width;
+        const h = rect.height;
+        const p = parameterValues();
+        scene.clearRect(0, 0, w, h);
+
+        const groundY = h * 0.68;
+        const scale = Math.min(150, Math.max(74, w / 8));
+        const originX = w / 2 - state.x[2] * scale;
+        const cartX = w / 2;
+        const cartY = groundY - 48;
+        const cartW = 112;
+        const cartH = 42;
+        const rod = p.l * scale;
+        const phi = state.x[0];
+        const pivotX = cartX;
+        const pivotY = cartY - 8;
+        const tipX = pivotX + rod * Math.sin(phi);
+        const tipY = pivotY - rod * Math.cos(phi);
+        const wheelRadius = 12;
+        const wheelRotation = (state.x[2] * scale) / wheelRadius;
+
+        scene.save();
+        scene.strokeStyle = "rgba(255,255,255,0.11)";
+        scene.lineWidth = 1;
+        for (let x = originX % scale; x < w; x += scale) {
+          scene.beginPath();
+          scene.moveTo(x, groundY + 4);
+          scene.lineTo(x, groundY + 20);
+          scene.stroke();
+        }
+        scene.fillStyle = "rgba(255,255,255,0.1)";
+        scene.fillRect(0, groundY, w, 3);
+        scene.restore();
+
+        scene.save();
+        scene.translate(cartX, cartY);
+        scene.fillStyle = "#2c343c";
+        roundRect(scene, -cartW / 2, -cartH / 2, cartW, cartH, 8);
+        scene.fill();
+        scene.strokeStyle = "#59646e";
+        scene.lineWidth = 2;
+        scene.stroke();
+        drawWheel(scene, -34, 27, wheelRadius, wheelRotation);
+        drawWheel(scene, 34, 27, wheelRadius, wheelRotation);
+        scene.restore();
+
+        drawArrow(cartX, cartY - 56, state.force);
+
+        scene.save();
+        scene.lineCap = "round";
+        scene.strokeStyle = state.unstable ? "rgba(223,107,99,0.9)" : "#e8bb5a";
+        scene.lineWidth = 8;
+        scene.beginPath();
+        scene.moveTo(pivotX, pivotY);
+        scene.lineTo(tipX, tipY);
+        scene.stroke();
+        scene.fillStyle = "#f2d282";
+        scene.beginPath();
+        scene.arc(tipX, tipY, 16, 0, Math.PI * 2);
+        scene.fill();
+        scene.strokeStyle = "#fff0bd";
+        scene.lineWidth = 2;
+        scene.stroke();
+        scene.fillStyle = "#39b89f";
+        scene.beginPath();
+        scene.arc(pivotX, pivotY, 8, 0, Math.PI * 2);
+        scene.fill();
+        scene.restore();
+
+        scene.save();
+        scene.strokeStyle = "rgba(105,174,233,0.65)";
+        scene.setLineDash([6, 8]);
+        scene.lineWidth = 2;
+        scene.beginPath();
+        scene.moveTo(pivotX, pivotY - rod - 34);
+        scene.lineTo(pivotX, groundY);
+        scene.stroke();
+        scene.setLineDash([]);
+        scene.fillStyle = "rgba(105,174,233,0.95)";
+        scene.font = "12px ui-monospace, SFMono-Regular, Menlo, monospace";
+        scene.fillText("obere Ruhelage phi=0", pivotX + 14, Math.max(22, pivotY - rod - 18));
+        scene.restore();
+      }
+
+      function drawArrow(x, y, force) {
+        const len = clamp(force * 3.2, -110, 110);
+        if (Math.abs(len) < 1) return;
+        const dir = Math.sign(len);
+        const end = x + len;
+        scene.save();
+        scene.strokeStyle = force > 0 ? "#39b89f" : "#df6b63";
+        scene.fillStyle = scene.strokeStyle;
+        scene.lineWidth = 4;
+        scene.lineCap = "round";
+        scene.beginPath();
+        scene.moveTo(x, y);
+        scene.lineTo(end, y);
+        scene.stroke();
+        scene.beginPath();
+        scene.moveTo(end, y);
+        scene.lineTo(end - dir * 13, y - 7);
+        scene.lineTo(end - dir * 13, y + 7);
+        scene.closePath();
+        scene.fill();
+        scene.restore();
+      }
+
+      function drawWheel(ctx, x, y, radius, rotation) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        ctx.fillStyle = "#111316";
+        ctx.strokeStyle = "#87929d";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.strokeStyle = "#c7d0d8";
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < 4; i++) {
+          ctx.rotate(Math.PI / 4);
+          ctx.beginPath();
+          ctx.moveTo(-radius + 4, 0);
+          ctx.lineTo(radius - 4, 0);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "#59646e";
+        ctx.beginPath();
+        ctx.arc(0, 0, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function roundRect(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+      }
+
+      function drawChart(canvas, ctx, key, color, range, suffix, decimals = 2) {
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width;
+        const h = rect.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = "rgba(255,255,255,0.08)";
+        ctx.lineWidth = 1;
+        for (let i = 1; i < 4; i++) {
+          const y = (h * i) / 4;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = "rgba(255,255,255,0.18)";
+        ctx.beginPath();
+        ctx.moveTo(0, h / 2);
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+
+        if (state.history.length < 2) return;
+        const minT = 0;
+        const maxT = Math.max(1, state.history[state.history.length - 1].t);
+        const maxAbs = state.history.reduce((max, point) => Math.max(max, Math.abs(point[key])), range);
+        const displayRange = Math.max(range, maxAbs * 1.08);
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let started = false;
+        state.history.forEach(point => {
+          const x = ((point.t - minT) / (maxT - minT)) * w;
+          const value = clamp(point[key], -displayRange, displayRange);
+          const y = h / 2 - (value / displayRange) * (h * 0.42);
+          if (!started) {
+            ctx.moveTo(x, y);
+            started = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.stroke();
+
+        const latest = state.history[state.history.length - 1][key];
+        ctx.fillStyle = "rgba(255,255,255,0.82)";
+        ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+        ctx.fillText(`${latest.toFixed(decimals)} ${suffix}`, 14, h - 14);
+        ctx.fillStyle = "rgba(255,255,255,0.54)";
+        ctx.fillText("t=0", 14, h - 32);
+        ctx.textAlign = "right";
+        ctx.fillText(`t=${maxT.toFixed(1)} s`, w - 14, h - 14);
+        ctx.fillText(`±${displayRange.toFixed(decimals === 1 ? 1 : 2)} ${suffix}`, w - 14, 24);
+        ctx.textAlign = "left";
+      }
+
+      function drawCharts() {
+        drawChart(chartCanvases.phi, chartContexts.phi, "phi", "#e8bb5a", 90, "deg", 2);
+        drawChart(chartCanvases.phiDot, chartContexts.phiDot, "phiDot", "#f09372", 4, "rad/s", 2);
+        drawChart(chartCanvases.x, chartContexts.x, "x", "#69aee9", 12, "m", 2);
+        drawChart(chartCanvases.xDot, chartContexts.xDot, "xDot", "#a78bfa", 3, "m/s", 2);
+        drawChart(chartCanvases.force, chartContexts.force, "force", "#39b89f", Number(controls.forceLimit.value), "N", 1);
+        drawChart(chartCanvases.tip, chartContexts.tip, "tip", "#f5d76e", 12, "m", 2);
+      }
+
+      function sync() {
+        const p = parameterValues();
+        const phiDeg = radToDeg(wrapPi(state.x[0]));
+        const tip = state.x[2] + p.l * Math.sin(state.x[0]);
+        document.getElementById("phiHud").textContent = `${phiDeg.toFixed(2)} deg`;
+        document.getElementById("xHud").textContent = `${state.x[2].toFixed(2)} m`;
+        document.getElementById("distanceHud").textContent = `${state.distance.toFixed(2)} m`;
+        document.getElementById("forceHud").textContent = `${state.force.toFixed(1)} N`;
+        document.getElementById("statusHud").textContent = state.unstable ? "instabil" : state.running ? "laeuft" : "bereit";
+        document.getElementById("phiDotRead").textContent = `${state.x[1].toFixed(2)} rad/s`;
+        document.getElementById("xDotRead").textContent = `${state.x[3].toFixed(2)} m/s`;
+        document.getElementById("tipRead").textContent = `${tip.toFixed(2)} m`;
+        document.getElementById("distanceRead").textContent = `${state.distance.toFixed(2)} m`;
+        document.getElementById("timeRead").textContent = `${state.t.toFixed(2)} s`;
+
+        outputs.kp.textContent = Number(controls.kp.value).toFixed(1);
+        outputs.kd.textContent = Number(controls.kd.value).toFixed(1);
+        outputs.tau.textContent = `${Number(controls.tau.value).toFixed(2)} s`;
+        outputs.qPhi.textContent = Number(controls.qPhi.value).toFixed(0);
+        outputs.qPhiDot.textContent = Number(controls.qPhiDot.value).toFixed(0);
+        outputs.qX.textContent = Number(controls.qX.value).toFixed(0);
+        outputs.qXDot.textContent = Number(controls.qXDot.value).toFixed(0);
+        outputs.rWeight.textContent = Number(controls.rWeight.value).toFixed(1);
+        outputs.x0.textContent = `${Number(controls.x0.value).toFixed(2)} m`;
+        outputs.kick.textContent = `${Number(controls.kick.value).toFixed(0)} deg`;
+        outputs.massCart.textContent = `${p.M.toFixed(2)} kg`;
+        outputs.massPend.textContent = `${p.m.toFixed(2)} kg`;
+        outputs.length.textContent = `${p.l.toFixed(2)} m`;
+        outputs.forceLimit.textContent = `${p.limit.toFixed(0)} N`;
+
+        const isPd = controls.controller.value === "pd";
+        const isLqr = controls.controller.value === "lqr";
+        controls.kp.disabled = !isPd;
+        controls.kd.disabled = !isPd;
+        controls.tau.disabled = !isPd;
+        controls.qPhi.disabled = !isLqr;
+        controls.qPhiDot.disabled = !isLqr;
+        controls.qX.disabled = !isLqr;
+        controls.qXDot.disabled = !isLqr;
+        controls.rWeight.disabled = !isLqr;
+
+        const { a, b } = linearizedUpperMatrices(p);
+        const pdStable = Number(controls.kp.value) > -a / b && Number(controls.kd.value) > 0;
+        const kText = state.lqrGain.map(value => value.toFixed(2)).join(", ");
+        document.getElementById("lawText").innerHTML =
+          controls.controller.value === "lqr"
+            ? `LQR: u = -Kx<br>K = [${kText}]<br>Q = diag(${Number(controls.qPhi.value)}, ${Number(controls.qPhiDot.value)}, ${Number(controls.qX.value)}, ${Number(controls.qXDot.value)}), R = ${Number(controls.rWeight.value).toFixed(1)}${state.lqrError ? `<br>${state.lqrError}` : ""}`
+            : controls.controller.value === "pd"
+              ? `PD: u = Kp phi + Kd phi_dot_filtered<br>Linearisierung: phi_ddot = ${a.toFixed(2)} phi ${b.toFixed(2)} u<br>stabil fuer Kp &gt; ${(-a / b).toFixed(2)}, Kd &gt; 0<br>${pdStable ? "aktuelle Werte: stabil im linearen Modell" : "aktuelle Werte: instabil im linearen Modell"}`
+              : `Offenes System: u = 0<br>Obere Ruhelage ist instabil.`;
+      }
+
+      function animate(now) {
+        const dt = Math.min(0.05, (now - (animate.last || now)) / 1000);
+        animate.last = now;
+        if (state.running) simulate(dt);
+        drawScene();
+        drawCharts();
+        sync();
+        requestAnimationFrame(animate);
+      }
+
+      document.getElementById("playBtn").addEventListener("click", () => {
+        state.running = !state.running;
+        document.getElementById("playBtn").textContent = state.running ? "Pause" : "Start";
+      });
+
+      document.getElementById("resetBtn").addEventListener("click", resetSimulation);
+
+      document.getElementById("kickBtn").addEventListener("click", () => {
+        state.x[0] = wrapPi(state.x[0] + degToRad(Number(controls.kick.value)));
+        state.unstable = false;
+        pushHistory();
+      });
+
+      Object.values(controls).forEach(control => {
+        control.addEventListener("input", () => {
+          if (["qPhi", "qPhiDot", "qX", "qXDot", "rWeight", "massCart", "massPend", "length"].includes(control.id)) computeLqrGain();
+          if (["kick", "x0", "massCart", "massPend", "length"].includes(control.id)) resetSimulation();
+          sync();
+        });
+        control.addEventListener("change", sync);
+      });
+
+      window.addEventListener("resize", resize);
+
+      resize();
+      computeLqrGain();
+      resetSimulation();
+      requestAnimationFrame(animate);
+    </script>
+  </body>
+</html>
