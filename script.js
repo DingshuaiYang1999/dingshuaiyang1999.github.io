@@ -34,7 +34,9 @@ const translations = {
     aboutLabel: "About me",
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
     aboutText1:
-      "I started in materials engineering and kept being drawn to systems that perceive, decide, and act. Today I work at the boundary between control theory, robotics, and modern AI tools.",
+      "I started in materials engineering — four years of metal forming and forging at GDUT. The deeper I went, the clearer it got: I was not in love with the shaping itself, but with the systems doing it. A robot that walks across a room is, to me, more exciting than a perfectly cast alloy.",
+    aboutText2:
+      "So I pivoted to mechatronics and moved to Erlangen for a masters. These days I work with control loops, manipulators, and modern AI tools — and the harder question of how all three play nicely together. This site is the record of that journey, and a public window into what I am currently building.",
     educationLabel: "Education",
     educationTitle: "Education",
     edu1Degree: "M.Sc. Mechatronics",
@@ -94,11 +96,11 @@ const translations = {
     demo7Meta: "Path planning · Python source",
     demo7Text: "Random sampling builds a connectivity graph in free space; Dijkstra finds the shortest collision-free path. Ideal for multi-query static scenes.",
     project1Title: "MATLAB Laboratory Course",
-    project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
+    project1Timeline: "Timeline: 01.10.2025 - 01.02.2026",
     project1Text:
       "Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: 15.04.2026 - 01.07.2026",
+    project2Timeline: "Timeline: 15.04.2026 - 01.07.2026",
     project2Text:
       "Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.",
     contactLabel: "Contact me",
@@ -144,7 +146,9 @@ const translations = {
     aboutLabel: "Über mich",
     aboutTitle: "Von Materialwissenschaften über Mechatronik bis hin zu Robotik und KI.",
     aboutText1:
-      "Ich begann im Materialingenieurwesen und wurde immer wieder von Systemen angezogen, die wahrnehmen, entscheiden und handeln. Heute arbeite ich an der Schnittstelle zwischen Regelungstechnik, Robotik und modernen KI-Tools.",
+      "Ich kam aus dem Materialingenieurwesen — vier Jahre Umformtechnik und Schmieden an der GDUT. Je tiefer ich einstieg, desto klarer wurde: nicht die Umformung selbst hat mich fasziniert, sondern die Systeme, die sie ausführen. Ein Roboter, der durch einen Raum geht, ist für mich spannender als jede perfekt gegossene Legierung.",
+    aboutText2:
+      "Also wechselte ich in die Mechatronik und ging für den Master nach Erlangen. Heute arbeite ich mit Regelkreisen, Manipulatoren und modernen KI-Tools — und der schwierigeren Frage, wie diese drei gut zusammenspielen. Diese Seite ist die Aufzeichnung dieser Reise und ein offenes Fenster in das, woran ich gerade baue.",
     educationLabel: "Ausbildung",
     educationTitle: "Ausbildung",
     edu1Degree: "M.Sc. Mechatronik",
@@ -204,11 +208,11 @@ const translations = {
     demo7Meta: "Pfadplanung · Python-Quellcode",
     demo7Text: "Zufällige Stichproben bilden einen Graphen im freien Raum; Dijkstra findet den kürzesten kollisionsfreien Pfad. Geeignet für Mehrfachabfragen.",
     project1Title: "MATLAB Laboratory Course",
-    project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
+    project1Timeline: "Timeline: 01.10.2025 - 01.02.2026",
     project1Text:
       "Inhalt: Static truss, Dynamic Crane, Measurement Data Analysis und Optimisation of the truss structure. Das Labor nutzte MATLAB für Strukturmechanik-Modellierung, ODE-Simulation, FFT-Signalanalyse, symbolische Berechnung und Optimierung.",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: 15.04.2026 - 01.07.2026",
+    project2Timeline: "Timeline: 15.04.2026 - 01.07.2026",
     project2Text:
       "Inhalt: Laborstationen sind Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension und Magnetic Levitation System. Das Labor wendet Grundlagen aus Regelungstechnik A / dynamical systems and control auf Modellierung, Simulation, Reglerentwurf und experimentelle Beobachtung an.",
     contactLabel: "Kontaktiere mich",
@@ -253,7 +257,9 @@ const translations = {
     aboutLabel: "关于我",
     aboutTitle: "从材料工程到机电一体化，再到 Robotics 与 AI。",
     aboutText1:
-      "我从材料工程出发，逐步被那些能感知、决策、行动的系统吸引。现在我在控制理论、机器人、以及现代 AI 工具的交界处工作。",
+      "我从材料工程出发，本科四年学的是把铁皮变形、把铜片冲压。但越学越发现，自己真正感兴趣的不是"成型"，而是那些能感知、能决策、能行动的系统——一台会自己走路的机器人，比一颗工艺完美的合金，更让我兴奋。",
+    aboutText2:
+      "所以我把方向拐到了机电一体化，跑到 Erlangen 重读硕士。现在我每天打交道的是控制回路、机械臂、和现代 AI 工具——以及如何让这三者好好合作。这个站点是我的学习与项目记录，也是一个公开的"现在在做什么"。",
     educationLabel: "教育经历",
     educationTitle: "教育经历",
     edu1Degree: "M.Sc. 机电一体化",
@@ -313,11 +319,11 @@ const translations = {
     demo7Meta: "路径规划 · Python 源码",
     demo7Text: "对自由空间随机采样并构建近邻图，再用 Dijkstra 求最短无碰撞路径。适合多次查询的静态场景。",
     project1Title: "MATLAB Laboratory Course",
-    project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
+    project1Timeline: "Timeline: 01.10.2025 - 01.02.2026",
     project1Text:
       "内容：Static truss、Dynamic Crane、Measurement Data Analysis 和 Optimisation of the truss structure。实验使用 MATLAB 完成结构力学建模、ODE 仿真、FFT 信号分析、符号计算和优化任务。",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: 15.04.2026 - 01.07.2026",
+    project2Timeline: "Timeline: 15.04.2026 - 01.07.2026",
     project2Text:
       "内容：实验站点包括 Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension 和 Magnetic Levitation System。课程实验围绕自动控制基础，将 Regelungstechnik A / dynamical systems and control 的理论用于建模、仿真、控制器设计和实验观察。",
     contactLabel: "联系我",
@@ -363,7 +369,9 @@ const translations = {
     aboutLabel: "私について",
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
     aboutText1:
-      "材料工学から出発し、知覚し、判断し、動作するシステムに惹かれていきました。今は制御理論、ロボティクス、そして現代の AI ツールの交点で取り組んでいます。",
+      "出発点は材料工学でした。GDUT で 4 年間、金属の成形と鍛造を学びました。学ぶほどに気づいたのは、自分が惹かれているのは「成形そのもの」ではなく、それを動かすシステムだということ。完璧に鋳造された合金より、部屋を歩くロボットの方が、自分にとってはずっと面白い。",
+    aboutText2:
+      "そこでメカトロニクスへ進路を変え、エアランゲンで修士を始めました。今は制御ループ、マニピュレータ、そして現代の AI ツールと向き合い、それら三つをうまく協調させる難しい問いに取り組んでいます。このサイトはその旅の記録であり、今作っているものの公開窓口です。",
     educationLabel: "学歴",
     educationTitle: "学歴",
     edu1Degree: "M.Sc. メカトロニクス",
@@ -423,11 +431,11 @@ const translations = {
     demo7Meta: "経路計画 · Python ソース",
     demo7Text: "自由空間のランダムサンプリングからグラフを構築し、Dijkstra で最短の衝突なし経路を探索。静的環境で多回クエリに有効。",
     project1Title: "MATLAB Laboratory Course",
-    project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
+    project1Timeline: "Timeline: 01.10.2025 - 01.02.2026",
     project1Text:
       "内容：Static truss、Dynamic Crane、Measurement Data Analysis、Optimisation of the truss structure。MATLAB を用いて構造力学モデリング、ODE シミュレーション、FFT 信号解析、記号計算、最適化を行いました。",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
-    project2Timeline: "Time line: 15.04.2026 - 01.07.2026",
+    project2Timeline: "Timeline: 15.04.2026 - 01.07.2026",
     project2Text:
       "内容：実験ステーションは Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension、Magnetic Levitation System です。Regelungstechnik A / dynamical systems and control の基礎を、モデリング、シミュレーション、制御器設計、実験観察に応用しました。",
     contactLabel: "連絡する",

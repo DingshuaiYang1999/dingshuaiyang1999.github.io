@@ -42,6 +42,15 @@ html {
   scroll-padding-top: 90px;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: 12px;
@@ -266,6 +275,13 @@ a {
   color: var(--ink);
 }
 
+.hero-name {
+  position: relative;
+  display: inline-block;
+  padding-right: 4px;
+  cursor: default;
+}
+
 .hero-name::after {
   content: "";
   display: block;
@@ -273,6 +289,11 @@ a {
   height: 2px;
   background: var(--accent);
   margin-top: 18px;
+  transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.hero-copy:hover .hero-name::after {
+  width: 160px;
 }
 
 .hero-pills {
