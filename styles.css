@@ -309,27 +309,35 @@ a {
 .pill {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   padding: 0;
-  font-weight: 500;
-  color: var(--muted);
+  font-weight: 600;
+  color: var(--ink);
   background: none;
   border: none;
   border-radius: 0;
 }
 
-.pill + .pill::before {
-  content: "·";
-  margin: 0 12px;
-  color: var(--line-strong);
+.pill::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
-.pill-robotics,
-.pill-control,
-.pill-ai {
-  color: var(--muted);
-  border: none;
-  background: none;
+.pill + .pill {
+  margin-left: 22px;
 }
+
+.pill-robotics { color: #2f7d63; }
+.pill-control  { color: #355c81; }
+.pill-ai       { color: #b86a3f; }
+
+:root[data-theme="dark"] .pill-robotics { color: #7cc4a7; }
+:root[data-theme="dark"] .pill-control  { color: #7da4c8; }
+:root[data-theme="dark"] .pill-ai       { color: #e0926a; }
 
 .hero-text {
   max-width: 640px;
@@ -764,26 +772,64 @@ a {
 }
 
 .now-section {
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-  padding: 28px 32px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+  padding: 36px 40px;
   background: var(--surface);
   border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius);
 }
 
-.now-section .section-label {
-  margin: 0;
-  flex-shrink: 0;
+.now-head .section-label {
+  margin: 0 0 6px;
 }
 
-.now-text {
+.now-sub {
   margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.now-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.now-list li {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 14px;
+  align-items: baseline;
   color: var(--ink);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.55;
+}
+
+.now-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 8px;
+}
+
+.dot-learn { background: var(--accent); }
+.dot-build { background: var(--blue); }
+.dot-seek  { background: var(--warm); }
+
+@media (max-width: 720px) {
+  .now-section {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 28px;
+  }
 }
 
 .skill-table {
