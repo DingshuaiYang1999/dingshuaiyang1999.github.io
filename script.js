@@ -33,9 +33,7 @@ const translations = {
     aboutLabel: "About me",
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
     aboutText1:
-      "I earned a B.Eng. in Materials Processing and Controlling Engineering from Guangdong University of Technology and now study M.Sc. Mechatronics at Friedrich-Alexander University Erlangen-Nürnberg.",
-    aboutText2:
-      "My interests span Robotics, Control Systems, Computer Science, AI tools, and Large Language Models. I am currently building personal projects in AI and automation.",
+      "I started in materials engineering and kept being drawn to systems that perceive, decide, and act. Today I work at the boundary between control theory, robotics, and modern AI tools.",
     educationLabel: "Education",
     educationTitle: "Education",
     edu1Degree: "M.Sc. Mechatronics",
@@ -116,9 +114,7 @@ const translations = {
     aboutLabel: "Über mich",
     aboutTitle: "Von Materialwissenschaften über Mechatronik bis hin zu Robotik und KI.",
     aboutText1:
-      "Ich habe einen B.Eng. in Materialumformung und Steuerungstechnik an der Guangdong University of Technology abgeschlossen und studiere derzeit M.Sc. Mechatronik an der Friedrich-Alexander-Universität Erlangen-Nürnberg.",
-    aboutText2:
-      "Meine Interessen umfassen Robotik, Control Systems, Informatik, KI-Tools und Large Language Models. Aktuell arbeite ich an persönlichen Projekten im Bereich KI und Automatisierung.",
+      "Ich begann im Materialingenieurwesen und wurde immer wieder von Systemen angezogen, die wahrnehmen, entscheiden und handeln. Heute arbeite ich an der Schnittstelle zwischen Regelungstechnik, Robotik und modernen KI-Tools.",
     educationLabel: "Ausbildung",
     educationTitle: "Ausbildung",
     edu1Degree: "M.Sc. Mechatronik",
@@ -198,9 +194,7 @@ const translations = {
     aboutLabel: "关于我",
     aboutTitle: "从材料工程到机电一体化，再到 Robotics 与 AI。",
     aboutText1:
-      "我本科毕业于 Guangdong University of Technology 的 Materials Processing and Controlling Engineering，现就读于 Friedrich-Alexander-Universität Erlangen-Nürnberg 的 M.Sc. Mechatronics。",
-    aboutText2:
-      "我的重点方向是 Robotics、Control Systems、Computer Science、AI Tools 与 Large Language Models，目前在做 AI 与自动化方向的个人项目。",
+      "我从材料工程出发，逐步被那些能感知、决策、行动的系统吸引。现在我在控制理论、机器人、以及现代 AI 工具的交界处工作。",
     educationLabel: "教育经历",
     educationTitle: "教育经历",
     edu1Degree: "M.Sc. 机电一体化",
@@ -281,9 +275,7 @@ const translations = {
     aboutLabel: "私について",
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
     aboutText1:
-      "Guangdong University of Technology で Materials Processing and Controlling Engineering の B.Eng. を取得し、現在は Friedrich-Alexander-Universität Erlangen-Nürnberg で M.Sc. Mechatronics を学んでいます。",
-    aboutText2:
-      "関心分野は Robotics、Control Systems、Computer Science、AI Tools、Large Language Models です。現在は AI と自動化の個人プロジェクトに取り組んでいます。",
+      "材料工学から出発し、知覚し、判断し、動作するシステムに惹かれていきました。今は制御理論、ロボティクス、そして現代の AI ツールの交点で取り組んでいます。",
     educationLabel: "学歴",
     educationTitle: "学歴",
     edu1Degree: "M.Sc. メカトロニクス",
