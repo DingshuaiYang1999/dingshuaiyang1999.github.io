@@ -75,9 +75,6 @@ const translations = {
     demo3Title: "7-DOF Robot Arm Simulator",
     demo3Meta: "Interactive demo · self-built",
     demo3Text: "A 7-degree-of-freedom robotic arm in the browser. Joint-by-joint control with DH-based modelling.",
-    demo4Title: "Glow Cube",
-    demo4Meta: "Visual experiment · self-built",
-    demo4Text: "Pure-CSS animated 3D cube with layered glow — a small visual / motion-design exercise.",
     project1Title: "MATLAB Laboratory Course",
     project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
     project1Text:
@@ -168,9 +165,6 @@ const translations = {
     demo3Title: "7-DOF Roboterarm Simulator",
     demo3Meta: "Interaktive Demo · selbst gebaut",
     demo3Text: "Ein 7-Achsen-Roboterarm im Browser. Gelenkweise Steuerung mit DH-Parametern.",
-    demo4Title: "Glow Cube",
-    demo4Meta: "Visuelles Experiment · selbst gebaut",
-    demo4Text: "Animierter 3D-Würfel mit reinem CSS und mehrschichtigem Glow — kleine visuelle / Motion-Design-Übung.",
     project1Title: "MATLAB Laboratory Course",
     project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
     project1Text:
@@ -260,9 +254,6 @@ const translations = {
     demo3Title: "7 自由度机械臂仿真",
     demo3Meta: "交互式 demo · 自己写的",
     demo3Text: "浏览器中的 7 自由度机械臂可视化，可逐关节控制并观察末端姿态变化，基于 DH 参数建模。",
-    demo4Title: "Glow Cube",
-    demo4Meta: "视觉小实验 · 自己写的",
-    demo4Text: "用纯 CSS 与 3D 变换做的发光立方体动画，练习视觉与动效。",
     project1Title: "MATLAB Laboratory Course",
     project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
     project1Text:
@@ -353,9 +344,6 @@ const translations = {
     demo3Title: "7-DOF ロボットアーム",
     demo3Meta: "インタラクティブ demo · 自作",
     demo3Text: "ブラウザ上の 7 自由度ロボットアーム。関節ごとの制御と DH モデリング。",
-    demo4Title: "Glow Cube",
-    demo4Meta: "ビジュアル実験 · 自作",
-    demo4Text: "純 CSS と 3D 変換による発光する立方体アニメーション。視覚とモーションの練習。",
     project1Title: "MATLAB Laboratory Course",
     project1Timeline: "Time line: 01.10.2025 - 01.02.2026",
     project1Text:
