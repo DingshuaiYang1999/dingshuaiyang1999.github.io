@@ -524,7 +524,7 @@ a {
   overflow: hidden;
   aspect-ratio: 16 / 9;
   background: #ffffff;
-  padding: 12px;
+  padding: 0;
 }
 
 .project-media img {
