@@ -77,8 +77,12 @@ a {
   width: min(100% - 32px, var(--max));
   margin: 0 auto;
   padding: 18px 0;
-  background: rgba(246, 248, 244, 0.86);
+  background: var(--header-bg, rgba(247, 246, 242, 0.86));
   backdrop-filter: blur(18px);
+}
+
+:root[data-theme="dark"] .site-header {
+  background: rgba(15, 19, 17, 0.86);
 }
 
 .brand,
