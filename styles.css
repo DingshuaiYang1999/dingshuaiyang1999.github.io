@@ -670,6 +670,12 @@ a {
   backdrop-filter: blur(8px);
 }
 
+:root[data-theme="dark"] .demo-open {
+  background: rgba(13, 17, 16, 0.9);
+  color: var(--accent-strong);
+  border: 1px solid rgba(124, 196, 167, 0.28);
+}
+
 .project-media.blueprint {
   background:
     linear-gradient(135deg, rgba(49, 95, 140, 0.85), rgba(31, 122, 90, 0.78)),
