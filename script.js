@@ -500,3 +500,28 @@ document.querySelectorAll(".theme-toggle").forEach((btn) => {
 });
 
 applyTheme(getInitialTheme());
+
+// Scroll-triggered fade-in reveal
+(function setupReveal() {
+  const targets = document.querySelectorAll(
+    ".hero-copy, .profile-panel, .section .section-heading, .section .text-block, .timeline-item, .skill-row, .language-row, .project-card, .now-section, .contact-section > div, .contact-right"
+  );
+  targets.forEach((el) => el.classList.add("reveal"));
+
+  if (!("IntersectionObserver" in window)) {
+    targets.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+  );
+  targets.forEach((el) => obs.observe(el));
+})();

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 — Page not found · Dingshuai Yang</title>
+    <meta name="robots" content="noindex" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314201b'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='30' font-family='-apple-system,BlinkMacSystemFont,Inter,Arial,sans-serif' font-weight='800' letter-spacing='-1' fill='white'%3EDY%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefers =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          document.documentElement.setAttribute("data-theme", saved || prefers);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .nf-wrap {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 32px;
+      }
+      .nf-card {
+        max-width: 560px;
+        text-align: left;
+      }
+      .nf-code {
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-size: 18px;
+        color: var(--accent);
+        margin: 0 0 10px;
+      }
+      .nf-title {
+        font-size: clamp(40px, 7vw, 72px);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.05;
+        margin: 0 0 18px;
+        color: var(--ink);
+      }
+      .nf-title::after {
+        content: "";
+        display: block;
+        width: 56px;
+        height: 2px;
+        background: var(--accent);
+        margin-top: 18px;
+      }
+      .nf-text {
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.55;
+      }
+      .nf-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="nf-wrap">
+      <div class="nf-card">
+        <p class="nf-code">404 · Page not found</p>
+        <h1 class="nf-title">The control loop lost track.</h1>
+        <p class="nf-text">
+          The page you were looking for isn't here — maybe the link is old or
+          mistyped. Let's get you back on the path.
+        </p>
+        <div class="nf-actions">
+          <a class="button primary" href="/">← Back to homepage</a>
+          <a class="button secondary" href="/#projects">View projects</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
