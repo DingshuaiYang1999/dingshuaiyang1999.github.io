@@ -534,7 +534,7 @@ a {
   object-fit: contain;
 }
 
-.demo-thumb {
+.project-media.image-frame.demo-thumb {
   position: relative;
   padding: 0;
   background: var(--ink);
@@ -543,8 +543,10 @@ a {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.demo-thumb img {
+.project-media.image-frame.demo-thumb img {
   object-fit: cover;
+  width: 100%;
+  height: 100%;
   transition: transform 0.4s ease;
 }
 
@@ -673,6 +675,11 @@ a {
 .contact-glyph.brand-github,
 .contact-glyph.brand-linkedin {
   opacity: 1;
+}
+
+:root[data-theme="dark"] .contact-glyph.brand-x svg path,
+:root[data-theme="dark"] .contact-glyph.brand-github svg path {
+  fill: #ffffff;
 }
 
 .now-section {
