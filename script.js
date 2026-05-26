@@ -34,9 +34,9 @@ const translations = {
     aboutLabel: "About me",
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
     aboutText1:
-      "I started in materials engineering — four years of metal forming and forging at GDUT. The deeper I went, the clearer it got: I was not in love with the shaping itself, but with the systems doing it. A robot that walks across a room is, to me, more exciting than a perfectly cast alloy.",
+      "I started in materials engineering, but my real curiosity has always been the machines themselves — and the question of what makes them intelligent. Watching humanoid robots learn to walk, manipulate, and reason is what pulled me into this field.",
     aboutText2:
-      "So I pivoted to mechatronics and moved to Erlangen for a masters. These days I work with control loops, manipulators, and modern AI tools — and the harder question of how all three play nicely together. This site is the record of that journey, and a public window into what I am currently building.",
+      "I believe humanoid robots and embodied intelligence are where things are heading. That is why I switched to mechatronics and moved to Erlangen — to learn the control loops, the manipulators, and the AI tools that will, sooner or later, walk through every kitchen and every factory floor.",
     educationLabel: "Education",
     educationTitle: "Education",
     edu1Degree: "M.Sc. Mechatronics",
@@ -146,9 +146,9 @@ const translations = {
     aboutLabel: "Über mich",
     aboutTitle: "Von Materialwissenschaften über Mechatronik bis hin zu Robotik und KI.",
     aboutText1:
-      "Ich kam aus dem Materialingenieurwesen — vier Jahre Umformtechnik und Schmieden an der GDUT. Je tiefer ich einstieg, desto klarer wurde: nicht die Umformung selbst hat mich fasziniert, sondern die Systeme, die sie ausführen. Ein Roboter, der durch einen Raum geht, ist für mich spannender als jede perfekt gegossene Legierung.",
+      "Ich habe im Materialingenieurwesen angefangen, aber meine eigentliche Neugier galt schon immer den Maschinen selbst — und der Frage, was sie intelligent macht. Wenn humanoide Roboter lernen, zu gehen, zu greifen und zu schlussfolgern, ist das für mich der Grund, warum ich in dieses Feld eingestiegen bin.",
     aboutText2:
-      "Also wechselte ich in die Mechatronik und ging für den Master nach Erlangen. Heute arbeite ich mit Regelkreisen, Manipulatoren und modernen KI-Tools — und der schwierigeren Frage, wie diese drei gut zusammenspielen. Diese Seite ist die Aufzeichnung dieser Reise und ein offenes Fenster in das, woran ich gerade baue.",
+      "Ich glaube, dass humanoide Roboter und Embodied Intelligence die Zukunft sind. Deshalb bin ich zur Mechatronik gewechselt und nach Erlangen gezogen — um die Regelkreise, Manipulatoren und KI-Werkzeuge zu lernen, die früher oder später durch jede Küche und jede Fabrikhalle gehen werden.",
     educationLabel: "Ausbildung",
     educationTitle: "Ausbildung",
     edu1Degree: "M.Sc. Mechatronik",
@@ -257,9 +257,9 @@ const translations = {
     aboutLabel: "关于我",
     aboutTitle: "从材料工程到机电一体化，再到 Robotics 与 AI。",
     aboutText1:
-      "我从材料工程出发，本科四年学的是把铁皮变形、把铜片冲压。但越学越发现，自己真正感兴趣的不是"成型"，而是那些能感知、能决策、能行动的系统——一台会自己走路的机器人，比一颗工艺完美的合金，更让我兴奋。",
+      "我本科学的是材料工程，但真正让我好奇的从来是那些机器本身——以及让它们变得智能的那些东西。看着人形机器人学会走路、抓取、像人一样推理，是把我拉进这个领域的根本原因。",
     aboutText2:
-      "所以我把方向拐到了机电一体化，跑到 Erlangen 重读硕士。现在我每天打交道的是控制回路、机械臂、和现代 AI 工具——以及如何让这三者好好合作。这个站点是我的学习与项目记录，也是一个公开的"现在在做什么"。",
+      "我相信人形机器人和具身智能就是未来的方向。所以我转到机电一体化，跑到 Erlangen 读硕士——把控制回路、机械臂、和现代 AI 工具一个个学会。早晚它们会走进每个厨房和每条产线，我希望那时候我也在那里。",
     educationLabel: "教育经历",
     educationTitle: "教育经历",
     edu1Degree: "M.Sc. 机电一体化",
@@ -369,9 +369,9 @@ const translations = {
     aboutLabel: "私について",
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
     aboutText1:
-      "出発点は材料工学でした。GDUT で 4 年間、金属の成形と鍛造を学びました。学ぶほどに気づいたのは、自分が惹かれているのは「成形そのもの」ではなく、それを動かすシステムだということ。完璧に鋳造された合金より、部屋を歩くロボットの方が、自分にとってはずっと面白い。",
+      "我本科学的是材料工程，但真正让我好奇的从来是那些机器本身——以及让它们变得智能的那些东西。看着人形机器人学会走路、抓取、像人一样推理，是把我拉进这个领域的根本原因。",
     aboutText2:
-      "そこでメカトロニクスへ進路を変え、エアランゲンで修士を始めました。今は制御ループ、マニピュレータ、そして現代の AI ツールと向き合い、それら三つをうまく協調させる難しい問いに取り組んでいます。このサイトはその旅の記録であり、今作っているものの公開窓口です。",
+      "我相信人形机器人和具身智能就是未来的方向。所以我转到机电一体化，跑到 Erlangen 读硕士——把控制回路、机械臂、和现代 AI 工具一个个学会。早晚它们会走进每个厨房和每条产线，我希望那时候我也在那里。",
     educationLabel: "学歴",
     educationTitle: "学歴",
     edu1Degree: "M.Sc. メカトロニクス",
