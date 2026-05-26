@@ -20,17 +20,12 @@ const translations = {
     heroDomain1: "Robotics",
     heroDomain2: "Control Engineering",
     heroDomain3: "AI",
-    heroTitle: "Hi, I am Dingshuai Yang. I work across robotics, control engineering, and AI.",
     heroText:
       "Currently in Erlangen for a masters in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.",
     viewProjects: "View labs →",
     contactMe: "Contact me",
     profileTitle: "M.Sc. Mechatronics  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany",
-    focusLabel: "Focus",
-    focusValue: "Robotics, Control Engineering, Computer Science, AI & LLMs",
-    statusLabel: "Currently learning",
-    statusValue: "Computer Science fundamentals, AI, Machine Learning, LLMs, and Prompt Engineering",
     aboutLabel: "About me",
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
     aboutText1:
@@ -63,12 +58,6 @@ const translations = {
     nowItem1: "Studying CS fundamentals, AI, Machine Learning, LLMs, and Prompt Engineering.",
     nowItem2: "Building personal projects in AI and automation.",
     nowItem3: "Looking for internships and Werkstudent roles in robotics, control, AI.",
-    skill1Title: "Robotics & Control",
-    skill1Text: "ROS/ROS2, MATLAB, Simulink, OpenCV, control systems, and robot simulation.",
-    skill2Title: "Programming & Systems",
-    skill2Text: "Python, C++, Linux, GitHub, data processing, and engineering scripts.",
-    skill3Title: "AI & Automation",
-    skill3Text: "AI, Machine Learning, PyTorch, LLMs, Prompt Engineering, and automation projects.",
     languagesLabel: "Languages",
     languagesTitle: "Languages I speak.",
     lang1Name: "Chinese",
@@ -136,17 +125,12 @@ const translations = {
     heroDomain1: "Robotik",
     heroDomain2: "Regelungstechnik",
     heroDomain3: "KI",
-    heroTitle: "Hallo, ich bin Dingshuai Yang. Ich arbeite an Robotik, Regelungstechnik und KI.",
     heroText:
       "Aktuell in Erlangen für den Master in Mechatronik. Die meiste Zeit fließt in Regelkreise, Manipulatoren und die KI-Tools, die sie schlauer machen.",
     viewProjects: "Labore ansehen →",
     contactMe: "Kontakt aufnehmen",
     profileTitle: "M.Sc. Mechatronik  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
-    focusLabel: "Schwerpunkt",
-    focusValue: "Robotik, Regelungstechnik, Informatik, KI & LLMs",
-    statusLabel: "Derzeit lerne ich",
-    statusValue: "Grundlagen der Informatik, KI, Machine Learning, LLMs und Prompt Engineering",
     aboutLabel: "Über mich",
     aboutTitle: "Von Materialwissenschaften über Mechatronik bis hin zu Robotik und KI.",
     aboutText1:
@@ -179,12 +163,6 @@ const translations = {
     nowItem1: "Lerne Informatik-Grundlagen, KI, Machine Learning, LLMs und Prompt Engineering.",
     nowItem2: "Baue persönliche Projekte in KI und Automatisierung.",
     nowItem3: "Suche Praktika und Werkstudentenstellen in Robotik, Regelung, KI.",
-    skill1Title: "Robotik & Regelung",
-    skill1Text: "ROS/ROS2, MATLAB, Simulink, OpenCV, Regelungssysteme und Robotersimulation.",
-    skill2Title: "Programmierung & Systeme",
-    skill2Text: "Python, C++, Linux, GitHub, Datenverarbeitung und Engineering-Skripte.",
-    skill3Title: "KI & Automatisierung",
-    skill3Text: "KI, Machine Learning, PyTorch, LLMs, Prompt Engineering und Automatisierungsprojekte.",
     languagesLabel: "Sprachen",
     languagesTitle: "Sprachen, die ich spreche.",
     lang1Name: "Chinesisch",
@@ -251,17 +229,12 @@ const translations = {
     heroDomain1: "机器人",
     heroDomain2: "控制工程",
     heroDomain3: "人工智能",
-    heroTitle: "你好，我是杨定帅。这里展示我的机器人、控制工程与 AI 项目。",
     heroText:
       "现在在埃尔朗根读机电一体化硕士。大部分时间花在控制回路、机械臂、以及让它们更聪明的 AI 工具上。",
     viewProjects: "查看实验 →",
     contactMe: "联系我",
     profileTitle: "M.Sc. 机电一体化  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
-    focusLabel: "关注方向",
-    focusValue: "Robotics、Control Engineering、Computer Science、AI & LLMs",
-    statusLabel: "当前学习",
-    statusValue: "Computer Science fundamentals、AI、Machine Learning、LLMs 与 Prompt Engineering",
     aboutLabel: "关于我",
     aboutTitle: "从材料工程到机电一体化，再到 Robotics 与 AI。",
     aboutText1:
@@ -294,12 +267,6 @@ const translations = {
     nowItem1: "学习 CS 基础、AI、Machine Learning、LLMs 与 Prompt Engineering。",
     nowItem2: "在做 AI 与自动化方向的个人项目。",
     nowItem3: "寻找 Robotics / Control / AI 方向的实习与 Werkstudent。",
-    skill1Title: "Robotics & Control",
-    skill1Text: "ROS/ROS2、MATLAB、Simulink、OpenCV、控制系统与机器人仿真。",
-    skill2Title: "Programming & Systems",
-    skill2Text: "Python、C++、Linux、GitHub、数据处理与工程化脚本。",
-    skill3Title: "AI & Automation",
-    skill3Text: "AI、Machine Learning、PyTorch、LLMs、Prompt Engineering 与自动化项目。",
     languagesLabel: "语言",
     languagesTitle: "我会说的语言。",
     lang1Name: "中文",
@@ -366,17 +333,12 @@ const translations = {
     heroDomain1: "機器人",
     heroDomain2: "控制工程",
     heroDomain3: "人工智能",
-    heroTitle: "你好，我是楊定帥。這裡展示我的機器人、控制工程與 AI 項目。",
     heroText:
       "現在在埃爾朗根讀機電一體化碩士。大部分時間花在控制迴路、機械臂、以及讓它們更聰明的 AI 工具上。",
     viewProjects: "查看實驗 →",
     contactMe: "聯繫我",
     profileTitle: "M.Sc. 機電一體化  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
-    focusLabel: "關注方向",
-    focusValue: "Robotics、Control Engineering、Computer Science、AI & LLMs",
-    statusLabel: "當前學習",
-    statusValue: "Computer Science fundamentals、AI、Machine Learning、LLMs 與 Prompt Engineering",
     aboutLabel: "關於我",
     aboutTitle: "從材料工程到機電一體化，再到 Robotics 與 AI。",
     aboutText1:
@@ -409,12 +371,6 @@ const translations = {
     nowItem1: "學習 CS 基礎、AI、Machine Learning、LLMs 與 Prompt Engineering。",
     nowItem2: "在做 AI 與自動化方向的個人項目。",
     nowItem3: "尋找 Robotics / Control / AI 方向的實習與 Werkstudent。",
-    skill1Title: "Robotics & Control",
-    skill1Text: "ROS/ROS2、MATLAB、Simulink、OpenCV、控制系統與機器人仿真。",
-    skill2Title: "Programming & Systems",
-    skill2Text: "Python、C++、Linux、GitHub、數據處理與工程化腳本。",
-    skill3Title: "AI & Automation",
-    skill3Text: "AI、Machine Learning、PyTorch、LLMs、Prompt Engineering 與自動化項目。",
     languagesLabel: "語言",
     languagesTitle: "我會說的語言。",
     lang1Name: "中文",
@@ -482,17 +438,12 @@ const translations = {
     heroDomain1: "ロボティクス",
     heroDomain2: "制御工学",
     heroDomain3: "AI",
-    heroTitle: "こんにちは、ディンシュアイ・ヤン です。ロボティクス、制御工学、AI に取り組んでいます。",
     heroText:
       "現在エアランゲンでメカトロニクスの修士課程に在籍。多くの時間を制御ループ、マニピュレータ、そしてそれらを賢くする AI ツールに費やしています。",
     viewProjects: "ラボを見る →",
     contactMe: "連絡する",
     profileTitle: "M.Sc. メカトロニクス  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
-    focusLabel: "関心分野",
-    focusValue: "Robotics、Control Engineering、Computer Science、AI & LLMs",
-    statusLabel: "現在学習中",
-    statusValue: "Computer Science fundamentals、AI、Machine Learning、LLMs、Prompt Engineering",
     aboutLabel: "私について",
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
     aboutText1:
@@ -525,12 +476,6 @@ const translations = {
     nowItem1: "CS の基礎、AI、Machine Learning、LLMs、Prompt Engineering を学習中。",
     nowItem2: "AI と自動化分野の個人プロジェクトに取り組んでいます。",
     nowItem3: "ロボティクス・制御・AI 分野のインターンと Werkstudent を探しています。",
-    skill1Title: "Robotics & Control",
-    skill1Text: "ROS/ROS2、MATLAB、Simulink、OpenCV、制御システム、ロボットシミュレーション。",
-    skill2Title: "Programming & Systems",
-    skill2Text: "Python、C++、Linux、GitHub、データ処理、エンジニアリングスクリプト。",
-    skill3Title: "AI & Automation",
-    skill3Text: "AI、Machine Learning、PyTorch、LLMs、Prompt Engineering、自動化プロジェクト。",
     languagesLabel: "言語",
     languagesTitle: "話せる言語。",
     lang1Name: "中国語",
@@ -588,10 +533,21 @@ const languageMeta = {
 };
 
 function getInitialLanguage() {
+  // 1. URL param ?lang=xx wins (so hreflang links work)
+  const params = new URLSearchParams(window.location.search);
+  const fromQuery = params.get("lang");
+  if (fromQuery && translations[fromQuery]) return fromQuery;
+
+  // 2. Saved preference
   const saved = localStorage.getItem("preferredLanguage");
   if (saved && translations[saved]) return saved;
 
-  const browserLanguage = navigator.language.slice(0, 2).toLowerCase();
+  // 3. Browser language — map zh-TW/HK to zhTw, others by first 2 letters
+  const nav = (navigator.language || "").toLowerCase();
+  if (nav.startsWith("zh-tw") || nav.startsWith("zh-hk") || nav.startsWith("zh-hant")) {
+    return "zhTw";
+  }
+  const browserLanguage = nav.slice(0, 2);
   return translations[browserLanguage] ? browserLanguage : "zh";
 }
 
