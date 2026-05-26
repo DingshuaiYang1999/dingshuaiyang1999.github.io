@@ -23,7 +23,7 @@ const translations = {
     heroTitle: "Hi, I am Dingshuai Yang. I work across robotics, control engineering, and AI.",
     heroText:
       "Currently in Erlangen for a masters in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.",
-    viewProjects: "View projects",
+    viewProjects: "View labs →",
     contactMe: "Contact me",
     profileTitle: "M.Sc. Mechatronics  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany",
@@ -35,8 +35,9 @@ const translations = {
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
     aboutText1:
       "I started in materials engineering, but my real curiosity has always been the machines themselves — and the question of what makes them intelligent. Watching humanoid robots learn to walk, manipulate, and reason is what pulled me into this field.",
+    aboutQuote: "I believe humanoid robots and embodied intelligence are the future.",
     aboutText2:
-      "I believe humanoid robots and embodied intelligence are where things are heading. That is why I switched to mechatronics and moved to Erlangen — to learn the control loops, the manipulators, and the AI tools that will, sooner or later, walk through every kitchen and every factory floor.",
+      "So I switched to mechatronics and moved to Erlangen — to learn the control loops, the manipulators, and the AI tools that will, sooner or later, walk through every kitchen and every factory floor.",
     educationLabel: "Education",
     educationTitle: "Where I have studied.",
     edu1Degree: "M.Sc. Mechatronics",
@@ -135,7 +136,7 @@ const translations = {
     heroTitle: "Hallo, ich bin Dingshuai Yang. Ich arbeite an Robotik, Regelungstechnik und KI.",
     heroText:
       "Aktuell in Erlangen für den Master in Mechatronik. Die meiste Zeit fließt in Regelkreise, Manipulatoren und die KI-Tools, die sie schlauer machen.",
-    viewProjects: "Projekte ansehen",
+    viewProjects: "Labore ansehen →",
     contactMe: "Kontakt aufnehmen",
     profileTitle: "M.Sc. Mechatronik  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
@@ -147,8 +148,9 @@ const translations = {
     aboutTitle: "Von Materialwissenschaften über Mechatronik bis hin zu Robotik und KI.",
     aboutText1:
       "Ich habe im Materialingenieurwesen angefangen, aber meine eigentliche Neugier galt schon immer den Maschinen selbst — und der Frage, was sie intelligent macht. Wenn humanoide Roboter lernen, zu gehen, zu greifen und zu schlussfolgern, ist das für mich der Grund, warum ich in dieses Feld eingestiegen bin.",
+    aboutQuote: "Ich glaube, humanoide Roboter und Embodied Intelligence sind die Zukunft.",
     aboutText2:
-      "Ich glaube, dass humanoide Roboter und Embodied Intelligence die Zukunft sind. Deshalb bin ich zur Mechatronik gewechselt und nach Erlangen gezogen — um die Regelkreise, Manipulatoren und KI-Werkzeuge zu lernen, die früher oder später durch jede Küche und jede Fabrikhalle gehen werden.",
+      "Deshalb bin ich zur Mechatronik gewechselt und nach Erlangen gezogen — um die Regelkreise, Manipulatoren und KI-Werkzeuge zu lernen, die früher oder später durch jede Küche und jede Fabrikhalle gehen werden.",
     educationLabel: "Ausbildung",
     educationTitle: "Wo ich studiert habe.",
     edu1Degree: "M.Sc. Mechatronik",
@@ -246,7 +248,7 @@ const translations = {
     heroTitle: "你好，我是杨定帅。这里展示我的机器人、控制工程与 AI 项目。",
     heroText:
       "现在在埃尔朗根读机电一体化硕士。大部分时间花在控制回路、机械臂、以及让它们更聪明的 AI 工具上。",
-    viewProjects: "查看项目",
+    viewProjects: "查看实验 →",
     contactMe: "联系我",
     profileTitle: "M.Sc. 机电一体化  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
@@ -258,8 +260,9 @@ const translations = {
     aboutTitle: "从材料工程到机电一体化，再到 Robotics 与 AI。",
     aboutText1:
       "我本科学的是材料工程，但真正让我好奇的从来是那些机器本身——以及让它们变得智能的那些东西。看着人形机器人学会走路、抓取、像人一样推理，是把我拉进这个领域的根本原因。",
+    aboutQuote: "我相信人形机器人和具身智能就是未来。",
     aboutText2:
-      "我相信人形机器人和具身智能就是未来的方向。所以我转到机电一体化，跑到 Erlangen 读硕士——把控制回路、机械臂、和现代 AI 工具一个个学会。早晚它们会走进每个厨房和每条产线，我希望那时候我也在那里。",
+      "所以我转到机电一体化，跑到 Erlangen 读硕士——把控制回路、机械臂、和现代 AI 工具一个个学会。早晚它们会走进每个厨房和每条产线，我希望那时候我也在那里。",
     educationLabel: "教育经历",
     educationTitle: "我读过的学校。",
     edu1Degree: "M.Sc. 机电一体化",
@@ -358,7 +361,7 @@ const translations = {
     heroTitle: "こんにちは、ディンシュアイ・ヤン です。ロボティクス、制御工学、AI に取り組んでいます。",
     heroText:
       "現在エアランゲンでメカトロニクスの修士課程に在籍。多くの時間を制御ループ、マニピュレータ、そしてそれらを賢くする AI ツールに費やしています。",
-    viewProjects: "プロジェクトを見る",
+    viewProjects: "ラボを見る →",
     contactMe: "連絡する",
     profileTitle: "M.Sc. メカトロニクス  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
@@ -370,8 +373,9 @@ const translations = {
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
     aboutText1:
       "我本科学的是材料工程，但真正让我好奇的从来是那些机器本身——以及让它们变得智能的那些东西。看着人形机器人学会走路、抓取、像人一样推理，是把我拉进这个领域的根本原因。",
+    aboutQuote: "ヒューマノイドロボットと身体性のある知能こそが未来だと信じています。",
     aboutText2:
-      "我相信人形机器人和具身智能就是未来的方向。所以我转到机电一体化，跑到 Erlangen 读硕士——把控制回路、机械臂、和现代 AI 工具一个个学会。早晚它们会走进每个厨房和每条产线，我希望那时候我也在那里。",
+      "だからメカトロニクスへ進路を変え、エアランゲンへ来ました — 制御ループ、マニピュレータ、そして現代の AI ツールを一つずつ学ぶために。それらがいつかどのキッチンにもどの工場にも現れる時、自分もその場にいたい。",
     educationLabel: "学歴",
     educationTitle: "学んだ場所。",
     edu1Degree: "M.Sc. メカトロニクス",

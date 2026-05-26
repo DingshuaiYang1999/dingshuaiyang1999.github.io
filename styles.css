@@ -749,6 +749,20 @@ a {
   fill: #ffffff;
 }
 
+.pull-quote {
+  margin: 24px 0;
+  padding: 18px 22px 18px 28px;
+  border-left: 3px solid var(--accent);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(20px, 1.9vw, 26px);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--ink);
+  background: linear-gradient(90deg, var(--accent-soft) 0%, transparent 70%);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
 .now-section {
   display: flex;
   align-items: baseline;
