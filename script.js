@@ -113,7 +113,7 @@ const translations = {
     contactTitle: "Ask me about robotics, control systems, AI tools, and LLMs.",
     footerText: "© 2026 Dingshuai Yang.",
     footerSource: "Source ↗",
-    footerUpdated: "Updated 2026-05-26",
+    footerUpdated: "Updated",
     backToTop: "Back to top"
   },
   de: {
@@ -230,7 +230,7 @@ const translations = {
     contactTitle: "Sprich mich an über Robotik, Control Systems, KI-Tools und LLMs.",
     footerText: "© 2026 Dingshuai Yang.",
     footerSource: "Quellcode ↗",
-    footerUpdated: "Aktualisiert 2026-05-26",
+    footerUpdated: "Aktualisiert",
     backToTop: "Nach oben"
   },
   zh: {
@@ -346,52 +346,52 @@ const translations = {
     contactTitle: "欢迎交流 Robotics、Control Systems、AI Tools 与 LLMs。",
     footerText: "© 2026 杨定帅.",
     footerSource: "源码 ↗",
-    footerUpdated: "更新于 2026-05-26",
+    footerUpdated: "更新于",
     backToTop: "回到顶部"
   },
   zhTw: {
     documentTitle: "楊定帥 | 機器人、控制工程、AI",
-    metaDescription: "楊定帥的多語言個人主頁，展示機器人、控制工程、機電一體化、AI 與自動化項目。",
+    metaDescription: "楊定帥的多語言個人網站，展示機器人、控制工程、機電一體化、AI 與自動化專案。",
     homeAria: "返回首頁",
     languageAria: "語言選擇",
     actionsAria: "主要操作",
-    profileAria: "個人信息摘要",
+    profileAria: "個人資訊摘要",
     brandMark: "DY",
     brandName: "楊定帥",
     navAbout: "關於",
     navEducation: "教育",
     navSkills: "技能",
     navProjects: "實驗",
-    navContact: "聯繫",
+    navContact: "聯絡",
     navCourses: "課程",
     coursesLabel: "課程",
     coursesTitle: "在 FAU 學過的核心課程。",
     cm1Title: "控制工程",
     cm1Meta: "Vertiefung",
     cm1Note: "從經典 PID 到狀態空間、Lyapunov 穩定性，再到機器人運動學和非線性觀測器——把如何讓一個系統按預期運動這件事徹底搞懂的過程。",
-    cm2Title: "計算機與 AI",
+    cm2Title: "電腦科學與 AI",
     cm2Meta: "正在學習",
     cm2Note: "正在從手撕梯度開始補齊 ML/DL 的數學和工程鏈路。目標是把它和我的控制經驗結合，做 learning-based control。",
     cm3Title: "工程基礎",
     cm3Meta: "技術",
-    cm3Note: "從微觀的半導體到宏觀的生產線——讓我對一臺機器人是如何被造出來的有完整的工程視角。",
+    cm3Note: "從微觀的半導體到宏觀的生產線——讓我對一臺機器人是如何被打造出來的，有完整的工程視角。",
     introLine: "個人主頁",
-    heroGreeting: "你好，我是",
+    heroGreeting: "您好，我是",
     heroName: "楊定帥",
     heroDomain1: "機器人",
     heroDomain2: "控制工程",
-    heroDomain3: "人工智能",
+    heroDomain3: "人工智慧",
     heroText:
       "現在在埃爾朗根讀機電一體化碩士。大部分時間花在控制迴路、機械臂、以及讓它們更聰明的 AI 工具上。",
     viewProjects: "查看實驗 →",
-    contactMe: "聯繫我",
+    contactMe: "聯絡我",
     profileTitle: "M.Sc. 機電一體化  ·  2025 – 2027  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     aboutLabel: "關於我",
     aboutTitle: "從材料工程到機電一體化，再到 Robotics 與 AI。",
     aboutText1:
-      "我本科學的是材料工程，但真正讓我好奇的從來是那些機器本身——以及讓它們變得智能的那些東西。看著人形機器人學會走路、抓取、像人一樣推理，是把我拉進這個領域的根本原因。",
-    aboutQuote: "我相信人形機器人和具身智能就是未來。",
+      "我大學主修材料工程，但真正讓我好奇的，一直是機器本身——以及讓它們變得智慧的那些技術。看著人形機器人學會走路、抓取、像人一樣推理，是把我帶進這個領域的根本原因。",
+    aboutQuote: "我相信人形機器人和具身智慧就是未來。",
     aboutText2:
       "所以我轉到機電一體化，跑到 Erlangen 讀碩士——把控制迴路、機械臂、和現代 AI 工具一個個學會。早晚它們會走進每個廚房和每條產線，我希望那時候我也在那裡。",
     educationLabel: "教育經歷",
@@ -402,9 +402,9 @@ const translations = {
     edu2Degree: "工學學士 · 材料成型及控制工程",
     edu2School: "廣東工業大學 (GDUT) · 中國廣州",
     skillsLabel: "技能",
-    skillsTitle: "跨越控制、機器人軟件與 AI 工具鏈。",
-    skillCat1: "編程語言",
-    skillCat2: "機器人與仿真",
+    skillsTitle: "跨越控制、機器人軟體與 AI 工具鏈。",
+    skillCat1: "程式語言",
+    skillCat2: "機器人與模擬",
     factLocLabel: "所在地",
     factLocValue: "德國 埃爾朗根",
     factGradLabel: "畢業時間",
@@ -417,7 +417,7 @@ const translations = {
     nowLabel: "Now",
     nowSub: "2026 年 5 月",
     nowItem1: "學習 CS 基礎、AI、Machine Learning、LLMs 與 Prompt Engineering。",
-    nowItem2: "在做 AI 與自動化方向的個人項目。",
+    nowItem2: "在做 AI 與自動化方向的個人專案。",
     nowItem3: "尋找 Robotics / Control / AI 方向的實習與 Werkstudent。",
     languagesLabel: "語言",
     languagesTitle: "我會說的語言。",
@@ -429,40 +429,40 @@ const translations = {
     lang3Level: "B2",
     lang4Name: "日語",
     lang4Level: "≈ N4",
-    projectsLabel: "實驗與項目",
-    projectsTitle: "課程實驗與個人小項目。",
-    demo1Title: "倒立擺-小車可視化",
-    demo1Meta: "交互式 demo  ·  2025",
-    demo1Text: "瀏覽器內可交互的倒立擺 + 小車系統仿真，可調質量、長度、阻尼等參數，實時觀察狀態變化與控制信號。",
-    demo2Title: "平面 2R 機械臂仿真",
-    demo2Meta: "交互式 demo  ·  2025",
-    demo2Text: "二連桿平面機械臂仿真，可拖拽末端執行器，實時演示正向 / 逆向運動學解算。",
-    demo3Title: "7 自由度機械臂仿真",
-    demo3Meta: "交互式 demo  ·  2025",
-    demo3Text: "瀏覽器中的 7 自由度機械臂可視化，可逐關節控制並觀察末端姿態變化，基於 DH 參數建模。",
-    demo5Title: "RRT — 快速擴展隨機樹",
-    demo5Meta: "Python 源碼  ·  2025",
-    demo5Text: "基於隨機採樣的單向樹路徑規劃，tkinter 實時動畫展示樹擴展與避障，可對比不同參數下的結果。",
+    projectsLabel: "實驗與專案",
+    projectsTitle: "課程實驗與個人小專案。",
+    demo1Title: "倒立擺-小車視覺化",
+    demo1Meta: "互動式 demo  ·  2025",
+    demo1Text: "瀏覽器內可互動的倒立擺 + 小車系統模擬，可調整質量、長度、阻尼等參數，並即時觀察狀態變化與控制訊號。",
+    demo2Title: "平面 2R 機械臂模擬",
+    demo2Meta: "互動式 demo  ·  2025",
+    demo2Text: "二連桿平面機械臂模擬，可拖曳末端執行器，即時展示正向 / 逆向運動學解算。",
+    demo3Title: "7 自由度機械臂模擬",
+    demo3Meta: "互動式 demo  ·  2025",
+    demo3Text: "瀏覽器中的 7 自由度機械臂視覺化，可逐關節控制並觀察末端姿態變化，基於 DH 參數建模。",
+    demo5Title: "RRT — 快速探索隨機樹",
+    demo5Meta: "Python 原始碼  ·  2025",
+    demo5Text: "基於隨機採樣的單向樹路徑規劃，tkinter 即時動畫展示樹的擴展與避障，並可比較不同參數下的結果。",
     demo6Title: "Bidirectional RRT",
-    demo6Meta: "Python 源碼  ·  2025",
-    demo6Text: "兩棵採樣樹分別從起點與終點同時生長，相遇即得通路。可視化展示兩樹擴展過程與最終拼接路徑。",
-    demo7Title: "PRM — 概率路圖",
-    demo7Meta: "Python 源碼  ·  2025",
-    demo7Text: "對自由空間隨機採樣並構建近鄰圖，再用 Dijkstra 求最短無碰撞路徑。適合多次查詢的靜態場景。",
+    demo6Meta: "Python 原始碼  ·  2025",
+    demo6Text: "兩棵採樣樹分別從起點與終點同時生長，相遇後即得到通路。視覺化展示兩棵樹的擴展過程與最終拼接路徑。",
+    demo7Title: "PRM — 機率路圖",
+    demo7Meta: "Python 原始碼  ·  2025",
+    demo7Text: "對自由空間進行隨機採樣並建構近鄰圖，再用 Dijkstra 求出最短無碰撞路徑。適合多次查詢的靜態場景。",
     project1Title: "MATLAB Laboratory Course",
     project1Timeline: "課程實驗  ·  WS 2025/26",
     project1Text:
-      "內容：Static truss、Dynamic Crane、Measurement Data Analysis 和 Optimisation of the truss structure。實驗使用 MATLAB 完成結構力學建模、ODE 仿真、FFT 信號分析、符號計算和優化任務。",
+      "內容：Static truss、Dynamic Crane、Measurement Data Analysis 和 Optimisation of the truss structure。實驗使用 MATLAB 完成結構力學建模、ODE 模擬、FFT 訊號分析、符號計算和最佳化任務。",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
     project2Timeline: "課程實驗  ·  SS 2026",
     project2Text:
-      "內容：實驗站點包括 Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension 和 Magnetic Levitation System。課程實驗圍繞自動控制基礎，將 Regelungstechnik A / dynamical systems and control 的理論用於建模、仿真、控制器設計和實驗觀察。",
-    contactLabel: "聯繫我",
+      "內容：實驗站點包括 Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension 和 Magnetic Levitation System。課程實驗圍繞自動控制基礎，將 Regelungstechnik A / dynamical systems and control 的理論用於建模、模擬、控制器設計和實驗觀察。",
+    contactLabel: "聯絡我",
     followLabel: "關注我",
     contactTitle: "歡迎交流 Robotics、Control Systems、AI Tools 與 LLMs。",
     footerText: "© 2026 楊定帥.",
-    footerSource: "源碼 ↗",
-    footerUpdated: "更新於 2026-05-26",
+    footerSource: "原始碼 ↗",
+    footerUpdated: "更新於",
     backToTop: "回到頂部"
   },
   ja: {
@@ -507,7 +507,7 @@ const translations = {
     aboutLabel: "私について",
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
     aboutText1:
-      "我本科学的是材料工程，但真正让我好奇的从来是那些机器本身——以及让它们变得智能的那些东西。看着人形机器人学会走路、抓取、像人一样推理，是把我拉进这个领域的根本原因。",
+      "学部では材料工学を学びましたが、本当に惹かれていたのは機械そのもの、そして機械を知的にする仕組みでした。ヒューマノイドロボットが歩き、物を扱い、人間のように推論していく姿を見たことが、この分野に進む大きなきっかけです。",
     aboutQuote: "ヒューマノイドロボットと身体性のある知能こそが未来だと信じています。",
     aboutText2:
       "だからメカトロニクスへ進路を変え、エアランゲンへ来ました — 制御ループ、マニピュレータ、そして現代の AI ツールを一つずつ学ぶために。それらがいつかどのキッチンにもどの工場にも現れる時、自分もその場にいたい。",
@@ -569,17 +569,17 @@ const translations = {
     project1Title: "MATLAB Laboratory Course",
     project1Timeline: "ラボ授業  ·  WS 2025/26",
     project1Text:
-      "内容：Static truss、Dynamic Crane、Measurement Data Analysis、Optimisation of the truss structure。MATLAB を用いて構造力学モデリング、ODE シミュレーション、FFT 信号解析、記号計算、最適化を行いました。",
+      "実験内容: Static truss、Dynamic Crane、Measurement Data Analysis、Optimisation of the truss structure。MATLAB を用いて構造力学モデリング、ODE シミュレーション、FFT 信号解析、記号計算、最適化を行いました。",
     project2Title: "Automatic Control I Lab / Regelungstechnik I",
     project2Timeline: "ラボ授業  ·  SS 2026",
     project2Text:
-      "内容：実験ステーションは Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension、Magnetic Levitation System です。Regelungstechnik A / dynamical systems and control の基礎を、モデリング、シミュレーション、制御器設計、実験観察に応用しました。",
+      "実験内容: Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension、Magnetic Levitation System。Regelungstechnik A / dynamical systems and control の基礎を、モデリング、シミュレーション、制御器設計、実験観察に応用しました。",
     contactLabel: "連絡する",
     followLabel: "フォローする",
     contactTitle: "Robotics、Control Systems、AI Tools、LLMs について気軽に連絡してください。",
     footerText: "© 2026 ディンシュアイ・ヤン.",
     footerSource: "ソース ↗",
-    footerUpdated: "更新 2026-05-26",
+    footerUpdated: "更新",
     backToTop: "上に戻る"
   }
 };
@@ -608,12 +608,12 @@ function getInitialLanguage() {
     return "zhTw";
   }
   const browserLanguage = nav.slice(0, 2);
-  return translations[browserLanguage] ? browserLanguage : "zh";
+  return translations[browserLanguage] ? browserLanguage : "en";
 }
 
 function applyLanguage(language) {
-  const dictionary = translations[language] || translations.zh;
-  document.documentElement.lang = languageMeta[language] || "zh-CN";
+  const dictionary = translations[language] || translations.en;
+  document.documentElement.lang = languageMeta[language] || "en";
   document.title = dictionary.documentTitle;
 
   const description = document.querySelector('meta[name="description"]');
@@ -635,7 +635,27 @@ function applyLanguage(language) {
     button.setAttribute("aria-pressed", String(isActive));
   });
 
+  updateFooterDate(dictionary, language);
   localStorage.setItem("preferredLanguage", language);
+}
+
+function getLastUpdatedDate(language, element) {
+  const source = element.getAttribute("datetime") || document.lastModified;
+  const modified = new Date(source);
+  if (Number.isNaN(modified.getTime())) return "";
+
+  return new Intl.DateTimeFormat(languageMeta[language] || "en", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(modified);
+}
+
+function updateFooterDate(dictionary, language) {
+  document.querySelectorAll("[data-updated]").forEach((element) => {
+    const date = getLastUpdatedDate(language, element);
+    element.textContent = date ? `${dictionary.footerUpdated} ${date}` : dictionary.footerUpdated;
+  });
 }
 
 document.querySelectorAll("[data-lang]").forEach((button) => {

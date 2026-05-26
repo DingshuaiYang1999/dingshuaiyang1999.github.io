@@ -172,6 +172,12 @@ a {
   font-size: 15px;
 }
 
+:root[data-theme="dark"] .brand-mark {
+  border-color: rgba(124, 196, 167, 0.28);
+  background: rgba(124, 196, 167, 0.1);
+  color: var(--accent-strong);
+}
+
 .site-nav {
   gap: 22px;
   color: var(--muted);
@@ -205,6 +211,18 @@ a {
 .language-switcher button.is-active {
   background: var(--ink);
   color: #ffffff;
+}
+
+:root[data-theme="dark"] .language-switcher {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] .language-switcher button:hover,
+:root[data-theme="dark"] .language-switcher button.is-active {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
 }
 
 .site-nav a:hover,
@@ -374,12 +392,15 @@ a {
 }
 
 .button.primary {
-  background: var(--accent);
-  color: #ffffff;
+  border-color: var(--ink);
+  background: transparent;
+  color: var(--ink);
 }
 
 .button.primary:hover {
-  background: var(--accent-strong);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
 }
 
 .button.secondary {
@@ -459,8 +480,11 @@ a {
 }
 
 .profile-avatar {
-  height: auto;
-  aspect-ratio: 1 / 1;
+  height: 290px;
+  width: min(100%, 232px);
+  max-height: 290px;
+  aspect-ratio: 4 / 5;
+  justify-self: center;
   padding: 0;
 }
 
@@ -840,7 +864,13 @@ a {
   color: var(--muted);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1080px) {
+  .course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
   .course-grid {
     grid-template-columns: 1fr;
   }
@@ -914,10 +944,15 @@ a {
 .dot-seek  { background: var(--warm); }
 
 @media (max-width: 720px) {
-  .now-section {
+  .section.now-section {
     grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 28px;
+    gap: 20px;
+    padding: 30px 26px 30px 36px;
+  }
+
+  .now-list li {
+    grid-template-columns: 16px 1fr;
+    gap: 16px;
   }
 }
 
@@ -1261,6 +1296,10 @@ a {
     gap: 16px;
   }
 
+  .site-header {
+    position: static;
+  }
+
   .site-nav {
     width: 100%;
     flex-wrap: wrap;
@@ -1299,6 +1338,12 @@ a {
 
   .profile-visual {
     height: 220px;
+  }
+
+  .profile-avatar {
+    height: auto;
+    width: auto;
+    max-height: 230px;
   }
 
   .skill-grid {
