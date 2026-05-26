@@ -351,3 +351,24 @@ document.querySelectorAll("[data-lang]").forEach((button) => {
 });
 
 applyLanguage(getInitialLanguage());
+
+// Theme toggle
+function getInitialTheme() {
+  const saved = localStorage.getItem("theme");
+  if (saved === "light" || saved === "dark") return saved;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+}
+
+document.querySelectorAll(".theme-toggle").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(next);
+  });
+});
+
+applyTheme(getInitialTheme());
