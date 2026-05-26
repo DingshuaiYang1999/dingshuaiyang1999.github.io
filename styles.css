@@ -127,7 +127,7 @@ a {
 }
 
 .site-header {
-  position: sticky;
+  position: static;
   top: 0;
   z-index: 10;
   display: flex;
@@ -142,8 +142,6 @@ a {
 
 :root[data-theme="dark"] .site-header {
   background: rgba(13, 17, 16, 0.88);
-  border-bottom: 1px solid var(--line);
-  border-radius: 0 0 12px 12px;
 }
 
 .brand,
@@ -1294,10 +1292,6 @@ a {
     align-items: flex-start;
     flex-direction: column;
     gap: 16px;
-  }
-
-  .site-header {
-    position: static;
   }
 
   .site-nav {
