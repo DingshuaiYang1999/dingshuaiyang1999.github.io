@@ -29,26 +29,6 @@ python3 tools/build_blog.py   # writes blog/<slug>.html, blog/index.html and sit
 `blog/posts/2026-10-10-welcome.md` is only an example/template — delete it and rebuild
 once the first real post exists. Images for posts can go in `assets/blog/`.
 
-## Q&A
-
-Public questions with answers live in `qa/entries/*.md` (one file per question):
-
-```markdown
----
-question: The question (anonymised)
-topic: Study            # chips on /qa/ are built from these topics
-date: 2026-11-01
-asked_by: A. Student    # optional; omit to stay anonymous
-draft: false            # optional
----
-
-The answer, in Markdown.
-```
-
-`python3 tools/build_blog.py` builds `qa/index.html` together with the blog. Only publish
-questions whose sender ticked "may answer publicly" in the contact form.
-`qa/entries/2026-10-10-example.md` is a template — delete it and rebuild.
-
 ## Contact form
 
 `/contact/` posts to [Web3Forms](https://web3forms.com) (no backend needed). Set the access

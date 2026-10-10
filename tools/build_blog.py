@@ -7,11 +7,6 @@
 Reads   blog/posts/*.md   (front matter: title, date, tag, excerpt, optional draft)
 Writes  blog/<slug>.html  for every post and  blog/index.html  (newest first),
 and the latest posts on the homepage.
-
-Also builds the public Q&A page:
-Reads   qa/entries/*.md   (front matter: question, topic, date, optional asked_by)
-Writes  qa/index.html  (newest first, topic filter + search via qa.js).
-
 Finally refreshes sitemap.xml. Generated .html files in blog/ are overwritten;
 posts whose .md was deleted are removed.
 """
@@ -103,7 +98,6 @@ def page(title, description, canonical, main, current="blog", extra_head=""):
             <li><a href="../#education" data-nav="education">Education</a></li>
             <li><a href="../#projects" data-nav="projects">Projects</a></li>
             <li><a href="../blog/" data-nav="blog">Blog</a></li>
-            <li><a href="../qa/" data-nav="qa">Q&amp;A</a></li>
             <li><a href="../contact/" data-nav="contact">Contact</a></li>
           </ul>
         </nav>
@@ -152,55 +146,6 @@ def meta_line(p):
     return f'<p class="post-meta">{tag}<time datetime="{p["date"]}">{fmt_date(p["date"])}</time></p>'
 
 
-QA = ROOT / "qa"
-QA_ENTRIES = QA / "entries"
-
-
-def build_qa():
-    entries = [parse(f, required=("question", "topic", "date")) for f in sorted(QA_ENTRIES.glob("*.md"))]
-    entries = [q for q in entries if not q["draft"]]
-    entries.sort(key=lambda q: q["date"], reverse=True)
-    topics = sorted({q["topic"] for q in entries})
-    e = html.escape
-    chips = "\n".join(
-        f'          <button type="button" class="chip" data-topic="{e(t)}" aria-pressed="false">{e(t)}</button>' for t in topics)
-    items = "\n".join(
-        f"""        <li class="qa-item" id="{e(q['slug'])}" data-topic="{e(q['topic'])}">
-          <details>
-            <summary>
-              <span class="qa-q">{e(q['question'])}</span>
-              <span class="qa-meta"><span class="post-tag">{e(q['topic'])}</span> <time datetime="{q['date']}">{fmt_date(q['date'])}</time>{(' · asked by ' + e(q['asked_by'])) if q.get('asked_by') else ''}</span>
-            </summary>
-            <div class="qa-a post-body">
-{q['body']}
-              <p class="qa-link"><a href="#{e(q['slug'])}">Link to this question</a></p>
-            </div>
-          </details>
-        </li>""" for q in entries)
-    main_html = f"""      <p class="section-label">Q&amp;A</p>
-      <h1>Questions &amp; answers</h1>
-      <p class="section-intro">Selected questions people have sent me, answered publicly. Names are only shown with permission; otherwise questions are anonymised. <a href="../contact/">Ask a question</a>.</p>
-      <div class="qa-tools">
-        <label class="visually-hidden" for="qa-search">Search questions</label>
-        <input id="qa-search" type="search" placeholder="Search questions and answers…" autocomplete="off" />
-        <div class="chips" role="group" aria-label="Filter by topic">
-          <button type="button" class="chip" data-topic="" aria-pressed="true">All</button>
-{chips}
-        </div>
-      </div>
-      <p class="qa-count muted" id="qa-count" role="status" aria-live="polite"></p>
-      <ol class="qa-list" id="qa-list">
-{items or '        <li class="muted">No questions answered yet.</li>'}
-      </ol>
-      <p class="qa-empty muted" id="qa-empty" hidden>No questions match your search.</p>"""
-    QA.mkdir(exist_ok=True)
-    (QA / "index.html").write_text(
-        page("Q&A · Dingshuai Yang", "Selected questions to Dingshuai Yang about robotics, control engineering and studying mechatronics, with answers.",
-             f"{BASE}/qa/", main_html, current="qa", extra_head='    <script src="../qa.js" defer></script>\n  '),
-        encoding="utf-8")
-    print(f"wrote qa/index.html ({len(entries)} entries)")
-
-
 def write_home_snippet(posts, limit=3):
     """Latest posts on the homepage, between the BLOG:START / BLOG:END markers."""
     home = ROOT / "index.html"
@@ -224,7 +169,6 @@ def write_sitemap(posts):
     urls = [(f"{BASE}/", "weekly", "1.0")]
     urls += [(f"{BASE}/demos/{p.name}", "monthly", "0.6") for p in sorted((ROOT / "demos").glob("*.html"))]
     urls.append((f"{BASE}/contact/", "yearly", "0.5"))
-    urls.append((f"{BASE}/qa/", "weekly", "0.6"))
     urls.append((f"{BASE}/blog/", "weekly", "0.7"))
     urls += [(f"{BASE}/blog/{p['slug']}.html", "monthly", "0.5") for p in posts]
     body = "".join(
@@ -273,7 +217,6 @@ def main():
     print("wrote blog/index.html")
 
     write_home_snippet(posts)
-    build_qa()
     write_sitemap(posts)
     print("wrote sitemap.xml")
 
