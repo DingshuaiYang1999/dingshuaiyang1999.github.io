@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-page-lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to the blog (example post — delete me) · Dingshuai Yang</title>
+    <meta name="description" content="Template post showing how blog posts work. Replace or delete it before publishing real posts." />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/blog/2026-10-10-welcome.html" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/blog/2026-10-10-welcome.html" />
+    <meta property="og:title" content="Welcome to the blog (example post — delete me) · Dingshuai Yang" />
+    <meta property="og:description" content="Template post showing how blog posts work. Replace or delete it before publishing real posts." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#14201b" />
+    <link rel="stylesheet" href="../styles.css" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefers = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", saved || prefers);
+        } catch (e) {}
+      })();
+    </script>
+    <script src="../script.js" defer></script>
+  </head>
+  <body id="top" data-no-i18n>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="../" aria-label="Back to homepage">
+        <span class="brand-mark">DY</span>
+        <span>Dingshuai Yang</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="../#about">About</a>
+        <a href="../#projects">Projects</a>
+        <a href="./" aria-current="page">Blog</a>
+        <a href="../#contact">Contact</a>
+      </nav>
+      <div class="header-tools">
+        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/><line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/><line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/><line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/></g></svg>
+          <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/></svg>
+        </button>
+      </div>
+    </header>
+    <main id="main" class="blog-main" tabindex="-1">
+      <a class="post-back" href="./">← All posts</a>
+      <article>
+        <p class="post-meta"><span class="post-tag">Life</span><time datetime="2026-10-10">Oct 10, 2026</time></p>
+        <h1>Welcome to the blog (example post — delete me)</h1>
+        <div class="post-body">
+<blockquote>
+<p><strong>This is an example/template post.</strong> It contains no real content. Delete
+<code>blog/posts/2026-10-10-welcome.md</code> (and re-run <code>python3 tools/build_blog.py</code>)
+once you have written your first real post.</p>
+</blockquote>
+<h2>How to write a post</h2>
+<ol>
+<li>Create a Markdown file in <code>blog/posts/</code>, e.g. <code>2026-11-01-my-first-post.md</code>.
+   The file name (without <code>.md</code>) becomes the URL: <code>/blog/2026-11-01-my-first-post.html</code>.</li>
+<li>Start it with a front-matter block:</li>
+</ol>
+<pre><code>---
+title: My post title
+date: 2026-11-01
+tag: Study        # Life, Study or Work
+excerpt: One or two sentences shown on the blog index.
+draft: false      # optional; true = not published
+---
+</code></pre>
+<ol start="3">
+<li>Write the body in normal Markdown: headings, <strong>bold</strong>, <em>italic</em>, lists,
+   <a href="https://example.com">links</a>, code blocks, tables and images such as
+   <code>![Alt text](../assets/blog/my-image.jpg)</code>.</li>
+<li>Run <code>python3 tools/build_blog.py</code>, check the result locally, commit and push.</li>
+</ol>
+        </div>
+      </article>
+    </main>
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang.</p>
+      <div class="footer-meta"><a href="../">Home</a><span class="footer-sep" aria-hidden="true">·</span><a href="#top">Back to top</a></div>
+    </footer>
+  </body>
+</html>

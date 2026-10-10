@@ -1,26 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-page-lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dingshuai Yang | Robotics, Control, AI</title>
     <meta
       name="description"
-      content="Dingshuai Yang's multilingual personal website for robotics, control engineering, mechatronics, AI, and automation projects."
+      content="Dingshuai Yang&#x27;s multilingual personal website for robotics, control engineering, mechatronics, AI, and automation projects."
     />
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314201b'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='30' font-family='-apple-system,BlinkMacSystemFont,Inter,Arial,sans-serif' font-weight='800' letter-spacing='-1' fill='white'%3EDY%3C/text%3E%3C/svg%3E"
     />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
     <link rel="canonical" href="https://dingshuaiyang1999.github.io/" />
-    <link rel="alternate" hreflang="en" href="https://dingshuaiyang1999.github.io/?lang=en" />
-    <link rel="alternate" hreflang="de" href="https://dingshuaiyang1999.github.io/?lang=de" />
-    <link rel="alternate" hreflang="zh-CN" href="https://dingshuaiyang1999.github.io/?lang=zh" />
-    <link rel="alternate" hreflang="zh-TW" href="https://dingshuaiyang1999.github.io/?lang=zhTw" />
-    <link rel="alternate" hreflang="ja" href="https://dingshuaiyang1999.github.io/?lang=ja" />
+    <link rel="alternate" hreflang="en" href="https://dingshuaiyang1999.github.io/" />
+    <link rel="alternate" hreflang="de" href="https://dingshuaiyang1999.github.io/de/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://dingshuaiyang1999.github.io/zh/" />
+    <link rel="alternate" hreflang="zh-TW" href="https://dingshuaiyang1999.github.io/zh-tw/" />
+    <link rel="alternate" hreflang="ja" href="https://dingshuaiyang1999.github.io/ja/" />
     <link rel="alternate" hreflang="x-default" href="https://dingshuaiyang1999.github.io/" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://dingshuaiyang1999.github.io/" />
     <meta property="og:title" content="Dingshuai Yang — Robotics, Control Engineering, AI" />
     <meta property="og:description" content="M.Sc. Mechatronics @ FAU Erlangen-Nürnberg. Personal site showcasing robotics, control engineering, AI projects, and interactive engineering demos." />
@@ -86,8 +89,8 @@
     </script>
     <script src="script.js" defer></script>
   </head>
-  <body>
-    <a class="skip-link" href="#top">Skip to content</a>
+  <body id="top">
+    <a class="skip-link" href="#main" data-i18n="skipLink">Skip to content</a>
     <header class="site-header">
       <a class="brand" href="#top" aria-label="Back to homepage" data-i18n-aria-label="homeAria">
         <span class="brand-mark" data-i18n="brandMark">DY</span>
@@ -98,7 +101,8 @@
         <a href="#education" data-i18n="navEducation">Education</a>
         <a href="#courses" data-i18n="navCourses">Courses</a>
         <a href="#skills" data-i18n="navSkills">Skills</a>
-        <a href="#projects" data-i18n="navProjects">Labs</a>
+        <a href="#projects" data-i18n="navProjects">Projects</a>
+        <a href="blog/" data-i18n="navBlog">Blog</a>
         <a href="#contact" data-i18n="navContact">Contact</a>
       </nav>
       <div class="header-tools">
@@ -121,16 +125,16 @@
           </svg>
         </button>
         <div class="language-switcher" aria-label="Language selection" data-i18n-aria-label="languageAria">
-          <button type="button" data-lang="en" aria-label="English" title="English">EN</button>
-          <button type="button" data-lang="de" aria-label="Deutsch" title="Deutsch">DE</button>
-          <button type="button" data-lang="zh" aria-label="简体中文" title="简体中文">简</button>
-          <button type="button" data-lang="zhTw" aria-label="繁體中文" title="繁體中文">繁</button>
-          <button type="button" data-lang="ja" aria-label="日本語" title="日本語">日</button>
+          <a href="/" data-lang="en" class="is-active" aria-current="page" hreflang="en" aria-label="English" title="English">EN</a>
+          <a href="/de/" data-lang="de" hreflang="de" aria-label="Deutsch" title="Deutsch">DE</a>
+          <a href="/zh/" data-lang="zh" hreflang="zh-CN" aria-label="简体中文" title="简体中文">简</a>
+          <a href="/zh-tw/" data-lang="zhTw" hreflang="zh-TW" aria-label="繁體中文" title="繁體中文">繁</a>
+          <a href="/ja/" data-lang="ja" hreflang="ja" aria-label="日本語" title="日本語">日</a>
         </div>
       </div>
     </header>
 
-    <main id="top">
+    <main id="main" tabindex="-1">
       <section class="hero section">
         <div class="hero-copy">
           <p class="intro-line" data-i18n="introLine">Personal website</p>
@@ -141,19 +145,20 @@
             <span class="pill pill-control" data-i18n="heroDomain2">Control Engineering</span>
             <span class="pill pill-ai" data-i18n="heroDomain3">AI</span>
           </div>
-          <p class="hero-text" data-i18n="heroText">Currently in Erlangen for a masters in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.</p>
+          <p class="hero-text" data-i18n="heroText">Currently in Erlangen for a master's in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.</p>
           <div class="hero-actions" aria-label="Primary actions" data-i18n-aria-label="actionsAria">
-            <a class="button primary" href="#projects" data-i18n="viewProjects">View labs →</a>
+            <a class="button primary" href="#projects" data-i18n="viewProjects">View projects →</a>
+            <a class="button secondary" href="assets/cv/Dingshuai_Yang_CV.pdf" data-cv download data-i18n="cvDownload">Download CV (PDF)</a>
             <a class="button secondary" href="#contact" data-i18n="contactMe">Contact me</a>
           </div>
         </div>
 
         <div class="profile-panel" aria-label="Personal information summary" data-i18n-aria-label="profileAria">
           <div class="profile-visual profile-avatar" aria-hidden="true">
-            <img src="assets/avatar.jpg" alt="Dingshuai Yang" />
+            <picture><source srcset="assets/avatar.webp" type="image/webp" /><img src="assets/avatar.jpg" alt="Dingshuai Yang" width="400" height="400" decoding="async" /></picture>
           </div>
           <div>
-            <h2 data-i18n="profileTitle">M.Sc. Mechatronics  ·  2025 – 2027  ·  FAU</h2>
+            <h2 data-i18n="profileTitle">M.Sc. Mechatronics  ·  2025 – 2028  ·  FAU</h2>
           </div>
           <dl class="profile-facts">
             <div>
@@ -162,7 +167,7 @@
             </div>
             <div>
               <dt data-i18n="factGradLabel">Graduating</dt>
-              <dd data-i18n="factGradValue">April 2027</dd>
+              <dd data-i18n="factGradValue">March 2028 (expected)</dd>
             </div>
             <div>
               <dt data-i18n="factOpenLabel">Open to</dt>
@@ -187,7 +192,8 @@
       <section id="now" class="section now-section">
         <div class="now-head">
           <p class="section-label" data-i18n="nowLabel">Now</p>
-          <p class="now-sub" data-i18n="nowSub">May 2026</p>
+          <p class="now-sub" data-i18n="nowSub">October 2026</p>
+          <!-- TODO(Dingshuai): the items below are carried over from the May 2026 version; please confirm or update them. -->
         </div>
         <ul class="now-list">
           <li>
@@ -205,6 +211,28 @@
         </ul>
       </section>
 
+      <!--
+        TODO(Dingshuai): Experience section. The CV (10.10.2026) lists no work/internship
+        entries yet, so this stays hidden. Uncomment and fill in real entries, add
+        translation keys (exp1Role, exp1Org, ...) to script.js, and add an "Experience"
+        nav link.
+      <section id="experience" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="experienceLabel">Experience</p>
+          <h2 data-i18n="experienceTitle">Where I have worked.</h2>
+        </div>
+        <ol class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-date">YYYY.MM — YYYY.MM</div>
+            <div class="timeline-body">
+              <h3 data-i18n="exp1Role">Role</h3>
+              <p class="timeline-meta" data-i18n="exp1Org">Company · City</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+      -->
+
       <section id="education" class="section">
         <div class="section-heading">
           <p class="section-label" data-i18n="educationLabel">Education</p>
@@ -212,11 +240,18 @@
         </div>
         <ol class="timeline">
           <li class="timeline-item">
-            <div class="timeline-date">2025.04 — 2027.04</div>
+            <div class="timeline-date">2025.04 — 2028.03</div>
             <div class="timeline-body">
               <h3 data-i18n="edu1Degree">M.Sc. Mechatronics</h3>
               <p class="timeline-meta" data-i18n="edu1School">Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany</p>
-              <p class="timeline-status" data-i18n="edu1Status">In progress</p>
+              <p class="timeline-status" data-i18n="edu1Status">In progress · expected 03/2028</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-date">2023.07 — 2025.03</div>
+            <div class="timeline-body">
+              <h3 data-i18n="edu3Degree">Intensive German Language Studies</h3>
+              <p class="timeline-meta" data-i18n="edu3School">Goethe-Institut (Qingdao/Shanghai) · Dr. Juno Sprachschule (Dortmund)</p>
             </div>
           </li>
           <li class="timeline-item">
@@ -351,18 +386,22 @@
 
       <section id="projects" class="section">
         <div class="section-heading">
-          <p class="section-label" data-i18n="projectsLabel">Labs &amp; Experiments</p>
+          <p class="section-label" data-i18n="projectsLabel">Projects</p>
           <h2 data-i18n="projectsTitle">Coursework and self-built experiments.</h2>
         </div>
         <div class="project-list">
           <article class="project-card">
             <div class="project-media image-frame">
-              <img src="assets/matlab-lab.jpg" alt="Static truss experiment from the MATLAB laboratory course" />
+              <picture><source srcset="assets/matlab-lab.webp" type="image/webp" /><img src="assets/matlab-lab.jpg" alt="Static truss experiment from the MATLAB laboratory course" width="1920" height="1080" decoding="async" /></picture>
             </div>
             <div>
               <h3 data-i18n="project1Title">MATLAB Laboratory Course</h3>
               <p class="project-meta" data-i18n="project1Timeline">Course lab  ·  WS 2025/26</p>
-              <p data-i18n="project1Text">Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="project1Text">Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><span data-i18n="project1Approach">Modelled a static truss and a dynamic crane, ran ODE simulations, analysed measurement data with FFT, and optimised a truss structure using symbolic and numerical methods.</span></dd></div>
+                <!-- TODO(Dingshuai): add a measured result / key figure for the MATLAB lab (not in CV). -->
+              </dl>
               <div class="tag-row">
                 <span class="tag">MATLAB</span>
                 <span class="tag">ODE Solver</span>
@@ -374,12 +413,16 @@
           </article>
           <article class="project-card">
             <div class="project-media image-frame">
-              <img src="assets/automatic-control-lab.jpg" alt="General information slide for the Automatic Control I laboratory" />
+              <picture><source srcset="assets/automatic-control-lab.webp" type="image/webp" /><img src="assets/automatic-control-lab.jpg" alt="General information slide for the Automatic Control I laboratory" width="1920" height="1080" decoding="async" /></picture>
             </div>
             <div>
               <h3 data-i18n="project2Title">Automatic Control I Lab / Regelungstechnik I</h3>
               <p class="project-meta" data-i18n="project2Timeline">Course lab  ·  SS 2026</p>
-              <p data-i18n="project2Text">Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="project2Text">Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><span data-i18n="project2Approach">Applied PID tuning, state-space and feedforward control, Bode-plot analysis with gain and phase margins, and anti-windup for actuator saturation.</span></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="project2Result">Modelled, controlled, and experimentally validated real lab systems: a two-tank process, a rotary arm, an active suspension, and an open-loop unstable magnetic levitation system.</dd></div>
+              </dl>
               <div class="tag-row">
                 <span class="tag">MATLAB / Simulink</span>
                 <span class="tag">Controller Design</span>
@@ -392,104 +435,122 @@
           </article>
           <article class="project-card">
             <a class="project-media image-frame demo-thumb" href="demos/pendulum.html" target="_blank" rel="noopener">
-              <img src="assets/demos/pendulum.jpg" alt="Pendulum-cart visualizer screenshot" loading="lazy" />
+              <picture><source srcset="assets/demos/pendulum.webp" type="image/webp" /><img src="assets/demos/pendulum.jpg" alt="Pendulum-cart visualizer screenshot" loading="lazy" width="1920" height="1080" decoding="async" /></picture>
               <span class="demo-open" aria-hidden="true">Open ↗</span>
             </a>
             <div>
               <h3 data-i18n="demo1Title">Pendulum-Cart Visualizer</h3>
               <p class="project-meta" data-i18n="demo1Meta">Interactive demo  ·  2025</p>
-              <p data-i18n="demo1Text">An in-browser interactive simulation of an inverted pendulum on a cart. Tunable mass, length, damping, and live state plotting.</p>
-              <div class="tag-row">
-                <span class="tag">HTML / JS</span>
-                <span class="tag">Dynamics</span>
-                <span class="tag">Control</span>
-                <span class="tag">Physics Sim</span>
-              </div>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="demo1Text">An in-browser interactive simulation of an inverted pendulum on a cart. Tunable mass, length, damping, and live state plotting.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><div class="tag-row">
+                  <span class="tag">HTML / JS</span>
+                  <span class="tag">Dynamics</span>
+                  <span class="tag">Control</span>
+                  <span class="tag">Physics Sim</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="resultDemo">Runs in the browser — open the interactive demo.</dd></div>
+              </dl>
             </div>
           </article>
           <article class="project-card">
             <a class="project-media image-frame demo-thumb" href="demos/planar-2r.html" target="_blank" rel="noopener">
-              <img src="assets/demos/planar-2r.jpg" alt="Planar 2R robot simulator screenshot" loading="lazy" />
+              <picture><source srcset="assets/demos/planar-2r.webp" type="image/webp" /><img src="assets/demos/planar-2r.jpg" alt="Planar 2R robot simulator screenshot" loading="lazy" width="1920" height="1080" decoding="async" /></picture>
               <span class="demo-open" aria-hidden="true">Open ↗</span>
             </a>
             <div>
               <h3 data-i18n="demo2Title">Planar 2R Robot Simulator</h3>
               <p class="project-meta" data-i18n="demo2Meta">Interactive demo  ·  2025</p>
-              <p data-i18n="demo2Text">Two-link planar manipulator: drag the end-effector to explore forward and inverse kinematics.</p>
-              <div class="tag-row">
-                <span class="tag">Kinematics</span>
-                <span class="tag">Robotics</span>
-                <span class="tag">HTML / JS</span>
-                <span class="tag">Interactive</span>
-              </div>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="demo2Text">Two-link planar manipulator: drag the end-effector to explore forward and inverse kinematics.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><div class="tag-row">
+                  <span class="tag">Kinematics</span>
+                  <span class="tag">Robotics</span>
+                  <span class="tag">HTML / JS</span>
+                  <span class="tag">Interactive</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="resultDemo">Runs in the browser — open the interactive demo.</dd></div>
+              </dl>
             </div>
           </article>
           <article class="project-card">
             <a class="project-media image-frame demo-thumb" href="demos/arm-7dof.html" target="_blank" rel="noopener">
-              <img src="assets/demos/arm-7dof.jpg" alt="7-DOF robot arm simulator screenshot" loading="lazy" />
+              <picture><source srcset="assets/demos/arm-7dof.webp" type="image/webp" /><img src="assets/demos/arm-7dof.jpg" alt="7-DOF robot arm simulator screenshot" loading="lazy" width="1920" height="1080" decoding="async" /></picture>
               <span class="demo-open" aria-hidden="true">Open ↗</span>
             </a>
             <div>
               <h3 data-i18n="demo3Title">7-DOF Robot Arm Simulator</h3>
               <p class="project-meta" data-i18n="demo3Meta">Interactive demo  ·  2025</p>
-              <p data-i18n="demo3Text">A 7-degree-of-freedom robotic arm in the browser. Joint-by-joint control with DH-based modelling.</p>
-              <div class="tag-row">
-                <span class="tag">7-DoF</span>
-                <span class="tag">Kinematics</span>
-                <span class="tag">Robotics</span>
-                <span class="tag">3D</span>
-              </div>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="demo3Text">A 7-degree-of-freedom robotic arm in the browser. Joint-by-joint control with DH-based modelling.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><div class="tag-row">
+                  <span class="tag">7-DoF</span>
+                  <span class="tag">Kinematics</span>
+                  <span class="tag">Robotics</span>
+                  <span class="tag">3D</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="resultDemo">Runs in the browser — open the interactive demo.</dd></div>
+              </dl>
             </div>
           </article>
           <article class="project-card">
             <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener">
-              <img src="assets/demos/rrt.jpg" alt="RRT path planning illustration" loading="lazy" />
+              <picture><source srcset="assets/demos/rrt.webp" type="image/webp" /><img src="assets/demos/rrt.jpg" alt="RRT path planning illustration" loading="lazy" width="1432" height="1060" decoding="async" /></picture>
               <span class="demo-open" aria-hidden="true">GitHub ↗</span>
             </a>
             <div>
               <h3 data-i18n="demo5Title">RRT — Rapidly-exploring Random Tree</h3>
               <p class="project-meta" data-i18n="demo5Meta">Python source  ·  2025</p>
-              <p data-i18n="demo5Text">Single-tree sampling-based planner. Animated tree growth with obstacle avoidance, written in Python with tkinter.</p>
-              <div class="tag-row">
-                <span class="tag">Python</span>
-                <span class="tag">tkinter</span>
-                <span class="tag">Sampling-based</span>
-                <span class="tag">Single tree</span>
-              </div>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="demo5Text">Single-tree sampling-based planner. Animated tree growth with obstacle avoidance, written in Python with tkinter.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><div class="tag-row">
+                  <span class="tag">Python</span>
+                  <span class="tag">tkinter</span>
+                  <span class="tag">Sampling-based</span>
+                  <span class="tag">Single tree</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="resultSource">Python source code on GitHub.</dd></div>
+              </dl>
             </div>
           </article>
           <article class="project-card">
             <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener">
-              <img src="assets/demos/bidirectional-rrt.jpg" alt="Bidirectional RRT illustration" loading="lazy" />
+              <picture><source srcset="assets/demos/bidirectional-rrt.webp" type="image/webp" /><img src="assets/demos/bidirectional-rrt.jpg" alt="Bidirectional RRT illustration" loading="lazy" width="1432" height="1060" decoding="async" /></picture>
               <span class="demo-open" aria-hidden="true">GitHub ↗</span>
             </a>
             <div>
               <h3 data-i18n="demo6Title">Bidirectional RRT</h3>
               <p class="project-meta" data-i18n="demo6Meta">Python source  ·  2025</p>
-              <p data-i18n="demo6Text">Two trees grow simultaneously from start and goal; the planner stitches them together once they meet. Live animation in tkinter.</p>
-              <div class="tag-row">
-                <span class="tag">Python</span>
-                <span class="tag">tkinter</span>
-                <span class="tag">Bi-directional</span>
-                <span class="tag">Sampling-based</span>
-              </div>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="demo6Text">Two trees grow simultaneously from start and goal; the planner stitches them together once they meet. Live animation in tkinter.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><div class="tag-row">
+                  <span class="tag">Python</span>
+                  <span class="tag">tkinter</span>
+                  <span class="tag">Bi-directional</span>
+                  <span class="tag">Sampling-based</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="resultSource">Python source code on GitHub.</dd></div>
+              </dl>
             </div>
           </article>
           <article class="project-card">
             <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">
-              <img src="assets/demos/prm.jpg" alt="Probabilistic roadmap illustration" loading="lazy" />
+              <picture><source srcset="assets/demos/prm.webp" type="image/webp" /><img src="assets/demos/prm.jpg" alt="Probabilistic roadmap illustration" loading="lazy" width="1432" height="1060" decoding="async" /></picture>
               <span class="demo-open" aria-hidden="true">GitHub ↗</span>
             </a>
             <div>
               <h3 data-i18n="demo7Title">PRM — Probabilistic Roadmap</h3>
               <p class="project-meta" data-i18n="demo7Meta">Python source  ·  2025</p>
-              <p data-i18n="demo7Text">Random sampling builds a connectivity graph in free space; Dijkstra finds the shortest collision-free path. Ideal for multi-query static scenes.</p>
-              <div class="tag-row">
-                <span class="tag">Python</span>
-                <span class="tag">tkinter</span>
-                <span class="tag">Roadmap</span>
-                <span class="tag">Dijkstra</span>
-              </div>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">Problem</dt><dd data-i18n="demo7Text">Random sampling builds a connectivity graph in free space; Dijkstra finds the shortest collision-free path. Ideal for multi-query static scenes.</dd></div>
+                <div><dt data-i18n="labelApproach">Approach</dt><dd><div class="tag-row">
+                  <span class="tag">Python</span>
+                  <span class="tag">tkinter</span>
+                  <span class="tag">Roadmap</span>
+                  <span class="tag">Dijkstra</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">Result</dt><dd data-i18n="resultSource">Python source code on GitHub.</dd></div>
+              </dl>
             </div>
           </article>
         </div>
@@ -542,7 +603,7 @@
       <div class="footer-meta">
         <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener" data-i18n="footerSource">Source ↗</a>
         <span class="footer-sep" aria-hidden="true">·</span>
-        <time class="footer-updated" data-i18n="footerUpdated" data-updated datetime="2026-05-26">Updated May 26, 2026</time>
+        <time class="footer-updated" data-i18n="footerUpdated" data-updated datetime="2026-10-10">Updated</time>
         <span class="footer-sep" aria-hidden="true">·</span>
         <a href="#top" data-i18n="backToTop">Back to top</a>
       </div>

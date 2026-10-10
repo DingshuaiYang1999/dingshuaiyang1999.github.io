@@ -192,7 +192,11 @@ a {
   box-shadow: 0 8px 26px rgba(27, 37, 34, 0.06);
 }
 
-.language-switcher button {
+.language-switcher a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   min-width: 42px;
   min-height: 30px;
   border: 0;
@@ -205,8 +209,8 @@ a {
   font-weight: 800;
 }
 
-.language-switcher button:hover,
-.language-switcher button.is-active {
+.language-switcher a:hover,
+.language-switcher a.is-active {
   background: var(--ink);
   color: #ffffff;
 }
@@ -217,8 +221,8 @@ a {
   box-shadow: none;
 }
 
-:root[data-theme="dark"] .language-switcher button:hover,
-:root[data-theme="dark"] .language-switcher button.is-active {
+:root[data-theme="dark"] .language-switcher a:hover,
+:root[data-theme="dark"] .language-switcher a.is-active {
   background: var(--accent-soft);
   color: var(--accent-strong);
 }
@@ -1312,7 +1316,7 @@ a {
     justify-content: space-between;
   }
 
-  .language-switcher button {
+  .language-switcher a {
     flex: 1;
   }
 
@@ -1384,4 +1388,128 @@ a {
   .contact-section {
     padding: 20px;
   }
+}
+
+/* Project write-up: problem / approach / result */
+.pa-list {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.pa-list > div {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 10px;
+}
+
+.pa-list dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+
+.pa-list dd {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .pa-list > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* Blog */
+.blog-main {
+  width: min(860px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.post-item {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.post-item h2 {
+  margin: 6px 0 8px;
+  font-size: 22px;
+}
+
+.post-item h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-item h2 a:hover {
+  text-decoration: underline;
+}
+
+.post-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.post-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.post-body {
+  line-height: 1.75;
+}
+
+.post-body h2,
+.post-body h3 {
+  margin-top: 1.6em;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.post-body pre {
+  overflow-x: auto;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.post-back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+/* <picture> wrappers (WebP with JPEG fallback) must fill their frame like the bare <img> did */
+.project-media picture,
+.profile-avatar picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

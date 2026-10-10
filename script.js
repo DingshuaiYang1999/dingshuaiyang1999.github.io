@@ -12,7 +12,7 @@ const translations = {
     navAbout: "About",
     navEducation: "Education",
     navSkills: "Skills",
-    navProjects: "Labs",
+    navProjects: "Projects",
     navContact: "Contact",
     navCourses: "Courses",
     coursesLabel: "Courses",
@@ -33,10 +33,10 @@ const translations = {
     heroDomain2: "Control Engineering",
     heroDomain3: "AI",
     heroText:
-      "Currently in Erlangen for a masters in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.",
-    viewProjects: "View labs →",
+      "Currently in Erlangen for a master's in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.",
+    viewProjects: "View projects →",
     contactMe: "Contact me",
-    profileTitle: "M.Sc. Mechatronics  ·  2025 – 2027  ·  FAU",
+    profileTitle: "M.Sc. Mechatronics  ·  2025 – 2028  ·  FAU",
     profileRole: "Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     aboutLabel: "About me",
     aboutTitle: "From materials engineering to mechatronics, robotics, and AI.",
@@ -49,7 +49,7 @@ const translations = {
     educationTitle: "Where I have studied.",
     edu1Degree: "M.Sc. Mechatronics",
     edu1School: "Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany",
-    edu1Status: "In progress",
+    edu1Status: "In progress · expected 03/2028",
     edu2Degree: "B.Eng. Materials Processing & Controlling Engineering",
     edu2School: "Guangdong University of Technology (GDUT) · Guangzhou, China",
     skillsLabel: "Skills",
@@ -59,14 +59,14 @@ const translations = {
     factLocLabel: "Based in",
     factLocValue: "Erlangen, Germany",
     factGradLabel: "Graduating",
-    factGradValue: "April 2027",
+    factGradValue: "March 2028 (expected)",
     factOpenLabel: "Open to",
     factOpenValue: "Internships · working-student roles in robotics, control, AI",
     skillCat4: "ML & AI",
     skillCat5: "Dev Tools",
     skillCat3: "Domains",
     nowLabel: "Now",
-    nowSub: "May 2026",
+    nowSub: "October 2026",
     nowItem1: "Studying CS fundamentals, AI, Machine Learning, LLMs, and Prompt Engineering.",
     nowItem2: "Building personal projects in AI and automation.",
     nowItem3: "Looking for internships and Werkstudent roles in robotics, control, AI.",
@@ -80,7 +80,7 @@ const translations = {
     lang3Level: "B2",
     lang4Name: "Japanese",
     lang4Level: "≈ N4",
-    projectsLabel: "Labs & Experiments",
+    projectsLabel: "Projects",
     projectsTitle: "Coursework and self-built experiments.",
     demo1Title: "Pendulum-Cart Visualizer",
     demo1Meta: "Interactive demo  ·  2025",
@@ -114,6 +114,19 @@ const translations = {
     footerText: "© 2026 Dingshuai Yang.",
     footerSource: "Source ↗",
     footerUpdated: "Updated",
+    navBlog: "Blog",
+    edu3Degree: "Intensive German Language Studies",
+    edu3School: "Goethe-Institut (Qingdao/Shanghai) · Dr. Juno Sprachschule (Dortmund)",
+    labelProblem: "Problem",
+    labelApproach: "Approach",
+    labelResult: "Result",
+    resultDemo: "Runs in the browser — open the interactive demo.",
+    resultSource: "Python source code on GitHub.",
+    project1Approach: "Modelled a static truss and a dynamic crane, ran ODE simulations, analysed measurement data with FFT, and optimised a truss structure using symbolic and numerical methods.",
+    project2Approach: "Applied PID tuning, state-space and feedforward control, Bode-plot analysis with gain and phase margins, and anti-windup for actuator saturation.",
+    project2Result: "Modelled, controlled, and experimentally validated real lab systems: a two-tank process, a rotary arm, an active suspension, and an open-loop unstable magnetic levitation system.",
+    cvDownload: "Download CV (PDF)",
+    skipLink: "Skip to content",
     backToTop: "Back to top"
   },
   de: {
@@ -129,7 +142,7 @@ const translations = {
     navAbout: "Über mich",
     navEducation: "Ausbildung",
     navSkills: "Fähigkeiten",
-    navProjects: "Labore",
+    navProjects: "Projekte",
     navContact: "Kontakt",
     navCourses: "Kurse",
     coursesLabel: "Kurse",
@@ -151,9 +164,9 @@ const translations = {
     heroDomain3: "KI",
     heroText:
       "Aktuell in Erlangen für den Master in Mechatronik. Die meiste Zeit fließt in Regelkreise, Manipulatoren und die KI-Tools, die sie schlauer machen.",
-    viewProjects: "Labore ansehen →",
+    viewProjects: "Projekte ansehen →",
     contactMe: "Kontakt aufnehmen",
-    profileTitle: "M.Sc. Mechatronik  ·  2025 – 2027  ·  FAU",
+    profileTitle: "M.Sc. Mechatronik  ·  2025 – 2028  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     aboutLabel: "Über mich",
     aboutTitle: "Von Materialwissenschaften über Mechatronik bis hin zu Robotik und KI.",
@@ -166,7 +179,7 @@ const translations = {
     educationTitle: "Wo ich studiert habe.",
     edu1Degree: "M.Sc. Mechatronik",
     edu1School: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Deutschland",
-    edu1Status: "Laufend",
+    edu1Status: "Laufend · voraussichtlich 03/2028",
     edu2Degree: "B.Eng. Materialumformung & Steuerungstechnik",
     edu2School: "Guangdong University of Technology (GDUT) · Guangzhou, China",
     skillsLabel: "Fähigkeiten",
@@ -176,14 +189,14 @@ const translations = {
     factLocLabel: "Standort",
     factLocValue: "Erlangen, Deutschland",
     factGradLabel: "Abschluss",
-    factGradValue: "April 2027",
+    factGradValue: "März 2028 (voraussichtlich)",
     factOpenLabel: "Offen für",
     factOpenValue: "Praktika · Werkstudentenstellen in Robotik, Regelung, KI",
     skillCat4: "ML & KI",
     skillCat5: "Dev Tools",
     skillCat3: "Bereiche",
     nowLabel: "Aktuell",
-    nowSub: "Mai 2026",
+    nowSub: "Oktober 2026",
     nowItem1: "Lerne Informatik-Grundlagen, KI, Machine Learning, LLMs und Prompt Engineering.",
     nowItem2: "Baue persönliche Projekte in KI und Automatisierung.",
     nowItem3: "Suche Praktika und Werkstudentenstellen in Robotik, Regelung, KI.",
@@ -197,7 +210,7 @@ const translations = {
     lang3Level: "B2",
     lang4Name: "Japanisch",
     lang4Level: "≈ N4",
-    projectsLabel: "Labore & Experimente",
+    projectsLabel: "Projekte",
     projectsTitle: "Lehrlabore und eigene Experimente.",
     demo1Title: "Pendel-Wagen-Visualizer",
     demo1Meta: "Interaktive Demo  ·  2025",
@@ -231,6 +244,19 @@ const translations = {
     footerText: "© 2026 Dingshuai Yang.",
     footerSource: "Quellcode ↗",
     footerUpdated: "Aktualisiert",
+    navBlog: "Blog",
+    edu3Degree: "Intensivkurse Deutsch",
+    edu3School: "Goethe-Institut (Qingdao/Shanghai) · Dr. Juno Sprachschule (Dortmund)",
+    labelProblem: "Aufgabe",
+    labelApproach: "Vorgehen",
+    labelResult: "Ergebnis",
+    resultDemo: "Läuft im Browser — interaktive Demo öffnen.",
+    resultSource: "Python-Quellcode auf GitHub.",
+    project1Approach: "Modellierung eines statischen Fachwerks und eines dynamischen Krans, ODE-Simulationen, Auswertung von Messdaten mittels FFT sowie Optimierung einer Fachwerkstruktur mit symbolischen und numerischen Methoden.",
+    project2Approach: "PID-Reglereinstellung, Zustandsregelung und Vorsteuerung, Bode-Diagramm-Analyse mit Amplituden- und Phasenreserve sowie Anti-Windup bei Stellgrößenbegrenzung.",
+    project2Result: "Modellierung, Regelung und experimentelle Validierung realer Laborsysteme: Zwei-Tank-System, Dreharm, aktive Federung und ein im offenen Kreis instabiles Magnetschwebesystem.",
+    cvDownload: "Lebenslauf herunterladen (PDF)",
+    skipLink: "Zum Inhalt springen",
     backToTop: "Nach oben"
   },
   zh: {
@@ -245,7 +271,7 @@ const translations = {
     navAbout: "关于",
     navEducation: "教育",
     navSkills: "技能",
-    navProjects: "实验",
+    navProjects: "项目",
     navContact: "联系",
     navCourses: "课程",
     coursesLabel: "课程",
@@ -267,9 +293,9 @@ const translations = {
     heroDomain3: "人工智能",
     heroText:
       "现在在埃尔朗根读机电一体化硕士。大部分时间花在控制回路、机械臂、以及让它们更聪明的 AI 工具上。",
-    viewProjects: "查看实验 →",
+    viewProjects: "查看项目 →",
     contactMe: "联系我",
-    profileTitle: "M.Sc. 机电一体化  ·  2025 – 2027  ·  FAU",
+    profileTitle: "M.Sc. 机电一体化  ·  2025 – 2028  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     aboutLabel: "关于我",
     aboutTitle: "从材料工程到机电一体化，再到 Robotics 与 AI。",
@@ -282,7 +308,7 @@ const translations = {
     educationTitle: "我读过的学校。",
     edu1Degree: "M.Sc. 机电一体化",
     edu1School: "埃尔朗根-纽伦堡大学 (FAU) · 德国埃尔朗根",
-    edu1Status: "在读",
+    edu1Status: "在读 · 预计 2028.03 毕业",
     edu2Degree: "工学学士 · 材料成型及控制工程",
     edu2School: "广东工业大学 (GDUT) · 中国广州",
     skillsLabel: "技能",
@@ -292,14 +318,14 @@ const translations = {
     factLocLabel: "所在地",
     factLocValue: "德国 埃尔朗根",
     factGradLabel: "毕业时间",
-    factGradValue: "2027 年 4 月",
+    factGradValue: "2028 年 3 月（预计）",
     factOpenLabel: "目前在找",
     factOpenValue: "机器人 / 控制 / AI 方向的实习与 Werkstudent",
     skillCat4: "机器学习 / AI",
     skillCat5: "开发工具",
     skillCat3: "方向",
     nowLabel: "Now",
-    nowSub: "2026 年 5 月",
+    nowSub: "2026 年 10 月",
     nowItem1: "学习 CS 基础、AI、Machine Learning、LLMs 与 Prompt Engineering。",
     nowItem2: "在做 AI 与自动化方向的个人项目。",
     nowItem3: "寻找 Robotics / Control / AI 方向的实习与 Werkstudent。",
@@ -313,7 +339,7 @@ const translations = {
     lang3Level: "B2",
     lang4Name: "日语",
     lang4Level: "≈ N4",
-    projectsLabel: "实验与项目",
+    projectsLabel: "项目",
     projectsTitle: "课程实验与个人小项目。",
     demo1Title: "倒立摆-小车可视化",
     demo1Meta: "交互式 demo  ·  2025",
@@ -327,7 +353,7 @@ const translations = {
     demo5Title: "RRT — 快速扩展随机树",
     demo5Meta: "Python 源码  ·  2025",
     demo5Text: "基于随机采样的单向树路径规划，tkinter 实时动画展示树扩展与避障，可对比不同参数下的结果。",
-    demo6Title: "Bidirectional RRT",
+    demo6Title: "双向 RRT",
     demo6Meta: "Python 源码  ·  2025",
     demo6Text: "两棵采样树分别从起点与终点同时生长，相遇即得通路。可视化展示两树扩展过程与最终拼接路径。",
     demo7Title: "PRM — 概率路图",
@@ -347,6 +373,19 @@ const translations = {
     footerText: "© 2026 杨定帅.",
     footerSource: "源码 ↗",
     footerUpdated: "更新于",
+    navBlog: "博客",
+    edu3Degree: "德语强化学习",
+    edu3School: "歌德学院（青岛/上海） · Dr. Juno 语言学校（多特蒙德）",
+    labelProblem: "问题",
+    labelApproach: "方法",
+    labelResult: "结果",
+    resultDemo: "可在浏览器中运行——打开交互演示。",
+    resultSource: "Python 源代码见 GitHub。",
+    project1Approach: "对静态桁架和动态起重机进行建模，开展 ODE 仿真，利用 FFT 分析测量数据，并结合符号与数值方法完成桁架结构优化。",
+    project2Approach: "应用 PID 参数整定、状态空间控制与前馈控制、基于 Bode 图的增益裕度与相位裕度分析，以及针对执行器饱和的抗积分饱和（Anti-windup）设计。",
+    project2Result: "对多个真实实验系统完成建模、控制与实验验证：双容水箱过程、旋转臂、主动悬架，以及开环不稳定的磁悬浮系统。",
+    cvDownload: "下载简历（PDF，英文）",
+    skipLink: "跳到正文",
     backToTop: "回到顶部"
   },
   zhTw: {
@@ -361,7 +400,7 @@ const translations = {
     navAbout: "關於",
     navEducation: "教育",
     navSkills: "技能",
-    navProjects: "實驗",
+    navProjects: "專案",
     navContact: "聯絡",
     navCourses: "課程",
     coursesLabel: "課程",
@@ -383,9 +422,9 @@ const translations = {
     heroDomain3: "人工智慧",
     heroText:
       "現在在埃爾朗根讀機電一體化碩士。大部分時間花在控制迴路、機械臂、以及讓它們更聰明的 AI 工具上。",
-    viewProjects: "查看實驗 →",
+    viewProjects: "查看專案 →",
     contactMe: "聯絡我",
-    profileTitle: "M.Sc. 機電一體化  ·  2025 – 2027  ·  FAU",
+    profileTitle: "M.Sc. 機電一體化  ·  2025 – 2028  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     aboutLabel: "關於我",
     aboutTitle: "從材料工程到機電一體化，再到 Robotics 與 AI。",
@@ -398,7 +437,7 @@ const translations = {
     educationTitle: "我讀過的學校。",
     edu1Degree: "M.Sc. 機電一體化",
     edu1School: "埃爾朗根-紐倫堡大學 (FAU) · 德國埃爾朗根",
-    edu1Status: "在讀",
+    edu1Status: "在讀 · 預計 2028.03 畢業",
     edu2Degree: "工學學士 · 材料成型及控制工程",
     edu2School: "廣東工業大學 (GDUT) · 中國廣州",
     skillsLabel: "技能",
@@ -408,14 +447,14 @@ const translations = {
     factLocLabel: "所在地",
     factLocValue: "德國 埃爾朗根",
     factGradLabel: "畢業時間",
-    factGradValue: "2027 年 4 月",
+    factGradValue: "2028 年 3 月（預計）",
     factOpenLabel: "目前在找",
     factOpenValue: "機器人 / 控制 / AI 方向的實習與 Werkstudent",
     skillCat4: "機器學習 / AI",
     skillCat5: "開發工具",
     skillCat3: "方向",
     nowLabel: "Now",
-    nowSub: "2026 年 5 月",
+    nowSub: "2026 年 10 月",
     nowItem1: "學習 CS 基礎、AI、Machine Learning、LLMs 與 Prompt Engineering。",
     nowItem2: "在做 AI 與自動化方向的個人專案。",
     nowItem3: "尋找 Robotics / Control / AI 方向的實習與 Werkstudent。",
@@ -429,7 +468,7 @@ const translations = {
     lang3Level: "B2",
     lang4Name: "日語",
     lang4Level: "≈ N4",
-    projectsLabel: "實驗與專案",
+    projectsLabel: "專案",
     projectsTitle: "課程實驗與個人小專案。",
     demo1Title: "倒立擺-小車視覺化",
     demo1Meta: "互動式 demo  ·  2025",
@@ -443,7 +482,7 @@ const translations = {
     demo5Title: "RRT — 快速探索隨機樹",
     demo5Meta: "Python 原始碼  ·  2025",
     demo5Text: "基於隨機採樣的單向樹路徑規劃，tkinter 即時動畫展示樹的擴展與避障，並可比較不同參數下的結果。",
-    demo6Title: "Bidirectional RRT",
+    demo6Title: "雙向 RRT",
     demo6Meta: "Python 原始碼  ·  2025",
     demo6Text: "兩棵採樣樹分別從起點與終點同時生長，相遇後即得到通路。視覺化展示兩棵樹的擴展過程與最終拼接路徑。",
     demo7Title: "PRM — 機率路圖",
@@ -463,6 +502,19 @@ const translations = {
     footerText: "© 2026 楊定帥.",
     footerSource: "原始碼 ↗",
     footerUpdated: "更新於",
+    navBlog: "部落格",
+    edu3Degree: "德語密集課程",
+    edu3School: "歌德學院（青島/上海） · Dr. Juno 語言學校（多特蒙德）",
+    labelProblem: "問題",
+    labelApproach: "方法",
+    labelResult: "結果",
+    resultDemo: "可在瀏覽器中執行——開啟互動示範。",
+    resultSource: "Python 原始碼見 GitHub。",
+    project1Approach: "對靜態桁架與動態起重機進行建模，進行 ODE 模擬，以 FFT 分析量測資料，並結合符號與數值方法完成桁架結構最佳化。",
+    project2Approach: "應用 PID 參數整定、狀態空間控制與前饋控制、基於 Bode 圖的增益裕度與相位裕度分析，以及針對致動器飽和的抗積分飽和（Anti-windup）設計。",
+    project2Result: "對多個真實實驗系統完成建模、控制與實驗驗證：雙容水箱程序、旋轉臂、主動懸吊，以及開迴路不穩定的磁浮系統。",
+    cvDownload: "下載履歷（PDF，英文）",
+    skipLink: "跳到內容",
     backToTop: "回到頂部"
   },
   ja: {
@@ -478,7 +530,7 @@ const translations = {
     navAbout: "私について",
     navEducation: "学歴",
     navSkills: "スキル",
-    navProjects: "実験",
+    navProjects: "プロジェクト",
     navContact: "連絡先",
     navCourses: "授業",
     coursesLabel: "Courses",
@@ -500,9 +552,9 @@ const translations = {
     heroDomain3: "AI",
     heroText:
       "現在エアランゲンでメカトロニクスの修士課程に在籍。多くの時間を制御ループ、マニピュレータ、そしてそれらを賢くする AI ツールに費やしています。",
-    viewProjects: "ラボを見る →",
+    viewProjects: "プロジェクトを見る →",
     contactMe: "連絡する",
-    profileTitle: "M.Sc. メカトロニクス  ·  2025 – 2027  ·  FAU",
+    profileTitle: "M.Sc. メカトロニクス  ·  2025 – 2028  ·  FAU",
     profileRole: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · Erlangen, Germany",
     aboutLabel: "私について",
     aboutTitle: "材料工学からメカトロニクス、ロボティクス、AI へ。",
@@ -515,7 +567,7 @@ const translations = {
     educationTitle: "学んだ場所。",
     edu1Degree: "M.Sc. メカトロニクス",
     edu1School: "Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU) · ドイツ・エアランゲン",
-    edu1Status: "在学中",
+    edu1Status: "在学中 · 2028年3月修了予定",
     edu2Degree: "工学士 · 材料成形・制御工学",
     edu2School: "広東工業大学 (GDUT) · 中国・広州",
     skillsLabel: "スキル",
@@ -525,14 +577,14 @@ const translations = {
     factLocLabel: "拠点",
     factLocValue: "ドイツ・エアランゲン",
     factGradLabel: "卒業予定",
-    factGradValue: "2027 年 4 月",
+    factGradValue: "2028 年 3 月（予定）",
     factOpenLabel: "募集中",
     factOpenValue: "ロボティクス / 制御 / AI のインターン・Werkstudent",
     skillCat4: "ML & AI",
     skillCat5: "開発ツール",
     skillCat3: "領域",
     nowLabel: "Now",
-    nowSub: "2026 年 5 月",
+    nowSub: "2026 年 10 月",
     nowItem1: "CS の基礎、AI、Machine Learning、LLMs、Prompt Engineering を学習中。",
     nowItem2: "AI と自動化分野の個人プロジェクトに取り組んでいます。",
     nowItem3: "ロボティクス・制御・AI 分野のインターンと Werkstudent を探しています。",
@@ -546,7 +598,7 @@ const translations = {
     lang3Level: "B2",
     lang4Name: "日本語",
     lang4Level: "≈ N4",
-    projectsLabel: "ラボと実験",
+    projectsLabel: "プロジェクト",
     projectsTitle: "授業のラボと自作の実験。",
     demo1Title: "振り子-台車ビジュアライザー",
     demo1Meta: "インタラクティブ demo  ·  2025",
@@ -560,7 +612,7 @@ const translations = {
     demo5Title: "RRT — Rapidly-exploring Random Tree",
     demo5Meta: "Python ソース  ·  2025",
     demo5Text: "サンプリングに基づく単一ツリー経路計画。tkinter でツリーの成長と障害物回避をリアルタイムに可視化。",
-    demo6Title: "Bidirectional RRT",
+    demo6Title: "双方向 RRT",
     demo6Meta: "Python ソース  ·  2025",
     demo6Text: "始点と終点から同時に成長する 2 本のツリーを接続して経路を生成。アニメーションで動作確認可能。",
     demo7Title: "PRM — 確率的ロードマップ",
@@ -580,6 +632,19 @@ const translations = {
     footerText: "© 2026 ディンシュアイ・ヤン.",
     footerSource: "ソース ↗",
     footerUpdated: "更新",
+    navBlog: "ブログ",
+    edu3Degree: "ドイツ語集中学習",
+    edu3School: "ゲーテ・インスティトゥート（青島/上海） · Dr. Juno 語学学校（ドルトムント）",
+    labelProblem: "課題",
+    labelApproach: "アプローチ",
+    labelResult: "結果",
+    resultDemo: "ブラウザで動作 — インタラクティブデモを開く。",
+    resultSource: "Python ソースコード（GitHub）。",
+    project1Approach: "静的トラスと動的クレーンをモデル化し、ODE シミュレーション、FFT による計測データ解析、記号・数値手法によるトラス構造の最適化を行いました。",
+    project2Approach: "PID チューニング、状態空間制御とフィードフォワード制御、ゲイン余裕・位相余裕を用いたボード線図解析、アクチュエータ飽和に対するアンチワインドアップを適用しました。",
+    project2Result: "実際の実験装置（二容量タンク、回転アーム、アクティブサスペンション、開ループ不安定な磁気浮上システム）のモデル化・制御・実験検証を行いました。",
+    cvDownload: "履歴書をダウンロード（PDF・英語）",
+    skipLink: "本文へスキップ",
     backToTop: "上に戻る"
   }
 };
@@ -592,23 +657,20 @@ const languageMeta = {
   ja: "ja"
 };
 
+// Static per-language URLs (generated by tools/build_i18n.py).
+const languagePaths = { en: "/", de: "/de/", zh: "/zh/", zhTw: "/zh-tw/", ja: "/ja/" };
+
 function getInitialLanguage() {
-  // 1. URL param ?lang=xx wins (so hreflang links work)
+  // Legacy ?lang=xx links redirect to the static language URL.
   const params = new URLSearchParams(window.location.search);
   const fromQuery = params.get("lang");
-  if (fromQuery && translations[fromQuery]) return fromQuery;
-
-  // 2. Saved preference
-  const saved = localStorage.getItem("preferredLanguage");
-  if (saved && translations[saved]) return saved;
-
-  // 3. Browser language — map zh-TW/HK to zhTw, others by first 2 letters
-  const nav = (navigator.language || "").toLowerCase();
-  if (nav.startsWith("zh-tw") || nav.startsWith("zh-hk") || nav.startsWith("zh-hant")) {
-    return "zhTw";
+  const isHome = window.location.pathname === "/" || window.location.pathname === "/index.html";
+  if (isHome && fromQuery && fromQuery !== "en" && languagePaths[fromQuery]) {
+    window.location.replace(languagePaths[fromQuery] + window.location.hash);
   }
-  const browserLanguage = nav.slice(0, 2);
-  return translations[browserLanguage] ? browserLanguage : "en";
+  // Each generated page declares its own language.
+  const pageLang = document.documentElement.dataset.pageLang;
+  return translations[pageLang] ? pageLang : "en";
 }
 
 function applyLanguage(language) {
@@ -632,11 +694,11 @@ function applyLanguage(language) {
   document.querySelectorAll("[data-lang]").forEach((button) => {
     const isActive = button.dataset.lang === language;
     button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
+    if (isActive) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
   });
 
   updateFooterDate(dictionary, language);
-  localStorage.setItem("preferredLanguage", language);
 }
 
 function getLastUpdatedDate(language, element) {
@@ -658,11 +720,14 @@ function updateFooterDate(dictionary, language) {
   });
 }
 
-document.querySelectorAll("[data-lang]").forEach((button) => {
-  button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+document.querySelectorAll("[data-lang]").forEach((link) => {
+  link.addEventListener("click", () => {
+    try { localStorage.setItem("preferredLanguage", link.dataset.lang); } catch (e) {}
+  });
 });
 
-applyLanguage(getInitialLanguage());
+// Blog pages are single-language and keep their own <title>; skip i18n there.
+if (!document.body.hasAttribute("data-no-i18n")) applyLanguage(getInitialLanguage());
 
 // Theme toggle
 function getInitialTheme() {

@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="zh-CN" data-page-lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>杨定帅 | 机器人、控制工程、AI</title>
+    <meta
+      name="description"
+      content="杨定帅的多语言个人主页，展示机器人、控制工程、机电一体化、AI 与自动化项目。"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314201b'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='30' font-family='-apple-system,BlinkMacSystemFont,Inter,Arial,sans-serif' font-weight='800' letter-spacing='-1' fill='white'%3EDY%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/zh/" />
+    <link rel="alternate" hreflang="en" href="https://dingshuaiyang1999.github.io/" />
+    <link rel="alternate" hreflang="de" href="https://dingshuaiyang1999.github.io/de/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://dingshuaiyang1999.github.io/zh/" />
+    <link rel="alternate" hreflang="zh-TW" href="https://dingshuaiyang1999.github.io/zh-tw/" />
+    <link rel="alternate" hreflang="ja" href="https://dingshuaiyang1999.github.io/ja/" />
+    <link rel="alternate" hreflang="x-default" href="https://dingshuaiyang1999.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/zh/" />
+    <meta property="og:title" content="Dingshuai Yang — Robotics, Control Engineering, AI" />
+    <meta property="og:description" content="M.Sc. Mechatronics @ FAU Erlangen-Nürnberg. Personal site showcasing robotics, control engineering, AI projects, and interactive engineering demos." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dingshuai Yang — Robotics, Control, AI" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dingshuai Yang — Robotics, Control Engineering, AI" />
+    <meta name="twitter:description" content="M.Sc. Mechatronics @ FAU Erlangen-Nürnberg. Personal site showcasing robotics, control engineering, AI projects." />
+    <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="theme-color" content="#14201b" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Dingshuai Yang",
+      "alternateName": ["杨定帅", "ディンシュアイ・ヤン"],
+      "url": "https://dingshuaiyang1999.github.io/",
+      "image": "https://dingshuaiyang1999.github.io/assets/avatar.jpg",
+      "jobTitle": "M.Sc. Mechatronics Student",
+      "description": "M.Sc. Mechatronics student at FAU Erlangen-Nürnberg, focused on robotics, control engineering, and AI.",
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Friedrich-Alexander University Erlangen-Nürnberg",
+          "sameAs": "https://www.fau.eu/"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Guangdong University of Technology",
+          "sameAs": "https://www.gdut.edu.cn/"
+        }
+      ],
+      "knowsAbout": ["Robotics", "Control Engineering", "Mechatronics", "Artificial Intelligence", "Large Language Models", "Path Planning"],
+      "knowsLanguage": ["zh", "zh-Hant", "de", "en", "ja"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Erlangen",
+        "addressCountry": "DE"
+      },
+      "sameAs": [
+        "https://github.com/DingshuaiYang1999",
+        "https://www.linkedin.com/in/dingshuai-y-69b8a6405/",
+        "https://x.com/Charles42ouh"
+      ]
+    }
+    </script>
+    <link rel="stylesheet" href="../styles.css" />
+    <script>
+      // Set theme as early as possible to avoid flash
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefers =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          document.documentElement.setAttribute("data-theme", saved || prefers);
+        } catch (e) {}
+      })();
+    </script>
+    <script src="../script.js" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main" data-i18n="skipLink">跳到正文</a>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="返回首页" data-i18n-aria-label="homeAria">
+        <span class="brand-mark" data-i18n="brandMark">DY</span>
+        <span data-i18n="brandName">杨定帅</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#about" data-i18n="navAbout">关于</a>
+        <a href="#education" data-i18n="navEducation">教育</a>
+        <a href="#courses" data-i18n="navCourses">课程</a>
+        <a href="#skills" data-i18n="navSkills">技能</a>
+        <a href="#projects" data-i18n="navProjects">项目</a>
+        <a href="../blog/" data-i18n="navBlog">博客</a>
+        <a href="#contact" data-i18n="navContact">联系</a>
+      </nav>
+      <div class="header-tools">
+        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <line x1="12" y1="2.5" x2="12" y2="5"/>
+              <line x1="12" y1="19" x2="12" y2="21.5"/>
+              <line x1="2.5" y1="12" x2="5" y2="12"/>
+              <line x1="19" y1="12" x2="21.5" y2="12"/>
+              <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+              <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+              <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+              <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+            </g>
+          </svg>
+          <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+          </svg>
+        </button>
+        <div class="language-switcher" aria-label="语言选择" data-i18n-aria-label="languageAria">
+          <a href="/" data-lang="en" hreflang="en" aria-label="English" title="English">EN</a>
+          <a href="/de/" data-lang="de" hreflang="de" aria-label="Deutsch" title="Deutsch">DE</a>
+          <a href="/zh/" data-lang="zh" class="is-active" aria-current="page" hreflang="zh-CN" aria-label="简体中文" title="简体中文">简</a>
+          <a href="/zh-tw/" data-lang="zhTw" hreflang="zh-TW" aria-label="繁體中文" title="繁體中文">繁</a>
+          <a href="/ja/" data-lang="ja" hreflang="ja" aria-label="日本語" title="日本語">日</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero section">
+        <div class="hero-copy">
+          <p class="intro-line" data-i18n="introLine">个人主页</p>
+          <p class="hero-greeting" data-i18n="heroGreeting">你好，我是</p>
+          <h1 class="hero-name" data-i18n="heroName">杨定帅</h1>
+          <div class="hero-pills" aria-label="Core focus areas">
+            <span class="pill pill-robotics" data-i18n="heroDomain1">机器人</span>
+            <span class="pill pill-control" data-i18n="heroDomain2">控制工程</span>
+            <span class="pill pill-ai" data-i18n="heroDomain3">人工智能</span>
+          </div>
+          <p class="hero-text" data-i18n="heroText">现在在埃尔朗根读机电一体化硕士。大部分时间花在控制回路、机械臂、以及让它们更聪明的 AI 工具上。</p>
+          <div class="hero-actions" aria-label="主要操作" data-i18n-aria-label="actionsAria">
+            <a class="button primary" href="#projects" data-i18n="viewProjects">查看项目 →</a>
+            <a class="button secondary" href="../assets/cv/Dingshuai_Yang_CV.pdf" data-cv download data-i18n="cvDownload">下载简历（PDF，英文）</a>
+            <a class="button secondary" href="#contact" data-i18n="contactMe">联系我</a>
+          </div>
+        </div>
+
+        <div class="profile-panel" aria-label="个人信息摘要" data-i18n-aria-label="profileAria">
+          <div class="profile-visual profile-avatar" aria-hidden="true">
+            <picture><source srcset="../assets/avatar.webp" type="image/webp" /><img src="../assets/avatar.jpg" alt="Dingshuai Yang" width="400" height="400" decoding="async" /></picture>
+          </div>
+          <div>
+            <h2 data-i18n="profileTitle">M.Sc. 机电一体化  ·  2025 – 2028  ·  FAU</h2>
+          </div>
+          <dl class="profile-facts">
+            <div>
+              <dt data-i18n="factLocLabel">所在地</dt>
+              <dd data-i18n="factLocValue">德国 埃尔朗根</dd>
+            </div>
+            <div>
+              <dt data-i18n="factGradLabel">毕业时间</dt>
+              <dd data-i18n="factGradValue">2028 年 3 月（预计）</dd>
+            </div>
+            <div>
+              <dt data-i18n="factOpenLabel">目前在找</dt>
+              <dd data-i18n="factOpenValue">机器人 / 控制 / AI 方向的实习与 Werkstudent</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section id="about" class="section split-section">
+        <div>
+          <p class="section-label" data-i18n="aboutLabel">关于我</p>
+          <h2 data-i18n="aboutTitle">从材料工程到机电一体化，再到 Robotics 与 AI。</h2>
+        </div>
+        <div class="text-block">
+          <p data-i18n="aboutText1">我本科学的是材料工程，但真正让我好奇的从来是那些机器本身——以及让它们变得智能的那些东西。看着人形机器人学会走路、抓取、像人一样推理，是把我拉进这个领域的根本原因。</p>
+          <blockquote class="pull-quote" data-i18n="aboutQuote">我相信人形机器人和具身智能就是未来。</blockquote>
+          <p data-i18n="aboutText2">所以我转到机电一体化，跑到 Erlangen 读硕士——把控制回路、机械臂、和现代 AI 工具一个个学会。早晚它们会走进每个厨房和每条产线，我希望那时候我也在那里。</p>
+        </div>
+      </section>
+
+      <section id="now" class="section now-section">
+        <div class="now-head">
+          <p class="section-label" data-i18n="nowLabel">Now</p>
+          <p class="now-sub" data-i18n="nowSub">2026 年 10 月</p>
+          <!-- TODO(Dingshuai): the items below are carried over from the May 2026 version; please confirm or update them. -->
+        </div>
+        <ul class="now-list">
+          <li>
+            <span class="now-dot dot-learn" aria-hidden="true"></span>
+            <span data-i18n="nowItem1">学习 CS 基础、AI、Machine Learning、LLMs 与 Prompt Engineering。</span>
+          </li>
+          <li>
+            <span class="now-dot dot-build" aria-hidden="true"></span>
+            <span data-i18n="nowItem2">在做 AI 与自动化方向的个人项目。</span>
+          </li>
+          <li>
+            <span class="now-dot dot-seek" aria-hidden="true"></span>
+            <span data-i18n="nowItem3">寻找 Robotics / Control / AI 方向的实习与 Werkstudent。</span>
+          </li>
+        </ul>
+      </section>
+
+      <!--
+        TODO(Dingshuai): Experience section. The CV (10.10.2026) lists no work/internship
+        entries yet, so this stays hidden. Uncomment and fill in real entries, add
+        translation keys (exp1Role, exp1Org, ...) to script.js, and add an "Experience"
+        nav link.
+      <section id="experience" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="experienceLabel">Experience</p>
+          <h2 data-i18n="experienceTitle">Where I have worked.</h2>
+        </div>
+        <ol class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-date">YYYY.MM — YYYY.MM</div>
+            <div class="timeline-body">
+              <h3 data-i18n="exp1Role">Role</h3>
+              <p class="timeline-meta" data-i18n="exp1Org">Company · City</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+      -->
+
+      <section id="education" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="educationLabel">教育经历</p>
+          <h2 data-i18n="educationTitle">我读过的学校。</h2>
+        </div>
+        <ol class="timeline">
+          <li class="timeline-item">
+            <div class="timeline-date">2025.04 — 2028.03</div>
+            <div class="timeline-body">
+              <h3 data-i18n="edu1Degree">M.Sc. 机电一体化</h3>
+              <p class="timeline-meta" data-i18n="edu1School">埃尔朗根-纽伦堡大学 (FAU) · 德国埃尔朗根</p>
+              <p class="timeline-status" data-i18n="edu1Status">在读 · 预计 2028.03 毕业</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-date">2023.07 — 2025.03</div>
+            <div class="timeline-body">
+              <h3 data-i18n="edu3Degree">德语强化学习</h3>
+              <p class="timeline-meta" data-i18n="edu3School">歌德学院（青岛/上海） · Dr. Juno 语言学校（多特蒙德）</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-date">2019.09 — 2023.07</div>
+            <div class="timeline-body">
+              <h3 data-i18n="edu2Degree">工学学士 · 材料成型及控制工程</h3>
+              <p class="timeline-meta" data-i18n="edu2School">广东工业大学 (GDUT) · 中国广州</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="courses" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="coursesLabel">课程</p>
+          <h2 data-i18n="coursesTitle">在 FAU 学过的核心课程。</h2>
+        </div>
+        <div class="course-grid">
+          <article class="course-module">
+            <div class="course-module-head">
+              <h3 data-i18n="cm1Title">控制工程</h3>
+              <span class="course-meta" data-i18n="cm1Meta">Vertiefung</span>
+            </div>
+            <ul class="course-list">
+              <li>Regelungstechnik A</li>
+              <li>Regelungstechnik B</li>
+              <li>Robotics I</li>
+              <li>Robotics II</li>
+              <li>Nonlinear Control Systems</li>
+            </ul>
+            <p class="course-note" data-i18n="cm1Note">从经典 PID 到状态空间、Lyapunov 稳定性，再到机器人运动学和非线性观测器——把如何让一个系统按预期运动这件事彻底搞懂的过程。</p>
+          </article>
+          <article class="course-module">
+            <div class="course-module-head">
+              <h3 data-i18n="cm2Title">计算机与 AI</h3>
+              <span class="course-meta" data-i18n="cm2Meta">正在学习</span>
+            </div>
+            <ul class="course-list">
+              <li>Introduction to Machine Learning</li>
+              <li>Deep Learning</li>
+            </ul>
+            <p class="course-note" data-i18n="cm2Note">正在从手撕梯度开始补齐 ML/DL 的数学和工程链路。目标是把它和我的控制经验结合，做 learning-based control。</p>
+          </article>
+          <article class="course-module">
+            <div class="course-module-head">
+              <h3 data-i18n="cm3Title">工程基础</h3>
+              <span class="course-meta" data-i18n="cm3Meta">技术</span>
+            </div>
+            <ul class="course-list">
+              <li>Semiconductor Fundamentals</li>
+              <li>Rigid Body Dynamics</li>
+              <li>Production Engineering</li>
+            </ul>
+            <p class="course-note" data-i18n="cm3Note">从微观的半导体到宏观的生产线——让我对一台机器人是如何被造出来的有完整的工程视角。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="skillsLabel">技能</p>
+          <h2 data-i18n="skillsTitle">跨越控制、机器人软件与 AI 工具链。</h2>
+        </div>
+        <dl class="skill-table">
+          <div class="skill-row">
+            <dt data-i18n="skillCat1">编程语言</dt>
+            <dd>
+              <span class="tag">Python</span>
+              <span class="tag">C++</span>
+              <span class="tag">MATLAB</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt data-i18n="skillCat2">机器人与仿真</dt>
+            <dd>
+              <span class="tag">Simulink</span>
+              <span class="tag">ROS / ROS2</span>
+              <span class="tag">OpenCV</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt data-i18n="skillCat4">机器学习 / AI</dt>
+            <dd>
+              <span class="tag">PyTorch</span>
+              <span class="tag">LLMs</span>
+              <span class="tag">Prompt Engineering</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt data-i18n="skillCat5">开发工具</dt>
+            <dd>
+              <span class="tag">Linux</span>
+              <span class="tag">Git / GitHub</span>
+            </dd>
+          </div>
+          <div class="skill-row">
+            <dt data-i18n="skillCat3">方向</dt>
+            <dd>
+              <span class="tag">Robotics</span>
+              <span class="tag">Control Engineering</span>
+              <span class="tag">Mechatronics</span>
+              <span class="tag">AI / LLMs</span>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="languages" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="languagesLabel">语言</p>
+          <h2 data-i18n="languagesTitle">我会说的语言。</h2>
+        </div>
+        <dl class="language-defs">
+          <div class="language-row">
+            <dt data-i18n="lang1Name">中文</dt>
+            <dd data-i18n="lang1Level">母语</dd>
+          </div>
+          <div class="language-row">
+            <dt data-i18n="lang2Name">德语</dt>
+            <dd data-i18n="lang2Level">C1</dd>
+          </div>
+          <div class="language-row">
+            <dt data-i18n="lang3Name">英语</dt>
+            <dd data-i18n="lang3Level">B2</dd>
+          </div>
+          <div class="language-row">
+            <dt data-i18n="lang4Name">日语</dt>
+            <dd data-i18n="lang4Level">≈ N4</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="projects" class="section">
+        <div class="section-heading">
+          <p class="section-label" data-i18n="projectsLabel">项目</p>
+          <h2 data-i18n="projectsTitle">课程实验与个人小项目。</h2>
+        </div>
+        <div class="project-list">
+          <article class="project-card">
+            <div class="project-media image-frame">
+              <picture><source srcset="../assets/matlab-lab.webp" type="image/webp" /><img src="../assets/matlab-lab.jpg" alt="Static truss experiment from the MATLAB laboratory course" width="1920" height="1080" decoding="async" /></picture>
+            </div>
+            <div>
+              <h3 data-i18n="project1Title">MATLAB Laboratory Course</h3>
+              <p class="project-meta" data-i18n="project1Timeline">课程实验  ·  WS 2025/26</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="project1Text">内容：Static truss、Dynamic Crane、Measurement Data Analysis 和 Optimisation of the truss structure。实验使用 MATLAB 完成结构力学建模、ODE 仿真、FFT 信号分析、符号计算和优化任务。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><span data-i18n="project1Approach">对静态桁架和动态起重机进行建模，开展 ODE 仿真，利用 FFT 分析测量数据，并结合符号与数值方法完成桁架结构优化。</span></dd></div>
+                <!-- TODO(Dingshuai): add a measured result / key figure for the MATLAB lab (not in CV). -->
+              </dl>
+              <div class="tag-row">
+                <span class="tag">MATLAB</span>
+                <span class="tag">ODE Solver</span>
+                <span class="tag">FFT</span>
+                <span class="tag">Symbolic Math</span>
+                <span class="tag">Optimization</span>
+              </div>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-media image-frame">
+              <picture><source srcset="../assets/automatic-control-lab.webp" type="image/webp" /><img src="../assets/automatic-control-lab.jpg" alt="General information slide for the Automatic Control I laboratory" width="1920" height="1080" decoding="async" /></picture>
+            </div>
+            <div>
+              <h3 data-i18n="project2Title">Automatic Control I Lab / Regelungstechnik I</h3>
+              <p class="project-meta" data-i18n="project2Timeline">课程实验  ·  SS 2026</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="project2Text">内容：实验站点包括 Two Tank System、MATLAB 1、MATLAB 2、Rotary Arm、Active Suspension 和 Magnetic Levitation System。课程实验围绕自动控制基础，将 Regelungstechnik A / dynamical systems and control 的理论用于建模、仿真、控制器设计和实验观察。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><span data-i18n="project2Approach">应用 PID 参数整定、状态空间控制与前馈控制、基于 Bode 图的增益裕度与相位裕度分析，以及针对执行器饱和的抗积分饱和（Anti-windup）设计。</span></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="project2Result">对多个真实实验系统完成建模、控制与实验验证：双容水箱过程、旋转臂、主动悬架，以及开环不稳定的磁悬浮系统。</dd></div>
+              </dl>
+              <div class="tag-row">
+                <span class="tag">MATLAB / Simulink</span>
+                <span class="tag">Controller Design</span>
+                <span class="tag">Two Tank</span>
+                <span class="tag">Rotary Arm</span>
+                <span class="tag">MagLev</span>
+                <span class="tag">Active Suspension</span>
+              </div>
+            </div>
+          </article>
+          <article class="project-card">
+            <a class="project-media image-frame demo-thumb" href="../demos/pendulum.html" target="_blank" rel="noopener">
+              <picture><source srcset="../assets/demos/pendulum.webp" type="image/webp" /><img src="../assets/demos/pendulum.jpg" alt="Pendulum-cart visualizer screenshot" loading="lazy" width="1920" height="1080" decoding="async" /></picture>
+              <span class="demo-open" aria-hidden="true">Open ↗</span>
+            </a>
+            <div>
+              <h3 data-i18n="demo1Title">倒立摆-小车可视化</h3>
+              <p class="project-meta" data-i18n="demo1Meta">交互式 demo  ·  2025</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="demo1Text">浏览器内可交互的倒立摆 + 小车系统仿真，可调质量、长度、阻尼等参数，实时观察状态变化与控制信号。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><div class="tag-row">
+                  <span class="tag">HTML / JS</span>
+                  <span class="tag">Dynamics</span>
+                  <span class="tag">Control</span>
+                  <span class="tag">Physics Sim</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="resultDemo">可在浏览器中运行——打开交互演示。</dd></div>
+              </dl>
+            </div>
+          </article>
+          <article class="project-card">
+            <a class="project-media image-frame demo-thumb" href="../demos/planar-2r.html" target="_blank" rel="noopener">
+              <picture><source srcset="../assets/demos/planar-2r.webp" type="image/webp" /><img src="../assets/demos/planar-2r.jpg" alt="Planar 2R robot simulator screenshot" loading="lazy" width="1920" height="1080" decoding="async" /></picture>
+              <span class="demo-open" aria-hidden="true">Open ↗</span>
+            </a>
+            <div>
+              <h3 data-i18n="demo2Title">平面 2R 机械臂仿真</h3>
+              <p class="project-meta" data-i18n="demo2Meta">交互式 demo  ·  2025</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="demo2Text">二连杆平面机械臂仿真，可拖拽末端执行器，实时演示正向 / 逆向运动学解算。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><div class="tag-row">
+                  <span class="tag">Kinematics</span>
+                  <span class="tag">Robotics</span>
+                  <span class="tag">HTML / JS</span>
+                  <span class="tag">Interactive</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="resultDemo">可在浏览器中运行——打开交互演示。</dd></div>
+              </dl>
+            </div>
+          </article>
+          <article class="project-card">
+            <a class="project-media image-frame demo-thumb" href="../demos/arm-7dof.html" target="_blank" rel="noopener">
+              <picture><source srcset="../assets/demos/arm-7dof.webp" type="image/webp" /><img src="../assets/demos/arm-7dof.jpg" alt="7-DOF robot arm simulator screenshot" loading="lazy" width="1920" height="1080" decoding="async" /></picture>
+              <span class="demo-open" aria-hidden="true">Open ↗</span>
+            </a>
+            <div>
+              <h3 data-i18n="demo3Title">7 自由度机械臂仿真</h3>
+              <p class="project-meta" data-i18n="demo3Meta">交互式 demo  ·  2025</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="demo3Text">浏览器中的 7 自由度机械臂可视化，可逐关节控制并观察末端姿态变化，基于 DH 参数建模。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><div class="tag-row">
+                  <span class="tag">7-DoF</span>
+                  <span class="tag">Kinematics</span>
+                  <span class="tag">Robotics</span>
+                  <span class="tag">3D</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="resultDemo">可在浏览器中运行——打开交互演示。</dd></div>
+              </dl>
+            </div>
+          </article>
+          <article class="project-card">
+            <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener">
+              <picture><source srcset="../assets/demos/rrt.webp" type="image/webp" /><img src="../assets/demos/rrt.jpg" alt="RRT path planning illustration" loading="lazy" width="1432" height="1060" decoding="async" /></picture>
+              <span class="demo-open" aria-hidden="true">GitHub ↗</span>
+            </a>
+            <div>
+              <h3 data-i18n="demo5Title">RRT — 快速扩展随机树</h3>
+              <p class="project-meta" data-i18n="demo5Meta">Python 源码  ·  2025</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="demo5Text">基于随机采样的单向树路径规划，tkinter 实时动画展示树扩展与避障，可对比不同参数下的结果。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><div class="tag-row">
+                  <span class="tag">Python</span>
+                  <span class="tag">tkinter</span>
+                  <span class="tag">Sampling-based</span>
+                  <span class="tag">Single tree</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="resultSource">Python 源代码见 GitHub。</dd></div>
+              </dl>
+            </div>
+          </article>
+          <article class="project-card">
+            <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener">
+              <picture><source srcset="../assets/demos/bidirectional-rrt.webp" type="image/webp" /><img src="../assets/demos/bidirectional-rrt.jpg" alt="Bidirectional RRT illustration" loading="lazy" width="1432" height="1060" decoding="async" /></picture>
+              <span class="demo-open" aria-hidden="true">GitHub ↗</span>
+            </a>
+            <div>
+              <h3 data-i18n="demo6Title">双向 RRT</h3>
+              <p class="project-meta" data-i18n="demo6Meta">Python 源码  ·  2025</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="demo6Text">两棵采样树分别从起点与终点同时生长，相遇即得通路。可视化展示两树扩展过程与最终拼接路径。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><div class="tag-row">
+                  <span class="tag">Python</span>
+                  <span class="tag">tkinter</span>
+                  <span class="tag">Bi-directional</span>
+                  <span class="tag">Sampling-based</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="resultSource">Python 源代码见 GitHub。</dd></div>
+              </dl>
+            </div>
+          </article>
+          <article class="project-card">
+            <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">
+              <picture><source srcset="../assets/demos/prm.webp" type="image/webp" /><img src="../assets/demos/prm.jpg" alt="Probabilistic roadmap illustration" loading="lazy" width="1432" height="1060" decoding="async" /></picture>
+              <span class="demo-open" aria-hidden="true">GitHub ↗</span>
+            </a>
+            <div>
+              <h3 data-i18n="demo7Title">PRM — 概率路图</h3>
+              <p class="project-meta" data-i18n="demo7Meta">Python 源码  ·  2025</p>
+              <dl class="pa-list">
+                <div><dt data-i18n="labelProblem">问题</dt><dd data-i18n="demo7Text">对自由空间随机采样并构建近邻图，再用 Dijkstra 求最短无碰撞路径。适合多次查询的静态场景。</dd></div>
+                <div><dt data-i18n="labelApproach">方法</dt><dd><div class="tag-row">
+                  <span class="tag">Python</span>
+                  <span class="tag">tkinter</span>
+                  <span class="tag">Roadmap</span>
+                  <span class="tag">Dijkstra</span>
+                </div></dd></div>
+                <div><dt data-i18n="labelResult">结果</dt><dd data-i18n="resultSource">Python 源代码见 GitHub。</dd></div>
+              </dl>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact-section">
+        <div>
+          <p class="section-label" data-i18n="contactLabel">联系我</p>
+          <h2 data-i18n="contactTitle">欢迎交流 Robotics、Control Systems、AI Tools 与 LLMs。</h2>
+        </div>
+        <div class="contact-right">
+        <div class="contact-actions">
+          <a class="contact-link outlook" href="mailto:dingshuai.yang@outlook.com">
+            <img class="contact-icon" src="../assets/outlook.svg" alt="" aria-hidden="true" />
+            <span class="contact-text">
+              <span class="contact-label">Outlook</span>
+              <span class="contact-value">dingshuai.yang@outlook.com</span>
+            </span>
+          </a>
+          <a class="contact-link gmail" href="mailto:dingshuai.yang1999@gmail.com">
+            <img class="contact-icon" src="../assets/gmail.svg" alt="" aria-hidden="true" />
+            <span class="contact-text">
+              <span class="contact-label">Gmail</span>
+              <span class="contact-value">dingshuai.yang1999@gmail.com</span>
+            </span>
+          </a>
+        </div>
+        <div class="contact-socials">
+          <span class="contact-socials-label" data-i18n="followLabel">关注我</span>
+          <a class="contact-glyph brand-x" href="https://x.com/Charles42ouh" aria-label="X">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#000000" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a class="contact-glyph brand-github" href="https://github.com/DingshuaiYang1999" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#181717" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.54 2.87 8.39 6.84 9.74.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05.8-.23 1.65-.34 2.5-.34s1.7.12 2.5.34c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49 3.97-1.35 6.83-5.2 6.83-9.74C22 6.58 17.52 2 12 2z"/>
+            </svg>
+          </a>
+          <a class="contact-glyph brand-linkedin" href="https://www.linkedin.com/in/dingshuai-y-69b8a6405/" aria-label="LinkedIn">
+            <img src="../assets/linkedin.svg" alt="" aria-hidden="true" />
+          </a>
+        </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p data-i18n="footerText">© 2026 杨定帅.</p>
+      <div class="footer-meta">
+        <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener" data-i18n="footerSource">源码 ↗</a>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <time class="footer-updated" data-i18n="footerUpdated" data-updated datetime="2026-10-10">更新于</time>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <a href="#top" data-i18n="backToTop">回到顶部</a>
+      </div>
+    </footer>
+  </body>
+</html>
