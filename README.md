@@ -14,6 +14,9 @@ date: 2026-11-01
 tag: Study          # Life, Study or Work
 excerpt: One or two sentences for the blog index.
 draft: false        # optional
+# optional: subtitle, dek, author, cover, cover_alt
+# cover: <name> -> assets/blog/<name>-cover.{jpg,webp} (1600x900, post hero + og:image)
+#                  and assets/blog/<name>-thumb.{jpg,webp} (480x270, list thumbnail)
 ---
 
 Post body in Markdown…
@@ -26,8 +29,9 @@ pip install markdown
 python3 tools/build_blog.py   # writes blog/<slug>.html, blog/index.html and sitemap.xml
 ```
 
-`blog/posts/2026-10-10-welcome.md` is only an example/template — delete it and rebuild
-once the first real post exists. Images for posts can go in `assets/blog/`.
+Reading time (about 200 words per minute) is computed automatically. To style closing lines,
+wrap them in `<div class="post-closing" markdown="1"> … </div>`. See
+`blog/posts/2024-05-11-beginning-my-german-life.md` for a full example. Images for posts go in `assets/blog/`.
 
 ## Contact form
 

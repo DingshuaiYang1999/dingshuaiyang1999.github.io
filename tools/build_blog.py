@@ -38,8 +38,10 @@ def parse(path, required=("title", "date")):
     if meta.get("tag") and meta["tag"] not in TAGS:
         print(f"warning: {path.name}: tag '{meta['tag']}' is not one of {sorted(TAGS)}")
     meta["slug"] = path.stem
-    meta["body"] = markdown.markdown(m.group(2), extensions=["fenced_code", "tables", "sane_lists"])
+    meta["body"] = markdown.markdown(m.group(2), extensions=["fenced_code", "tables", "sane_lists", "md_in_html"])
     meta["draft"] = meta.get("draft", "false").lower() == "true"
+    words = len(re.findall(r"\w+", re.sub(r"<[^>]+>", " ", m.group(2))))
+    meta["minutes"] = max(1, round(words / 200))
     return meta
 
 
@@ -47,7 +49,7 @@ def fmt_date(iso):
     return datetime.date.fromisoformat(iso).strftime("%b %d, %Y")
 
 
-def page(title, description, canonical, main, current="blog", extra_head=""):
+def page(title, description, canonical, main, current="blog", extra_head="", og_image=None):
     e = html.escape
     out = f"""<!doctype html>
 <html lang="en">
@@ -65,7 +67,7 @@ def page(title, description, canonical, main, current="blog", extra_head=""):
     <meta property="og:url" content="{canonical}" />
     <meta property="og:title" content="{e(title)}" />
     <meta property="og:description" content="{e(description)}" />
-    <meta property="og:image" content="{BASE}/assets/og-card.jpg" />
+    <meta property="og:image" content="{og_image or BASE + '/assets/og-card.jpg'}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
@@ -144,7 +146,19 @@ def page(title, description, canonical, main, current="blog", extra_head=""):
 
 def meta_line(p):
     tag = f'<span class="post-tag">{html.escape(p["tag"])}</span>' if p.get("tag") else ""
-    return f'<p class="post-meta">{tag}<time datetime="{p["date"]}">{fmt_date(p["date"])}</time></p>'
+    return (f'<p class="post-meta">{tag}<time datetime="{p["date"]}">{fmt_date(p["date"])}</time>'
+            f'<span class="post-read">{p["minutes"]} min read</span></p>')
+
+
+def picture(p, kind, prefix, cls, w, h, eager=False):
+    """<picture> for a post cover ('cover' 1600x900) or list thumbnail ('thumb' 480x270)."""
+    if not p.get("cover"):
+        return ""
+    base = f'{prefix}assets/blog/{p["cover"]}-{kind}'
+    load = 'fetchpriority="high"' if eager else 'loading="lazy"'
+    alt = html.escape(p.get("cover_alt", "")) if kind == "cover" else ""
+    return (f'<picture class="{cls}"><source srcset="{base}.webp" type="image/webp" />'
+            f'<img src="{base}.jpg" alt="{alt}" width="{w}" height="{h}" {load} decoding="async" /></picture>')
 
 
 def write_home_snippet(posts, limit=3):
@@ -152,10 +166,13 @@ def write_home_snippet(posts, limit=3):
     home = ROOT / "index.html"
     page_html = home.read_text(encoding="utf-8")
     items = "\n".join(
-        f"""          <li class="post-item">
+        f"""          <li class="post-item{' has-thumb' if p.get('cover') else ''}">
+            {picture(p, "thumb", "", "post-thumb", 480, 270)}
+            <div class="post-text">
             {meta_line(p)}
             <h3><a href="blog/{p['slug']}.html">{html.escape(p['title'])}</a></h3>
             <p>{html.escape(p.get('excerpt', ''))}</p>
+            </div>
           </li>""" for p in posts[:limit])
     block = f'<ul class="post-list">\n{items}\n        </ul>' if posts else '<p class="muted">No posts yet.</p>'
     new = re.sub(r"(<!-- BLOG:START[^>]*-->).*?(<!-- BLOG:END -->)",
@@ -189,23 +206,33 @@ def main():
 
     for p in posts:
         main_html = f"""      <a class="post-back" href="./">← All posts</a>
-      <article>
-        {meta_line(p)}
-        <h1>{html.escape(p["title"])}</h1>
+      <article class="post">
+        <header class="post-header">
+          {meta_line(p)}
+          {f'<p class="post-kicker">{html.escape(p["title"])}</p>' if p.get("subtitle") else ""}
+          <h1>{html.escape(p.get("subtitle") or p["title"])}</h1>
+          {f'<p class="post-dek">{html.escape(p["dek"])}</p>' if p.get("dek") else ""}
+          {f'<p class="post-byline">By {html.escape(p["author"])}</p>' if p.get("author") else ""}
+        </header>
+        {picture(p, "cover", "../", "post-cover", 1600, 900, eager=True)}
         <div class="post-body">
 {p["body"]}
         </div>
       </article>"""
         (BLOG / f'{p["slug"]}.html').write_text(
-            page(f'{p["title"]} · Dingshuai Yang', p.get("excerpt", p["title"]), f'{BASE}/blog/{p["slug"]}.html', main_html),
+            page(f'{p["title"]} · Dingshuai Yang', p.get("excerpt", p["title"]), f'{BASE}/blog/{p["slug"]}.html', main_html,
+                 og_image=f'{BASE}/assets/blog/{p["cover"]}-cover.jpg' if p.get("cover") else None),
             encoding="utf-8")
         print("wrote", f'blog/{p["slug"]}.html')
 
     items = "\n".join(
-        f"""        <li class="post-item">
+        f"""        <li class="post-item{' has-thumb' if p.get('cover') else ''}">
+          {picture(p, "thumb", "../", "post-thumb", 480, 270)}
+          <div class="post-text">
           {meta_line(p)}
           <h2><a href="{p["slug"]}.html">{html.escape(p["title"])}</a></h2>
           <p>{html.escape(p.get("excerpt", ""))}</p>
+          </div>
         </li>""" for p in posts) or '        <li class="post-item"><p>No posts yet.</p></li>'
     index_html = f"""      <p class="section-label">Blog</p>
       <h1>Notes on life, study, and work.</h1>

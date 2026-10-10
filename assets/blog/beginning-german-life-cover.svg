@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Illustration of a passenger plane flying above the clouds">
+  <title>A passenger plane in the sky</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C9DCF2"/>
+      <stop offset="0.65" stop-color="#E6EFF9"/>
+      <stop offset="1" stop-color="#F7EFE6"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DCE4EE"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1290" cy="190" r="70" fill="#FFF6E6" opacity="0.9"/>
+  <!-- far clouds -->
+  <g fill="#FFFFFF" opacity="0.7">
+    <path d="M90 300 a60 60 0 0 1 110 -20 a50 50 0 0 1 90 30 h-200 z"/>
+    <path d="M1180 420 a70 70 0 0 1 130 -25 a55 55 0 0 1 100 35 h-230 z"/>
+  </g>
+  <!-- contrail -->
+  <path d="M120 610 C 420 560 700 520 905 470" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity="0.75"/>
+  <path d="M140 640 C 440 588 720 545 912 492" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+  <!-- plane, climbing slightly -->
+  <g transform="translate(860 420) rotate(-9)">
+    <!-- far wing -->
+    <path d="M300 30 L250 -95 L285 -95 L400 28 Z" fill="#9FB3CC"/>
+    <!-- fuselage -->
+    <path d="M30 40 C 30 10 60 0 110 0 L560 0 C 640 0 690 22 712 48 C 690 74 640 80 560 80 L110 80 C 70 80 40 66 30 40 Z" fill="url(#body)" stroke="#04316A" stroke-width="4"/>
+    <!-- tail -->
+    <path d="M60 4 L10 -120 L58 -120 L150 2 Z" fill="#04316A"/>
+    <path d="M40 50 L-30 62 L-22 78 L70 70 Z" fill="#04316A"/>
+    <!-- cockpit -->
+    <path d="M655 22 C 672 26 688 34 698 44 L668 44 C 662 36 658 30 655 22 Z" fill="#04316A"/>
+    <!-- windows -->
+    <g fill="#04316A">
+      <rect x="170" y="26" width="13" height="17" rx="6"/><rect x="205" y="26" width="13" height="17" rx="6"/><rect x="240" y="26" width="13" height="17" rx="6"/><rect x="275" y="26" width="13" height="17" rx="6"/><rect x="310" y="26" width="13" height="17" rx="6"/><rect x="345" y="26" width="13" height="17" rx="6"/><rect x="380" y="26" width="13" height="17" rx="6"/><rect x="415" y="26" width="13" height="17" rx="6"/><rect x="450" y="26" width="13" height="17" rx="6"/><rect x="485" y="26" width="13" height="17" rx="6"/><rect x="520" y="26" width="13" height="17" rx="6"/><rect x="555" y="26" width="13" height="17" rx="6"/>
+    </g>
+    <path d="M110 60 H600" stroke="#04316A" stroke-width="3" opacity="0.35"/>
+    <!-- near wing + engine -->
+    <path d="M300 56 L210 210 L262 210 L430 58 Z" fill="#04316A"/>
+    <rect x="270" y="112" width="96" height="34" rx="17" fill="#1E4C86"/>
+    <rect x="352" y="116" width="14" height="26" rx="5" fill="#0B2347"/>
+  </g>
+  <!-- near clouds -->
+  <g fill="#FFFFFF">
+    <path d="M0 900 V760 a110 110 0 0 1 190 -60 a130 130 0 0 1 240 20 a100 100 0 0 1 170 50 a120 120 0 0 1 210 -10 a140 140 0 0 1 250 30 a110 110 0 0 1 200 -20 a120 120 0 0 1 200 20 a90 90 0 0 1 140 30 V900 Z"/>
+  </g>
+  <g fill="#FFFFFF" opacity="0.6">
+    <path d="M0 720 a120 120 0 0 1 230 -40 a110 110 0 0 1 200 40 Z"/>
+    <path d="M1050 740 a130 130 0 0 1 240 -40 a120 120 0 0 1 230 30 l80 10 Z"/>
+  </g>
+</svg>

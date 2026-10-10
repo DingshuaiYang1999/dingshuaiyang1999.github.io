@@ -1245,3 +1245,134 @@ p {
 .page.contact-page {
   max-width: 960px;
 }
+
+/* ---------- Blog posts: covers, thumbnails, closing ---------- */
+.post-read::before {
+  content: "·";
+  margin: 0 8px;
+}
+
+.post-item.has-thumb {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.post-thumb img,
+.post-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+
+.post-thumb {
+  display: block;
+  margin-top: 4px;
+}
+
+.post-header {
+  margin-bottom: 28px;
+}
+
+.post-kicker {
+  margin: 14px 0 4px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.post-header h1 {
+  margin-top: 0;
+}
+
+.post-dek {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 21px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.post-byline {
+  margin: 14px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.post-cover {
+  display: block;
+  margin: 0 0 36px;
+}
+
+:root[data-theme="dark"] .post-cover img,
+:root[data-theme="dark"] .post-thumb img {
+  filter: brightness(0.88);
+}
+
+.post-closing {
+  margin: 44px 0 8px;
+  padding: 26px 0 4px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-style: italic;
+}
+
+.post-closing p {
+  margin: 0 auto 10px;
+  max-width: 34em;
+}
+
+.post-closing p:first-child {
+  margin-bottom: 22px;
+  font-style: normal;
+}
+
+.post-closing p:last-child {
+  margin-top: 22px;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .post-item.has-thumb {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .post-dek {
+    font-size: 18px;
+  }
+}
+
+.post-figure {
+  margin: 28px auto;
+  text-align: center;
+}
+
+.post-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+}
+
+.post-figure-phone {
+  max-width: 320px;
+}
+
+.post-figure figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
