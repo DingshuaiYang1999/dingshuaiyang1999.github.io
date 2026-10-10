@@ -98,7 +98,6 @@ def page(title, description, canonical, main):
           </ul>
         </nav>
         <div class="header-tools">
-          <a class="nav-cv" href="../assets/cv/Dingshuai_Yang_CV.pdf">CV</a>
           <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
