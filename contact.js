@@ -2,7 +2,7 @@
 // ============================================================================
 // SET YOUR KEY HERE (the only place). Create a free access key at web3forms.com
 // with the address that should receive the messages, then replace REPLACE_ME.
-const WEB3FORMS_ACCESS_KEY = "REPLACE_ME";
+const WEB3FORMS_ACCESS_KEY = "e36d8535-8a2c-427f-a6ae-c29d62a06011";
 // ============================================================================
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
