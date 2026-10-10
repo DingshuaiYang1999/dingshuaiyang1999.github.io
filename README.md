@@ -33,6 +33,18 @@ Reading time (about 200 words per minute) is computed automatically. To style cl
 wrap them in `<div class="post-closing" markdown="1"> … </div>`. See
 `blog/posts/2024-05-11-beginning-my-german-life.md` for a full example. Images for posts go in `assets/blog/`.
 
+## Blog view counts (GoatCounter)
+
+Posts show public view counts ("N views") from [GoatCounter](https://www.goatcounter.com/),
+which is cookieless and GDPR-friendly. To enable:
+
+1. Create a GoatCounter site (free for non-commercial use), e.g. code `dingshuai` → `dingshuai.goatcounter.com`.
+2. In its settings, enable **"Allow adding visitor counts on your website"**.
+3. Set `GOATCOUNTER_CODE` at the top of `views.js` to that code.
+
+While it is `"REPLACE_ME"`, nothing is loaded and counts stay hidden. If the counter request
+fails, the count is simply not shown.
+
 ## Contact form
 
 `/contact/` posts to [Web3Forms](https://web3forms.com) (no backend needed). Set the access

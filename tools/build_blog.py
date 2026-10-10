@@ -143,6 +143,8 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
   </body>
 </html>
 """
+    if current == "blog":
+        extra_head = '    <script src="../views.js" defer></script>\n' + extra_head
     return out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1)
 
 
@@ -168,7 +170,8 @@ LISTEN = """<div class="listen" data-listen hidden>
 def meta_line(p):
     tag = f'<span class="post-tag">{html.escape(p["tag"])}</span>' if p.get("tag") else ""
     return (f'<p class="post-meta">{tag}<time datetime="{p["date"]}">{fmt_date(p["date"])}</time>'
-            f'<span class="post-read">{p["minutes"]} min read</span></p>')
+            f'<span class="post-read">{p["minutes"]} min read</span>'
+            f'<span class="post-views" data-views-path="/blog/{p["slug"]}.html" hidden></span></p>')
 
 
 def picture(p, kind, prefix, cls, w, h, eager=False):
@@ -259,6 +262,7 @@ def main():
         </li>""" for p in posts) or '        <li class="post-item"><p>No posts yet.</p></li>'
     index_html = f"""      <p class="section-label">Blog</p>
       <h1>Notes on life, study, and work.</h1>
+      <p class="blog-privacy muted">View counts use <a href="https://www.goatcounter.com/" rel="noopener">GoatCounter</a>: cookieless statistics, no personal data stored.</p>
       <ul class="post-list">
 {items}
       </ul>"""

@@ -1489,3 +1489,17 @@ p {
 .listen-stop[hidden] {
   display: none;
 }
+
+.post-views::before {
+  content: "·";
+  margin: 0 8px;
+}
+
+.post-views[hidden] {
+  display: none;
+}
+
+.blog-privacy {
+  margin: -6px 0 18px;
+  font-size: 13.5px;
+}
