@@ -61,6 +61,8 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
     <link rel="canonical" href="{canonical}" />
     <meta property="og:type" content="article" />
@@ -144,6 +146,25 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
     return out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1)
 
 
+LISTEN = """<div class="listen" data-listen hidden>
+          <button type="button" class="listen-play" aria-pressed="false" aria-label="Listen to this post">
+            <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+            <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
+            <span class="listen-play-label">Listen</span>
+          </button>
+          <button type="button" class="listen-stop" aria-label="Stop reading" hidden>
+            <svg class="listen-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></svg>
+          </button>
+          <label class="listen-speed"><span class="visually-hidden">Reading speed</span>
+            <select class="listen-rate">
+              <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
+            </select>
+          </label>
+          <div class="listen-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="listen-progress-fill"></span></div>
+          <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
+        </div>"""
+
+
 def meta_line(p):
     tag = f'<span class="post-tag">{html.escape(p["tag"])}</span>' if p.get("tag") else ""
     return (f'<p class="post-meta">{tag}<time datetime="{p["date"]}">{fmt_date(p["date"])}</time>'
@@ -213,6 +234,7 @@ def main():
           <h1>{html.escape(p.get("subtitle") or p["title"])}</h1>
           {f'<p class="post-dek">{html.escape(p["dek"])}</p>' if p.get("dek") else ""}
           {f'<p class="post-byline">By {html.escape(p["author"])}</p>' if p.get("author") else ""}
+          {LISTEN}
         </header>
         {picture(p, "cover", "../", "post-cover", 1600, 900, eager=True)}
         <div class="post-body">
@@ -221,6 +243,7 @@ def main():
       </article>"""
         (BLOG / f'{p["slug"]}.html').write_text(
             page(f'{p["title"]} · Dingshuai Yang', p.get("excerpt", p["title"]), f'{BASE}/blog/{p["slug"]}.html', main_html,
+                 extra_head='    <script src="../listen.js" defer></script>\n',
                  og_image=f'{BASE}/assets/blog/{p["cover"]}-cover.jpg' if p.get("cover") else None),
             encoding="utf-8")
         print("wrote", f'blog/{p["slug"]}.html')

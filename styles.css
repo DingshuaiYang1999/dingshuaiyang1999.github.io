@@ -1376,3 +1376,116 @@ p {
   font-size: 14px;
   line-height: 1.5;
 }
+
+/* ---------- Listen (speech) player ---------- */
+.listen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-top: 18px;
+}
+
+.listen[hidden] {
+  display: none;
+}
+
+.listen-play,
+.listen-stop {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 16px 0 12px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--accent);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.listen-stop {
+  width: 36px;
+  padding: 0;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.listen-play:hover,
+.listen-stop:hover {
+  border-color: var(--accent);
+}
+
+.listen-play[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.listen-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.listen .icon-pause,
+.listen[data-state="playing"] .icon-play {
+  display: none;
+}
+
+.listen[data-state="playing"] .icon-pause {
+  display: block;
+}
+
+.listen-rate {
+  min-height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.listen-progress {
+  flex: 1 1 120px;
+  max-width: 220px;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--rule);
+}
+
+.listen-progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.post-body .is-reading {
+  margin-left: -14px;
+  padding-left: 11px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  border-radius: 0 4px 4px 0;
+}
+
+.post-header h1.is-reading {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listen-progress-fill {
+    transition: none;
+  }
+}
+
+.listen-stop[hidden] {
+  display: none;
+}
