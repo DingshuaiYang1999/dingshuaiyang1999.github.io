@@ -15,6 +15,12 @@
   const bar = root.querySelector(".listen-progress");
   const fill = root.querySelector(".listen-progress-fill");
   const status = root.querySelector(".listen-status");
+  // Visible hint for the common iPhone case: speech is muted by the silent switch.
+  const hint = document.createElement("p");
+  hint.className = "listen-hint";
+  hint.hidden = true;
+  hint.textContent = "No sound? On iPhone, turn off silent mode and turn up the volume.";
+  root.appendChild(hint);
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const EMOJI = /[\p{Extended_Pictographic}\p{Regional_Indicator}\u{FE0F}\u{200D}\u{20E3}]/gu;
@@ -59,12 +65,17 @@
     };
     voice = voices.sort((a, b) => score(b) - score(a))[0];
   }
-  pickVoice();
-  if ("onvoiceschanged" in synth) synth.addEventListener("voiceschanged", pickVoice);
-
+  // Show the player as soon as speechSynthesis exists. Voices often load later (iOS/Chrome),
+  // and an empty list is fine: we then speak with the default voice.
   root.hidden = false;
+  try {
+    pickVoice();
+    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", pickVoice);
+    else synth.onvoiceschanged = pickVoice;
+  } catch (e) { /* keep default voice */ }
   const total = items.reduce((n, it) => n + it.parts.length, 0);
   let idx = 0, part = 0, state = "idle", token = 0;
+  let current = null, started = false, silentTimer = 0, keepAlive = 0;
 
   function done() { let n = part; for (let i = 0; i < idx; i++) n += items[i].parts.length; return n; }
   function setProgress() {
@@ -83,6 +94,8 @@
   }
   function setState(s, msg) {
     state = s;
+    if (s !== "playing") { clearInterval(keepAlive); clearTimeout(silentTimer); }
+    if (s !== "playing" || started) hint.hidden = true;
     root.dataset.state = s;
     playBtn.setAttribute("aria-pressed", s === "playing" ? "true" : "false");
     playLabel.textContent = s === "playing" ? "Pause" : s === "paused" ? "Resume" : "Listen";
@@ -98,7 +111,8 @@
     highlight(it.el);
     setProgress();
     const u = new SpeechSynthesisUtterance(it.parts[part]);
-    if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = "en-GB"; }
+    if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = "en-US"; }
+    current = u; // keep a reference: WebKit/Chrome can GC the utterance and never fire onend
     u.rate = parseFloat(rateSel.value) || 1;
     const my = ++token;
     u.onend = () => {
@@ -107,6 +121,7 @@
       if (part >= it.parts.length) { part = 0; idx++; }
       speakNext();
     };
+    u.onstart = () => { started = true; hint.hidden = true; };
     u.onerror = (e) => {
       if (my !== token || e.error === "interrupted" || e.error === "canceled") return;
       stop("Audio playback is not available in this browser.");
@@ -114,17 +129,30 @@
     synth.speak(u);
   }
 
+  // Cancel only when something is queued: on iOS WebKit, cancel() immediately followed by
+  // speak() in the same tap drops the new utterance, so the first tap produced silence.
+  function hush() { if (synth.speaking || synth.pending) synth.cancel(); }
+
   function play() {
     // Must start synchronously inside the tap/click handler (iOS Safari).
-    synth.cancel();
+    hush();
+    if (synth.paused) synth.resume(); // iOS can leave the engine paused after backgrounding
     if (state === "idle") { idx = 0; part = 0; }
     setState("playing", state === "paused" ? "Resumed." : "Reading the post aloud.");
-    speakNext();
+    started = false;
+    speakNext(); // synchronous: speak() must run inside the tap handler on iOS
+    clearTimeout(silentTimer);
+    silentTimer = setTimeout(() => {
+      if (state === "playing" && !started) hint.hidden = false;
+    }, 2500);
+    clearInterval(keepAlive);
+    // Chrome desktop stops long speech after ~15 s unless nudged; resume() is a no-op elsewhere.
+    keepAlive = setInterval(() => { if (state === "playing" && synth.speaking && !synth.paused) synth.resume(); }, 10000);
   }
   // Pause = cancel and remember the chunk; synth.pause() is unreliable in Chrome/Android.
-  function pause() { token++; synth.cancel(); setState("paused", "Paused."); }
+  function pause() { token++; hush(); setState("paused", "Paused."); }
   function stop(msg) {
-    token++; synth.cancel(); idx = 0; part = 0;
+    token++; hush(); idx = 0; part = 0;
     highlight(null); setProgress(); setState("idle", msg || "Stopped.");
   }
   function finish() { token++; highlight(null); idx = 0; part = 0; fill.style.width = "100%"; bar.setAttribute("aria-valuenow", "100"); setState("idle", "Finished."); }
@@ -133,7 +161,7 @@
   stopBtn.addEventListener("click", () => stop());
   rateSel.addEventListener("change", () => {
     status.textContent = `Speed ${rateSel.value}×.`;
-    if (state === "playing") { token++; synth.cancel(); speakNext(); } // restart current chunk at new rate
+    if (state === "playing") { token++; hush(); setTimeout(speakNext, 80); } // not same tick as cancel (iOS) // restart current chunk at new rate
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && state !== "idle") stop(); });
   window.addEventListener("pagehide", () => synth.cancel());
