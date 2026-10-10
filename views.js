@@ -2,7 +2,7 @@
 // SETUP: set your GoatCounter site code below (e.g. "dingshuai" for dingshuai.goatcounter.com)
 // and enable "Allow adding visitor counts on your website" in GoatCounter's site settings.
 // While this is the placeholder, nothing is loaded and no counts are shown.
-const GOATCOUNTER_CODE = "REPLACE_ME";
+const GOATCOUNTER_CODE = "dingshuai";
 
 (function () {
   "use strict";
