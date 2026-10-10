@@ -164,10 +164,12 @@ def audio_player(p):
     except Exception:
         pass
     total = f"{int(dur // 60)}:{int(dur % 60):02d}" if dur else "0:00"
-    m4a_tag = f'\n            <source src="../{m4a}" type="audio/mp4" />' if (ROOT / m4a).exists() else ""
+    import hashlib
+    ver = lambda rel: hashlib.sha1((ROOT / rel).read_bytes()).hexdigest()[:8] if (ROOT / rel).exists() else "0"
+    m4a_tag = f'\n            <source src="../{m4a}?v={ver(m4a)}" type="audio/mp4" />' if (ROOT / m4a).exists() else ""
     return f"""<div class="listen" data-audio-player data-duration="{dur:.1f}">
           <audio preload="none" playsinline controls>{m4a_tag}
-            <source src="../{src}" type="audio/mpeg" />
+            <source src="../{src}?v={ver(src)}" type="audio/mpeg" />
             <a href="../{src}">Download the narration (MP3)</a>
           </audio>
           <div class="listen-ui" hidden>
