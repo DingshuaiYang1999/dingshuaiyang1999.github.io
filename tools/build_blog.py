@@ -56,8 +56,9 @@ def page(title, description, canonical, main, current="blog", extra_head=""):
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{e(title)}</title>
     <meta name="description" content="{e(description)}" />
-    <link rel="icon" type="image/svg+xml" href="../assets/logo/dy-light.svg" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
     <link rel="canonical" href="{canonical}" />
     <meta property="og:type" content="article" />
@@ -88,8 +89,8 @@ def page(title, description, canonical, main, current="blog", extra_head=""):
     <header class="site-header" data-header>
       <div class="header-inner">
         <a class="brand" href="../" aria-label="Dingshuai Yang — home">
-          <img class="brand-logo brand-logo-light" src="../assets/logo/dy-light.svg" alt="" width="28" height="28" />
-          <img class="brand-logo brand-logo-dark" src="../assets/logo/dy-dark.svg" alt="" width="28" height="28" />
+          <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+          <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
           <span class="brand-name">Dingshuai Yang</span>
         </a>
         <nav class="site-nav" id="site-nav" aria-label="Primary">
