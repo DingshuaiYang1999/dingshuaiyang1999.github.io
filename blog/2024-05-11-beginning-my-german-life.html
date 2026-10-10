@@ -20,7 +20,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=b7bd4627" />
     <script>
       // Apply theme before first paint: saved choice, else OS preference.
       (function () {
@@ -33,9 +33,9 @@
         document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
-    <script src="../script.js" defer></script>
-      <script src="../views.js" defer></script>
-    <script src="../listen.js" defer></script>
+    <script src="../script.js?v=98f308e2" defer></script>
+      <script src="../views.js?v=edb1d227" defer></script>
+    <script src="../listen.js?v=3ca480c5" defer></script>
 </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -91,7 +91,7 @@
           <h1>My First Day in Germany 🇩🇪</h1>
           <p class="post-dek">One suitcase, one backpack, and the beginning of a new chapter.</p>
           <p class="post-byline">By Dingshuai Yang</p>
-          <div class="listen" data-listen hidden>
+          <div class="listen" data-listen>
           <button type="button" class="listen-play" aria-pressed="false" aria-label="Listen to this post">
             <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
             <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
@@ -107,6 +107,7 @@
           </label>
           <div class="listen-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="listen-progress-fill"></span></div>
           <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
+          <p class="listen-unsupported" hidden>Read-aloud isn't available in this browser.</p>
         </div>
         </header>
         <picture class="post-cover"><source srcset="../assets/blog/beginning-german-life-cover.webp" type="image/webp" /><img src="../assets/blog/beginning-german-life-cover.jpg" alt="Illustration of a passenger plane flying above the clouds" width="1600" height="900" fetchpriority="high" decoding="async" /></picture>

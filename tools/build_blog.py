@@ -145,10 +145,10 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
 """
     if current == "blog":
         extra_head = '    <script src="../views.js" defer></script>\n' + extra_head
-    return out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1)
+    return bust(out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1))
 
 
-LISTEN = """<div class="listen" data-listen hidden>
+LISTEN = """<div class="listen" data-listen>
           <button type="button" class="listen-play" aria-pressed="false" aria-label="Listen to this post">
             <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
             <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
@@ -164,7 +164,23 @@ LISTEN = """<div class="listen" data-listen hidden>
           </label>
           <div class="listen-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="listen-progress-fill"></span></div>
           <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
+          <p class="listen-unsupported" hidden>Read-aloud isn't available in this browser.</p>
         </div>"""
+
+
+ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js")
+
+
+def bust(text):
+    """Append ?v=<content hash> to local CSS/JS URLs so browsers never run stale copies."""
+    import hashlib
+    for name in ASSETS:
+        f = ROOT / name
+        if not f.exists():
+            continue
+        v = hashlib.sha1(f.read_bytes()).hexdigest()[:8]
+        text = re.sub(r'((?:\.\./|/)?' + re.escape(name) + r')(\?v=[0-9a-f]+)?"', lambda m: f'{m.group(1)}?v={v}"', text)
+    return text
 
 
 def meta_line(p):
@@ -272,6 +288,9 @@ def main():
     print("wrote blog/index.html")
 
     write_home_snippet(posts)
+    for static in ("index.html", "404.html", "contact/index.html"):
+        f = ROOT / static
+        f.write_text(bust(f.read_text(encoding="utf-8")), encoding="utf-8")
     write_sitemap(posts)
     print("wrote sitemap.xml")
 

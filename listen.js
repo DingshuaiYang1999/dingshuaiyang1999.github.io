@@ -6,7 +6,16 @@
   const root = document.querySelector("[data-listen]");
   if (!root) return;
   const synth = window.speechSynthesis;
-  if (!synth || typeof window.SpeechSynthesisUtterance !== "function") return; // stays hidden
+  // Feature-detect by presence only (older WebKit reports DOM constructors as typeof "object").
+  // If unsupported, keep the player visible but disabled with a short note instead of hiding it.
+  if (!synth || !("SpeechSynthesisUtterance" in window)) {
+    const btn = root.querySelector(".listen-play");
+    if (btn) { btn.disabled = true; btn.setAttribute("aria-disabled", "true"); }
+    root.querySelectorAll(".listen-rate, .listen-progress").forEach((el) => { el.hidden = true; });
+    const note = root.querySelector(".listen-unsupported");
+    if (note) note.hidden = false;
+    return;
+  }
 
   const playBtn = root.querySelector(".listen-play");
   const playLabel = root.querySelector(".listen-play-label");
