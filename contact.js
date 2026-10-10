@@ -117,3 +117,31 @@ const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
     }
   });
 })();
+
+// Copy-to-clipboard for the email address in the sidebar.
+(function setupCopy() {
+  document.querySelectorAll(".copy-btn[data-copy]").forEach((btn) => {
+    const status = document.getElementById(btn.getAttribute("aria-describedby"));
+    btn.addEventListener("click", async () => {
+      const text = btn.dataset.copy;
+      let ok = false;
+      try {
+        await navigator.clipboard.writeText(text);
+        ok = true;
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "absolute";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+        ta.remove();
+      }
+      btn.textContent = ok ? "Copied" : "Copy";
+      if (status) status.textContent = ok ? "Email address copied to clipboard." : "Copy failed — please select the address manually.";
+      setTimeout(() => { btn.textContent = "Copy"; if (status) status.textContent = ""; }, 2500);
+    });
+  });
+})();

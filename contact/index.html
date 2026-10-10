@@ -90,75 +90,98 @@
     </header>
 
     <main id="main" class="page contact-page" tabindex="-1">
-      <p class="section-label"><a href="../#contact">← Contact</a></p>
+      <p class="section-label"><a href="../#contact">← Home</a></p>
       <h1>Send me a message</h1>
-      <p class="section-intro">Questions about research, internships or working-student roles, or studying mechatronics at FAU are welcome. You can also email me directly at <a href="mailto:dingshuai.yang@fau.de">dingshuai.yang@fau.de</a>.</p>
+      <p class="section-intro">Open to internships, working-student roles and research collaboration. Questions about studying mechatronics at FAU are welcome too.</p>
 
-      <div class="form-status" id="form-status" role="status" aria-live="polite" tabindex="-1" hidden></div>
+      <div class="contact-layout">
+        <div class="contact-main">
+          <div class="form-status" id="form-status" role="status" aria-live="polite" tabindex="-1" hidden></div>
+          <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+          <!-- Web3Forms settings. The access key is set in ONE place: contact.js (WEB3FORMS_ACCESS_KEY). -->
+          <input type="hidden" name="access_key" value="" data-access-key />
+          <input type="hidden" name="from_name" value="dingshuaiyang1999.github.io contact form" />
+          <!-- Honeypot: humans never see or fill this. -->
+          <div class="hp" aria-hidden="true">
+            <label for="botcheck">Leave this field empty</label>
+            <input type="text" id="botcheck" name="botcheck" tabindex="-1" autocomplete="off" />
+          </div>
 
-      <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
-        <!-- Web3Forms settings. The access key is set in ONE place: contact.js (WEB3FORMS_ACCESS_KEY). -->
-        <input type="hidden" name="access_key" value="" data-access-key />
-        <input type="hidden" name="from_name" value="dingshuaiyang1999.github.io contact form" />
-        <!-- Honeypot: humans never see or fill this. -->
-        <div class="hp" aria-hidden="true">
-          <label for="botcheck">Leave this field empty</label>
-          <input type="text" id="botcheck" name="botcheck" tabindex="-1" autocomplete="off" />
-        </div>
+          <div class="field">
+            <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" required maxlength="120" aria-describedby="name-error" />
+            <p class="field-error" id="name-error" hidden></p>
+          </div>
 
-        <div class="field">
-          <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
-          <input id="name" name="name" type="text" autocomplete="name" required maxlength="120" aria-describedby="name-error" />
-          <p class="field-error" id="name-error" hidden></p>
-        </div>
+          <div class="field">
+            <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" aria-describedby="email-hint email-error" />
+            <p class="field-hint" id="email-hint">I will reply to this address.</p>
+            <p class="field-error" id="email-error" hidden></p>
+          </div>
 
-        <div class="field">
-          <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
-          <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" aria-describedby="email-hint email-error" />
-          <p class="field-hint" id="email-hint">I will reply to this address.</p>
-          <p class="field-error" id="email-error" hidden></p>
-        </div>
+          <details class="field optional-field">
+            <summary>Add your affiliation <span class="optional">(optional)</span></summary>
+            <div class="field-inner">
+              <label for="affiliation">Affiliation</label>
+              <input id="affiliation" name="affiliation" type="text" autocomplete="organization" maxlength="160" />
+            </div>
+          </details>
 
-        <div class="field">
-          <label for="affiliation">Affiliation <span class="optional">(optional)</span></label>
-          <input id="affiliation" name="affiliation" type="text" autocomplete="organization" maxlength="160" />
-        </div>
+          <div class="field">
+            <label for="topic">Subject <span class="req" aria-hidden="true">*</span></label>
+            <select id="topic" name="topic" required aria-describedby="topic-error">
+              <option value="">Please choose…</option>
+              <option>Research</option>
+              <option>Internship or job</option>
+              <option>Study question</option>
+              <option>Other</option>
+            </select>
+            <p class="field-error" id="topic-error" hidden></p>
+          </div>
 
-        <div class="field">
-          <label for="topic">Subject <span class="req" aria-hidden="true">*</span></label>
-          <select id="topic" name="topic" required aria-describedby="topic-error">
-            <option value="">Please choose…</option>
-            <option>Research</option>
-            <option>Internship or job</option>
-            <option>Study question</option>
-            <option>Other</option>
-          </select>
-          <p class="field-error" id="topic-error" hidden></p>
-        </div>
+          <div class="field">
+            <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="7" required minlength="10" maxlength="5000" aria-describedby="message-error"></textarea>
+            <p class="field-error" id="message-error" hidden></p>
+          </div>
 
-        <div class="field">
-          <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
-          <textarea id="message" name="message" rows="7" required minlength="10" maxlength="5000" aria-describedby="message-error"></textarea>
-          <p class="field-error" id="message-error" hidden></p>
-        </div>
-
-        <div class="field field-check">
-          <input id="consent" name="consent" type="checkbox" value="yes" required aria-describedby="consent-error" />
-          <label for="consent">I agree that my name, email address and message are used to reply to my enquiry. <span class="req" aria-hidden="true">*</span></label>
-          <p class="field-error" id="consent-error" hidden></p>
-        </div>
+          <div class="field field-check">
+            <input id="consent" name="consent" type="checkbox" value="yes" required aria-describedby="consent-error" />
+            <label for="consent">I agree that my name, email address and message are used to reply to my enquiry. <span class="req" aria-hidden="true">*</span></label>
+            <p class="field-error" id="consent-error" hidden></p>
+          </div>
 
 
-        <p class="form-required muted"><span aria-hidden="true">*</span> Required</p>
+          <p class="form-required muted"><span aria-hidden="true">*</span> Required</p>
 
-        <div class="cv-actions form-actions">
-          <button class="button primary" type="submit" id="contact-submit">Send message</button>
-        </div>
+          <div class="cv-actions form-actions">
+            <button class="button primary" type="submit" id="contact-submit">Send message</button>
+          </div>
       </form>
+          <noscript>
+            <p class="form-note">This form needs JavaScript. Please email <a href="mailto:dingshuai.yang@fau.de">dingshuai.yang@fau.de</a> instead.</p>
+          </noscript>
+        </div>
 
-      <noscript>
-        <p class="form-note">This form needs JavaScript. Please email <a href="mailto:dingshuai.yang@fau.de">dingshuai.yang@fau.de</a> instead.</p>
-      </noscript>
+        <aside class="contact-aside" aria-labelledby="direct-h">
+          <h2 id="direct-h">Direct contact</h2>
+          <p class="aside-label">Academic email</p>
+          <p class="email-row">
+            <a href="mailto:dingshuai.yang@fau.de" id="contact-email">dingshuai.yang@fau.de</a>
+            <button type="button" class="copy-btn" data-copy="dingshuai.yang@fau.de" aria-describedby="copy-status">Copy</button>
+          </p>
+          <p class="copy-status muted" id="copy-status" role="status" aria-live="polite"></p>
+          <p class="muted">I usually reply within a few days.</p>
+          <p class="aside-label">Location</p>
+          <p class="icon-text"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg><span>Erlangen, Germany</span></p>
+          <p class="aside-label">Profiles</p>
+          <ul class="icon-links icon-links-stacked">
+            <li><a href="https://github.com/DingshuaiYang1999" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.54 2.87 8.39 6.84 9.74.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05.8-.23 1.65-.34 2.5-.34s1.7.12 2.5.34c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49 3.97-1.35 6.83-5.2 6.83-9.74C22 6.58 17.52 2 12 2z"/></svg><span>GitHub</span></a></li>
+            <li><a href="https://www.linkedin.com/in/dingshuai-y-69b8a6405/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zm7 0h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.35h-4v-4.75c0-1.13-.02-2.6-1.58-2.6-1.59 0-1.83 1.24-1.83 2.52v4.83h-4z"/></svg><span>LinkedIn</span></a></li>
+          </ul>
+        </aside>
+      </div>
 
       <section class="privacy" aria-labelledby="privacy-h">
         <h2 id="privacy-h">Privacy</h2>
