@@ -18,7 +18,6 @@ BLOG = ROOT / "blog"
 POSTS = BLOG / "posts"
 BASE = "https://dingshuaiyang1999.github.io"
 TAGS = {"Life", "Study", "Work"}
-sys.path.insert(0, str(ROOT / "tools"))
 
 
 def parse(path):
@@ -50,10 +49,10 @@ def fmt_date(iso):
 def page(title, description, canonical, main):
     e = html.escape
     return f"""<!doctype html>
-<html lang="en" data-page-lang="en">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{e(title)}</title>
     <meta name="description" content="{e(description)}" />
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
@@ -81,24 +80,49 @@ def page(title, description, canonical, main):
     </script>
     <script src="../script.js" defer></script>
   </head>
-  <body id="top" data-no-i18n>
+  <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-      <a class="brand" href="../" aria-label="Back to homepage">
-        <span class="brand-mark">DY</span>
-        <span>Dingshuai Yang</span>
-      </a>
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="../#about">About</a>
-        <a href="../#projects">Projects</a>
-        <a href="./" aria-current="page">Blog</a>
-        <a href="../#contact">Contact</a>
-      </nav>
-      <div class="header-tools">
-        <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
-          <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/><line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/><line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/><line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/></g></svg>
-          <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/></svg>
+    <header class="site-header" data-header>
+      <div class="header-inner">
+        <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+          <span class="brand-mark" aria-hidden="true">DY</span>
+          <span class="brand-name">Dingshuai Yang</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <ul class="nav-links">
+          <li><a href="../#about" data-nav="about">About</a></li>
+          <li><a href="../#education" data-nav="education">Education</a></li>
+          <li><a href="../#projects" data-nav="projects">Projects</a></li>
+          <li><a href="./" data-nav="blog" aria-current="page">Blog</a></li>
+          <li><a href="../#contact" data-nav="contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-tools">
+          <a class="nav-cv" href="../assets/cv/Dingshuai_Yang_CV.pdf">CV</a>
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <line x1="12" y1="2.5" x2="12" y2="5"/>
+              <line x1="12" y1="19" x2="12" y2="21.5"/>
+              <line x1="2.5" y1="12" x2="5" y2="12"/>
+              <line x1="19" y1="12" x2="21.5" y2="12"/>
+              <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+              <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+              <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+              <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+            </g>
+          </svg>
+          <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+          </svg>
         </button>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
     </header>
     <main id="main" class="blog-main" tabindex="-1">
@@ -116,6 +140,21 @@ def page(title, description, canonical, main):
 def meta_line(p):
     tag = f'<span class="post-tag">{html.escape(p["tag"])}</span>' if p.get("tag") else ""
     return f'<p class="post-meta">{tag}<time datetime="{p["date"]}">{fmt_date(p["date"])}</time></p>'
+
+
+def write_sitemap(posts):
+    """sitemap.xml = homepage, demos, blog index and published posts."""
+    today = datetime.date.today().isoformat()
+    urls = [(f"{BASE}/", "weekly", "1.0")]
+    urls += [(f"{BASE}/demos/{p.name}", "monthly", "0.6") for p in sorted((ROOT / "demos").glob("*.html"))]
+    urls.append((f"{BASE}/blog/", "weekly", "0.7"))
+    urls += [(f"{BASE}/blog/{p['slug']}.html", "monthly", "0.5") for p in posts]
+    body = "".join(
+        f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{today}</lastmod>\n    <changefreq>{c}</changefreq>\n    <priority>{pr}</priority>\n  </url>\n"
+        for u, c, pr in urls)
+    (ROOT / "sitemap.xml").write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + "</urlset>\n",
+        encoding="utf-8")
 
 
 def main():
@@ -157,8 +196,7 @@ def main():
         encoding="utf-8")
     print("wrote blog/index.html")
 
-    from build_i18n import write_sitemap
-    write_sitemap()
+    write_sitemap(posts)
     print("wrote sitemap.xml")
 
 

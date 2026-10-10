@@ -3,18 +3,6 @@
 Personal website of Dingshuai Yang — plain HTML/CSS/JS, deployed to GitHub Pages by
 `.github/workflows/deploy.yml` on every push to `main`.
 
-## Languages (static per-language URLs)
-
-- `index.html` is the English page **and** the template for all languages.
-- All translations live in one place: the `translations` object in `script.js`.
-- `/de/`, `/zh/`, `/zh-tw/`, `/ja/` are **generated** — do not edit them by hand.
-
-After changing `index.html` or `script.js`:
-
-```bash
-python3 tools/build_i18n.py   # needs Node.js; regenerates language pages + sitemap.xml
-```
-
 ## Blog
 
 Posts are Markdown files in `blog/posts/` with a small front-matter block:
@@ -35,7 +23,7 @@ Build:
 
 ```bash
 pip install markdown
-python3 tools/build_blog.py   # writes blog/<slug>.html, blog/index.html, sitemap.xml
+python3 tools/build_blog.py   # writes blog/<slug>.html, blog/index.html and sitemap.xml
 ```
 
 `blog/posts/2026-10-10-welcome.md` is only an example/template — delete it and rebuild
@@ -43,9 +31,14 @@ once the first real post exists. Images for posts can go in `assets/blog/`.
 
 ## CV
 
-`assets/cv/Dingshuai_Yang_CV.pdf` (English) and `assets/cv/Dingshuai_Yang_Lebenslauf.pdf`
-(German) are web versions without signature. The German page links the Lebenslauf; all
-other languages link the English CV.
+`assets/cv/Dingshuai_Yang_CV.pdf` is the public web version of the CV (no signature, no
+phone number). The site is English-only; old `/de/`, `/zh/`, `/zh-tw/`, `/ja/` and `?lang=`
+links land on the English homepage.
+
+## Project thumbnails
+
+Cards use `assets/thumbs/*.webp|jpg` (960×540): cropped, brightened versions of the
+originals in `assets/` and `assets/demos/` so thin lines stay visible at card size.
 
 ## Local preview
 

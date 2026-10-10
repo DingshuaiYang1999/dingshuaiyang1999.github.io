@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>404 — Page not found · Dingshuai Yang</title>
     <meta name="robots" content="noindex" />
     <link
@@ -23,6 +23,14 @@
       })();
     </script>
     <link rel="stylesheet" href="/styles.css" />
+    <script>
+      // The site used to have /de/, /zh/, /zh-tw/ and /ja/ pages; send those visitors to the English page.
+      (function () {
+        if (/^\/(de|zh|zh-tw|ja)(\/|$)/i.test(window.location.pathname)) {
+          window.location.replace("/" + window.location.hash);
+        }
+      })();
+    </script>
     <script src="/script.js" defer></script>
     <style>
       .nf-wrap {
@@ -76,7 +84,7 @@
       }
     </style>
   </head>
-  <body data-no-i18n>
+  <body>
     <div class="nf-toggle">
       <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
