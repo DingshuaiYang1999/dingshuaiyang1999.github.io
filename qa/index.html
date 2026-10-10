@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Q&amp;A · Dingshuai Yang</title>
+    <meta name="description" content="Selected questions to Dingshuai Yang about robotics, control engineering and studying mechatronics, with answers." />
+    <link rel="icon" type="image/svg+xml" href="../assets/logo/dy-light.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/qa/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/qa/" />
+    <meta property="og:title" content="Q&amp;A · Dingshuai Yang" />
+    <meta property="og:description" content="Selected questions to Dingshuai Yang about robotics, control engineering and studying mechatronics, with answers." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css" />
+    <script>
+      // Apply theme before first paint: saved choice, else OS preference.
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js" defer></script>
+      <script src="../qa.js" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+      <div class="header-inner">
+        <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+          <img class="brand-logo brand-logo-light" src="../assets/logo/dy-light.svg" alt="" width="28" height="28" />
+          <img class="brand-logo brand-logo-dark" src="../assets/logo/dy-dark.svg" alt="" width="28" height="28" />
+          <span class="brand-name">Dingshuai Yang</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href="../#about" data-nav="about">About</a></li>
+            <li><a href="../#education" data-nav="education">Education</a></li>
+            <li><a href="../#projects" data-nav="projects">Projects</a></li>
+            <li><a href="../blog/" data-nav="blog">Blog</a></li>
+            <li><a href="../qa/" data-nav="qa" aria-current="page">Q&amp;A</a></li>
+            <li><a href="../contact/" data-nav="contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-tools">
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <line x1="12" y1="2.5" x2="12" y2="5"/>
+              <line x1="12" y1="19" x2="12" y2="21.5"/>
+              <line x1="2.5" y1="12" x2="5" y2="12"/>
+              <line x1="19" y1="12" x2="21.5" y2="12"/>
+              <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+              <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+              <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+              <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+            </g>
+          </svg>
+          <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+          </svg>
+        </button>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="main" class="blog-main" tabindex="-1">
+      <p class="section-label">Q&amp;A</p>
+      <h1>Questions &amp; answers</h1>
+      <p class="section-intro">Selected questions people have sent me, answered publicly. Names are only shown with permission; otherwise questions are anonymised. <a href="../contact/">Ask a question</a>.</p>
+      <div class="qa-tools">
+        <label class="visually-hidden" for="qa-search">Search questions</label>
+        <input id="qa-search" type="search" placeholder="Search questions and answers…" autocomplete="off" />
+        <div class="chips" role="group" aria-label="Filter by topic">
+          <button type="button" class="chip" data-topic="" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-topic="Website" aria-pressed="false">Website</button>
+        </div>
+      </div>
+      <p class="qa-count muted" id="qa-count" role="status" aria-live="polite"></p>
+      <ol class="qa-list" id="qa-list">
+        <li class="qa-item" id="2026-10-10-example" data-topic="Website">
+          <details>
+            <summary>
+              <span class="qa-q">Example question — how do I add a Q&amp;A entry? (delete me)</span>
+              <span class="qa-meta"><span class="post-tag">Website</span> <time datetime="2026-10-10">Oct 10, 2026</time> · asked by Example (template)</span>
+            </summary>
+            <div class="qa-a post-body">
+<blockquote>
+<p><strong>This is an example/template entry, not a real question.</strong> Delete
+<code>qa/entries/2026-10-10-example.md</code> and re-run <code>python3 tools/build_blog.py</code>
+once the first real answer is published.</p>
+</blockquote>
+<p>Create one Markdown file per question in <code>qa/entries/</code> with this front matter:</p>
+<pre><code>---
+question: The question, rewritten so the sender cannot be identified
+topic: Study        # e.g. Research, Internship, Study, Other — chips are built from these
+date: 2026-11-01
+asked_by: A. Student   # optional; leave out to stay anonymous
+draft: false           # optional
+---
+</code></pre>
+<p>The body below the front matter is the answer, written in normal Markdown.
+Only publish questions whose sender ticked "may answer publicly" in the contact form.</p>
+              <p class="qa-link"><a href="#2026-10-10-example">Link to this question</a></p>
+            </div>
+          </details>
+        </li>
+      </ol>
+      <p class="qa-empty muted" id="qa-empty" hidden>No questions match your search.</p>
+    </main>
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="../">Home</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>

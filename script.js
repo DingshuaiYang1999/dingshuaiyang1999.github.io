@@ -55,41 +55,6 @@ if (themeQuery) {
 
 applyTheme(getSavedTheme() || getSystemTheme());
 
-// Scroll-triggered fade-in reveal.
-// Content must never stay hidden: only elements that start below the viewport are
-// animated, they reveal as soon as any part enters (threshold 0), and everything is
-// shown immediately without IntersectionObserver, with reduced motion, or on print.
-(function setupReveal() {
-  const targets = document.querySelectorAll(
-    ".hero-copy, .profile-panel, .section .section-heading, .section .text-block, .timeline-item, .skill-row, .language-row, .now-section, .contact-section > div, .contact-right"
-  );
-  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!("IntersectionObserver" in window) || reduced) return;
-
-  const show = (el) => el.classList.add("is-visible");
-  const obs = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          show(entry.target);
-          obs.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0, rootMargin: "0px 0px -24px 0px" }
-  );
-  targets.forEach((el) => {
-    if (el.getBoundingClientRect().top < window.innerHeight) return; // already on screen: leave as is
-    el.classList.add("reveal");
-    obs.observe(el);
-  });
-  // Jumping to an anchor (nav link / #projects) or printing reveals everything at once.
-  const revealAll = () => targets.forEach(show);
-  window.addEventListener("hashchange", revealAll);
-  window.addEventListener("beforeprint", revealAll);
-  if (window.location.hash) revealAll();
-})();
-
 // ---------- Navbar: scrolled state, mobile menu, active section ----------
 (function setupNavbar() {
   const header = document.querySelector("[data-header]");
@@ -122,35 +87,9 @@ applyTheme(getSavedTheme() || getSystemTheme());
     document.addEventListener("click", (e) => {
       if (header.classList.contains("is-open") && !header.contains(e.target)) setOpen(false, false);
     });
-    const desktop = window.matchMedia("(min-width: 861px)");
+    const desktop = window.matchMedia("(min-width: 761px)");
     const onBreakpoint = () => { if (desktop.matches) setOpen(false, false); };
     if (desktop.addEventListener) desktop.addEventListener("change", onBreakpoint);
-  }
-
-  // Sliding pill indicator: follows hover, rests on the active link.
-  const list = header.querySelector(".nav-links");
-  const indicator = document.createElement("span");
-  indicator.className = "nav-indicator";
-  indicator.setAttribute("aria-hidden", "true");
-  if (list) list.prepend(indicator);
-  const moveIndicator = (a) => {
-    if (!a || !list) { indicator.style.opacity = "0"; return; }
-    const lr = list.getBoundingClientRect(), r = a.getBoundingClientRect();
-    indicator.style.width = r.width + "px";
-    indicator.style.transform = `translate(${r.left - lr.left}px, -50%)`;
-    indicator.style.opacity = "1";
-  };
-  const restIndicator = () => moveIndicator(header.querySelector(".nav-links a.is-active, .nav-links a[aria-current]"));
-  if (list) {
-    list.querySelectorAll("a").forEach((a) => {
-      a.addEventListener("mouseenter", () => moveIndicator(a));
-      a.addEventListener("focus", () => moveIndicator(a));
-    });
-    list.addEventListener("mouseleave", restIndicator);
-    list.addEventListener("focusout", restIndicator);
-    window.addEventListener("resize", restIndicator);
-    header.querySelector(".header-inner").addEventListener("transitionend", restIndicator);
-    restIndicator();
   }
 
   // Highlight the link of the section currently in view (homepage only).
@@ -166,7 +105,6 @@ applyTheme(getSavedTheme() || getSystemTheme());
       if (on) a.setAttribute("aria-current", "location");
       else a.removeAttribute("aria-current");
     });
-    restIndicator();
   };
   const visible = new Map();
   const obs = new IntersectionObserver(
