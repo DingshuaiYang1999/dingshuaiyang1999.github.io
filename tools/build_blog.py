@@ -148,23 +148,44 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
     return bust(out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1))
 
 
-LISTEN = """<div class="listen" data-listen>
-          <button type="button" class="listen-play" aria-pressed="false" aria-label="Listen to this post">
-            <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
-            <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
-            <span class="listen-play-label">Listen</span>
-          </button>
-          <button type="button" class="listen-stop" aria-label="Stop reading" hidden>
-            <svg class="listen-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></svg>
-          </button>
-          <label class="listen-speed"><span class="visually-hidden">Reading speed</span>
-            <select class="listen-rate">
-              <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
-            </select>
-          </label>
-          <div class="listen-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="listen-progress-fill"></span></div>
-          <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
-          <p class="listen-unsupported" hidden>Read-aloud isn't available in this browser.</p>
+def audio_player(p):
+    """Narration player for posts with `audio:` front matter or assets/audio/<slug>.mp3."""
+    src = p.get("audio") or (f"assets/audio/{p['slug']}.mp3" if (ROOT / "assets" / "audio" / f"{p['slug']}.mp3").exists() else "")
+    if not src:
+        return ""
+    src = src.lstrip("/")
+    m4a = src[:-4] + ".m4a"
+    dur = 0.0
+    try:
+        import subprocess
+        out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(ROOT / src)],
+                             capture_output=True, text=True, timeout=20)
+        dur = float(out.stdout.strip() or 0)
+    except Exception:
+        pass
+    total = f"{int(dur // 60)}:{int(dur % 60):02d}" if dur else "0:00"
+    m4a_tag = f'\n            <source src="../{m4a}" type="audio/mp4" />' if (ROOT / m4a).exists() else ""
+    return f"""<div class="listen" data-audio-player data-duration="{dur:.1f}">
+          <audio preload="none" playsinline controls>{m4a_tag}
+            <source src="../{src}" type="audio/mpeg" />
+            <a href="../{src}">Download the narration (MP3)</a>
+          </audio>
+          <div class="listen-ui" hidden>
+            <button type="button" class="listen-play" aria-pressed="false" aria-label="Play narration">
+              <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+              <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
+              <span class="listen-play-label">Listen</span>
+            </button>
+            <input class="listen-seek" type="range" min="0" max="{max(1, round(dur))}" step="1" value="0" aria-label="Seek narration" aria-valuetext="0:00 of {total}" />
+            <span class="listen-time"><span class="listen-cur">0:00</span> / <span class="listen-dur">{total}</span></span>
+            <label class="listen-speed"><span class="visually-hidden">Playback speed</span>
+              <select class="listen-rate">
+                <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
+              </select>
+            </label>
+            <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
+          </div>
+          <p class="listen-credit">Audio narration · computer-generated voice</p>
         </div>"""
 
 
@@ -253,7 +274,7 @@ def main():
           <h1>{html.escape(p.get("subtitle") or p["title"])}</h1>
           {f'<p class="post-dek">{html.escape(p["dek"])}</p>' if p.get("dek") else ""}
           {f'<p class="post-byline">By {html.escape(p["author"])}</p>' if p.get("author") else ""}
-          {LISTEN}
+          {audio_player(p)}
         </header>
         {picture(p, "cover", "../", "post-cover", 1600, 900, eager=True)}
         <div class="post-body">
@@ -262,7 +283,7 @@ def main():
       </article>"""
         (BLOG / f'{p["slug"]}.html').write_text(
             page(f'{p["title"]} · Dingshuai Yang', p.get("excerpt", p["title"]), f'{BASE}/blog/{p["slug"]}.html', main_html,
-                 extra_head='    <script src="../listen.js" defer></script>\n',
+                 extra_head='    <script src="../listen.js" defer></script>\n' if audio_player(p) else "",
                  og_image=f'{BASE}/assets/blog/{p["cover"]}-cover.jpg' if p.get("cover") else None),
             encoding="utf-8")
         print("wrote", f'blog/{p["slug"]}.html')

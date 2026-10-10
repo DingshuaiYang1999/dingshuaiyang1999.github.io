@@ -33,6 +33,22 @@ Reading time (about 200 words per minute) is computed automatically. To style cl
 wrap them in `<div class="post-closing" markdown="1"> … </div>`. See
 `blog/posts/2024-05-11-beginning-my-german-life.md` for a full example. Images for posts go in `assets/blog/`.
 
+## Blog audio narration
+
+Each post can have a pre-generated narration (works in every browser, incl. iPhone):
+
+```bash
+pip install piper-tts markdown          # once; ffmpeg must be installed
+python3 tools/make_audio.py blog/posts/<slug>.md   # writes assets/audio/<slug>.mp3 + .m4a
+python3 tools/build_blog.py                        # adds the Listen player automatically
+```
+
+`make_audio.py` reads the title, subtitle and body as published (skips figures, captions,
+alt text and emoji) with the local Piper voice `en_GB-cori-high` (trained on public-domain
+LibriVox recordings; downloaded once to `~/.local/share/piper/`). A post gets the player when
+`assets/audio/<slug>.mp3` exists, or set `audio: assets/audio/other.mp3` in its front matter.
+Re-run `make_audio.py` after editing a post's text.
+
 ## Blog view counts (GoatCounter)
 
 Posts show public view counts ("N views") from [GoatCounter](https://www.goatcounter.com/),

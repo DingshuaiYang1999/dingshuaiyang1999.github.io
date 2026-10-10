@@ -20,7 +20,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
-    <link rel="stylesheet" href="../styles.css?v=b7bd4627" />
+    <link rel="stylesheet" href="../styles.css?v=ad7f41c7" />
     <script>
       // Apply theme before first paint: saved choice, else OS preference.
       (function () {
@@ -35,7 +35,7 @@
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
       <script src="../views.js?v=edb1d227" defer></script>
-    <script src="../listen.js?v=3ca480c5" defer></script>
+    <script src="../listen.js?v=a696964f" defer></script>
 </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -91,23 +91,28 @@
           <h1>My First Day in Germany 🇩🇪</h1>
           <p class="post-dek">One suitcase, one backpack, and the beginning of a new chapter.</p>
           <p class="post-byline">By Dingshuai Yang</p>
-          <div class="listen" data-listen>
-          <button type="button" class="listen-play" aria-pressed="false" aria-label="Listen to this post">
-            <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
-            <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
-            <span class="listen-play-label">Listen</span>
-          </button>
-          <button type="button" class="listen-stop" aria-label="Stop reading" hidden>
-            <svg class="listen-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor"/></svg>
-          </button>
-          <label class="listen-speed"><span class="visually-hidden">Reading speed</span>
-            <select class="listen-rate">
-              <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
-            </select>
-          </label>
-          <div class="listen-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="listen-progress-fill"></span></div>
-          <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
-          <p class="listen-unsupported" hidden>Read-aloud isn't available in this browser.</p>
+          <div class="listen" data-audio-player data-duration="506.2">
+          <audio preload="none" playsinline controls>
+            <source src="../assets/audio/2024-05-11-beginning-my-german-life.m4a" type="audio/mp4" />
+            <source src="../assets/audio/2024-05-11-beginning-my-german-life.mp3" type="audio/mpeg" />
+            <a href="../assets/audio/2024-05-11-beginning-my-german-life.mp3">Download the narration (MP3)</a>
+          </audio>
+          <div class="listen-ui" hidden>
+            <button type="button" class="listen-play" aria-pressed="false" aria-label="Play narration">
+              <svg class="listen-icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+              <svg class="listen-icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 5.5h3v13h-3zM13.5 5.5h3v13h-3z" fill="currentColor"/></svg>
+              <span class="listen-play-label">Listen</span>
+            </button>
+            <input class="listen-seek" type="range" min="0" max="506" step="1" value="0" aria-label="Seek narration" aria-valuetext="0:00 of 8:26" />
+            <span class="listen-time"><span class="listen-cur">0:00</span> / <span class="listen-dur">8:26</span></span>
+            <label class="listen-speed"><span class="visually-hidden">Playback speed</span>
+              <select class="listen-rate">
+                <option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option>
+              </select>
+            </label>
+            <p class="listen-status visually-hidden" role="status" aria-live="polite"></p>
+          </div>
+          <p class="listen-credit">Audio narration · computer-generated voice</p>
         </div>
         </header>
         <picture class="post-cover"><source srcset="../assets/blog/beginning-german-life-cover.webp" type="image/webp" /><img src="../assets/blog/beginning-german-life-cover.jpg" alt="Illustration of a passenger plane flying above the clouds" width="1600" height="900" fetchpriority="high" decoding="async" /></picture>

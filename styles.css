@@ -1377,52 +1377,49 @@ p {
   line-height: 1.5;
 }
 
-/* ---------- Listen (speech) player ---------- */
+/* ---------- Listen (audio narration) player ---------- */
 .listen {
+  margin-top: 18px;
+}
+
+.listen audio {
+  width: 100%;
+  max-width: 420px;
+}
+
+.listen audio:not([controls]) {
+  display: none;
+}
+
+.listen-ui {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px 12px;
-  margin-top: 18px;
 }
 
-.listen[hidden] {
+.listen-ui[hidden] {
   display: none;
 }
 
-.listen-play,
-.listen-stop {
+.listen-play {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  min-height: 36px;
+  min-height: 38px;
   padding: 0 16px 0 12px;
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--accent);
   border-radius: 999px;
-  background: var(--bg);
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
   font: inherit;
   font-size: 14.5px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.listen-stop {
-  width: 36px;
-  padding: 0;
-  justify-content: center;
-  color: var(--muted);
-}
-
-.listen-play:hover,
-.listen-stop:hover {
-  border-color: var(--accent);
-}
-
-.listen-play[aria-pressed="true"] {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
+.listen-play:hover {
+  filter: brightness(1.12);
 }
 
 .listen-icon {
@@ -1439,8 +1436,68 @@ p {
   display: block;
 }
 
+.listen[data-loading] .listen-play {
+  opacity: 0.8;
+}
+
+.listen-seek {
+  --pct: 0%;
+  flex: 1 1 140px;
+  min-width: 120px;
+  max-width: 260px;
+  height: 20px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.listen-seek::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) var(--pct), var(--rule-strong) var(--pct));
+}
+
+.listen-seek::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--rule-strong);
+}
+
+.listen-seek::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.listen-seek::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.listen-seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.listen-time {
+  color: var(--muted);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
 .listen-rate {
-  min-height: 36px;
+  min-height: 34px;
   padding: 0 8px;
   border: 1px solid var(--rule-strong);
   border-radius: 999px;
@@ -1451,83 +1508,9 @@ p {
   cursor: pointer;
 }
 
-.listen-progress {
-  flex: 1 1 120px;
-  max-width: 220px;
-  height: 4px;
-  overflow: hidden;
-  border-radius: 2px;
-  background: var(--rule);
-}
-
-.listen-progress-fill {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: var(--accent);
-  transition: width 0.3s ease;
-}
-
-.post-body .is-reading {
-  margin-left: -14px;
-  padding-left: 11px;
-  border-left: 3px solid var(--accent);
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
-  border-radius: 0 4px 4px 0;
-}
-
-.post-header h1.is-reading {
-  color: var(--accent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .listen-progress-fill {
-    transition: none;
-  }
-}
-
-.listen-stop[hidden] {
-  display: none;
-}
-
-.post-views::before {
-  content: "·";
-  margin: 0 8px;
-}
-
-.post-views[hidden] {
-  display: none;
-}
-
-.blog-privacy {
-  margin: -6px 0 18px;
-  font-size: 13.5px;
-}
-
-.listen-hint {
-  flex-basis: 100%;
-  margin: 0;
+.listen-credit {
+  margin: 8px 0 0;
   color: var(--muted);
-  font-size: 13.5px;
+  font-size: 12.5px;
 }
 
-.listen-hint[hidden] {
-  display: none;
-}
-
-.listen-unsupported {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13.5px;
-}
-
-.listen-unsupported[hidden],
-.listen-progress[hidden],
-.listen-rate[hidden] {
-  display: none;
-}
-
-.listen-play:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
