@@ -38,15 +38,17 @@ wrap them in `<div class="post-closing" markdown="1"> … </div>`. See
 Each post can have a pre-generated narration (works in every browser, incl. iPhone):
 
 ```bash
-pip install piper-tts markdown          # once; ffmpeg must be installed
+pip install edge-tts markdown numpy     # once; ffmpeg must be installed
 python3 tools/make_audio.py blog/posts/<slug>.md   # writes assets/audio/<slug>.mp3 + .m4a
 python3 tools/build_blog.py                        # adds the Listen player automatically
 ```
 
 `make_audio.py` reads the title, subtitle and body as published (skips figures, captions,
-alt text and emoji) with the local Piper voice `en_GB-cori-high` (trained on public-domain
-LibriVox recordings; downloaded once to `~/.local/share/piper/`). A post gets the player when
-`assets/audio/<slug>.mp3` exists, or set `audio: assets/audio/other.mp3` in its front matter.
+alt text and emoji). English is read by the neural voice `en-US-AvaMultilingualNeural` via the
+`edge-tts` package (Microsoft's online "Read aloud" service, free, no account). Only the words in
+`GERMAN_TERMS` (top of the script) are spoken by `de-DE-SeraphinaMultilingualNeural` and spliced
+in place. A post gets the player when `assets/audio/<slug>.mp3` exists, or set
+`audio: assets/audio/other.mp3` in its front matter.
 Re-run `make_audio.py` after editing a post's text.
 
 ## Blog view counts (GoatCounter)
