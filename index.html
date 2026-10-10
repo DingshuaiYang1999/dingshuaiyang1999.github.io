@@ -2,25 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Dingshuai Yang | Robotics, Control, AI</title>
     <meta
       name="description"
-      content="Dingshuai Yang's multilingual personal website for robotics, control engineering, mechatronics, AI, and automation projects."
+      content="Dingshuai Yang&#x27;s personal website for robotics, control engineering, mechatronics, AI, and automation projects."
     />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314201b'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='30' font-family='-apple-system,BlinkMacSystemFont,Inter,Arial,sans-serif' font-weight='800' letter-spacing='-1' fill='white'%3EDY%3C/text%3E%3C/svg%3E"
-    />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
     <link rel="canonical" href="https://dingshuaiyang1999.github.io/" />
-    <link rel="alternate" hreflang="en" href="https://dingshuaiyang1999.github.io/?lang=en" />
-    <link rel="alternate" hreflang="de" href="https://dingshuaiyang1999.github.io/?lang=de" />
-    <link rel="alternate" hreflang="zh-CN" href="https://dingshuaiyang1999.github.io/?lang=zh" />
-    <link rel="alternate" hreflang="zh-TW" href="https://dingshuaiyang1999.github.io/?lang=zhTw" />
-    <link rel="alternate" hreflang="ja" href="https://dingshuaiyang1999.github.io/?lang=ja" />
-    <link rel="alternate" hreflang="x-default" href="https://dingshuaiyang1999.github.io/" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content="https://dingshuaiyang1999.github.io/" />
     <meta property="og:title" content="Dingshuai Yang — Robotics, Control Engineering, AI" />
     <meta property="og:description" content="M.Sc. Mechatronics @ FAU Erlangen-Nürnberg. Personal site showcasing robotics, control engineering, AI projects, and interactive engineering demos." />
@@ -32,7 +28,8 @@
     <meta name="twitter:title" content="Dingshuai Yang — Robotics, Control Engineering, AI" />
     <meta name="twitter:description" content="M.Sc. Mechatronics @ FAU Erlangen-Nürnberg. Personal site showcasing robotics, control engineering, AI projects." />
     <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
-    <meta name="theme-color" content="#14201b" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -56,7 +53,7 @@
         }
       ],
       "knowsAbout": ["Robotics", "Control Engineering", "Mechatronics", "Artificial Intelligence", "Large Language Models", "Path Planning"],
-      "knowsLanguage": ["zh", "zh-Hant", "de", "en", "ja"],
+      "knowsLanguage": ["zh", "de", "en", "ja"],
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Erlangen",
@@ -71,38 +68,39 @@
     </script>
     <link rel="stylesheet" href="styles.css" />
     <script>
-      // Set theme as early as possible to avoid flash
+      // Apply theme before first paint: saved choice, else OS preference.
       (function () {
+        var theme = "light";
         try {
           var saved = localStorage.getItem("theme");
-          var prefers =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          document.documentElement.setAttribute("data-theme", saved || prefers);
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
         } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
     <script src="script.js" defer></script>
   </head>
-  <body>
-    <a class="skip-link" href="#top">Skip to content</a>
-    <header class="site-header">
-      <a class="brand" href="#top" aria-label="Back to homepage" data-i18n-aria-label="homeAria">
-        <span class="brand-mark" data-i18n="brandMark">DY</span>
-        <span data-i18n="brandName">Dingshuai Yang</span>
-      </a>
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="#about" data-i18n="navAbout">About</a>
-        <a href="#education" data-i18n="navEducation">Education</a>
-        <a href="#courses" data-i18n="navCourses">Courses</a>
-        <a href="#skills" data-i18n="navSkills">Skills</a>
-        <a href="#projects" data-i18n="navProjects">Labs</a>
-        <a href="#contact" data-i18n="navContact">Contact</a>
-      </nav>
-      <div class="header-tools">
-        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="Dingshuai Yang — home">
+          <img class="brand-logo brand-logo-light" src="assets/logo/logo-light.svg" alt="" width="28" height="28" />
+          <img class="brand-logo brand-logo-dark" src="assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+          <span class="brand-name">Dingshuai Yang</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href="#about" data-nav="about">About</a></li>
+            <li><a href="#education" data-nav="education">Education</a></li>
+            <li><a href="#projects" data-nav="projects">Projects</a></li>
+            <li><a href="blog/" data-nav="blog">Blog</a></li>
+            <li><a href="contact/" data-nav="contact">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-tools">
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
             <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -120,432 +118,260 @@
             <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
           </svg>
         </button>
-        <div class="language-switcher" aria-label="Language selection" data-i18n-aria-label="languageAria">
-          <button type="button" data-lang="en" aria-label="English" title="English">EN</button>
-          <button type="button" data-lang="de" aria-label="Deutsch" title="Deutsch">DE</button>
-          <button type="button" data-lang="zh" aria-label="简体中文" title="简体中文">简</button>
-          <button type="button" data-lang="zhTw" aria-label="繁體中文" title="繁體中文">繁</button>
-          <button type="button" data-lang="ja" aria-label="日本語" title="日本語">日</button>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+          </button>
         </div>
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero section">
-        <div class="hero-copy">
-          <p class="intro-line" data-i18n="introLine">Personal website</p>
-          <p class="hero-greeting" data-i18n="heroGreeting">Hi, I am</p>
-          <h1 class="hero-name" data-i18n="heroName">Dingshuai Yang</h1>
-          <div class="hero-pills" aria-label="Core focus areas">
-            <span class="pill pill-robotics" data-i18n="heroDomain1">Robotics</span>
-            <span class="pill pill-control" data-i18n="heroDomain2">Control Engineering</span>
-            <span class="pill pill-ai" data-i18n="heroDomain3">AI</span>
+    <main id="main" class="page" tabindex="-1">
+      <section class="hero" aria-labelledby="hero-name">
+        <picture class="hero-photo"><source srcset="assets/avatar.webp" type="image/webp" /><img src="assets/avatar.jpg" alt="Portrait of Dingshuai Yang" width="400" height="400" decoding="async" /></picture>
+        <div class="hero-text">
+          <h1 id="hero-name">Dingshuai Yang</h1>
+          <p class="hero-title">M.Sc. Mechatronics, FAU Erlangen-Nürnberg</p>
+          <p class="hero-interests">Robotics · Control Engineering · AI</p>
+          <p class="hero-lede">Currently in Erlangen for a master's in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.</p>
+          <p class="hero-facts">Erlangen, Germany · Graduating March 2028 (expected) · Open to internships and working-student roles in robotics, control, AI</p>
+          <div class="cv-actions" role="group" aria-label="Curriculum vitae">
+            <a class="button primary" href="assets/cv/Dingshuai_Yang_CV.pdf" target="_blank" rel="noopener">View CV<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
+            <a class="button secondary" href="assets/cv/Dingshuai_Yang_CV.pdf" download="Dingshuai_Yang_CV.pdf">Download CV<span class="visually-hidden"> (PDF)</span></a>
           </div>
-          <p class="hero-text" data-i18n="heroText">Currently in Erlangen for a masters in mechatronics. Most of my time goes into control loops, manipulators, and the AI tools that make them smarter.</p>
-          <div class="hero-actions" aria-label="Primary actions" data-i18n-aria-label="actionsAria">
-            <a class="button primary" href="#projects" data-i18n="viewProjects">View labs →</a>
-            <a class="button secondary" href="#contact" data-i18n="contactMe">Contact me</a>
-          </div>
-        </div>
-
-        <div class="profile-panel" aria-label="Personal information summary" data-i18n-aria-label="profileAria">
-          <div class="profile-visual profile-avatar" aria-hidden="true">
-            <img src="assets/avatar.jpg" alt="Dingshuai Yang" />
-          </div>
-          <div>
-            <h2 data-i18n="profileTitle">M.Sc. Mechatronics  ·  2025 – 2027  ·  FAU</h2>
-          </div>
-          <dl class="profile-facts">
-            <div>
-              <dt data-i18n="factLocLabel">Based in</dt>
-              <dd data-i18n="factLocValue">Erlangen, Germany</dd>
-            </div>
-            <div>
-              <dt data-i18n="factGradLabel">Graduating</dt>
-              <dd data-i18n="factGradValue">April 2027</dd>
-            </div>
-            <div>
-              <dt data-i18n="factOpenLabel">Open to</dt>
-              <dd data-i18n="factOpenValue">Internships · working-student roles in robotics, control, AI</dd>
-            </div>
-          </dl>
+          <ul class="hero-links" aria-label="Contact and profiles">
+            <li><a href="mailto:dingshuai.yang@fau.de"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M3.5 6.5h17v11h-17z M3.8 7l8.2 6.2L20.2 7"/></svg><span>dingshuai.yang@fau.de</span></a></li>
+            <li><a href="https://github.com/DingshuaiYang1999" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.54 2.87 8.39 6.84 9.74.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05.8-.23 1.65-.34 2.5-.34s1.7.12 2.5.34c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49 3.97-1.35 6.83-5.2 6.83-9.74C22 6.58 17.52 2 12 2z"/></svg><span>GitHub</span></a></li>
+            <li><a href="https://www.linkedin.com/in/dingshuai-y-69b8a6405/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zm7 0h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.35h-4v-4.75c0-1.13-.02-2.6-1.58-2.6-1.59 0-1.83 1.24-1.83 2.52v4.83h-4z"/></svg><span>LinkedIn</span></a></li>
+          </ul>
         </div>
       </section>
 
-      <section id="about" class="section split-section">
-        <div>
-          <p class="section-label" data-i18n="aboutLabel">About me</p>
-          <h2 data-i18n="aboutTitle">From materials engineering to mechatronics, robotics, and AI.</h2>
-        </div>
-        <div class="text-block">
-          <p data-i18n="aboutText1">I started in materials engineering, but my real curiosity has always been the machines themselves — and the question of what makes them intelligent. Watching humanoid robots learn to walk, manipulate, and reason is what pulled me into this field.</p>
-          <blockquote class="pull-quote" data-i18n="aboutQuote">I believe humanoid robots and embodied intelligence are the future.</blockquote>
-          <p data-i18n="aboutText2">So I switched to mechatronics and moved to Erlangen — to learn the control loops, the manipulators, and the AI tools that will, sooner or later, walk through every kitchen and every factory floor.</p>
+      <section id="about" class="section" aria-labelledby="about-h">
+        <h2 id="about-h">About</h2>
+        <p>I started in materials engineering, but my real curiosity has always been the machines themselves — and the question of what makes them intelligent. Watching humanoid robots learn to walk, manipulate, and reason is what pulled me into this field.</p>
+        <blockquote class="quote">I believe humanoid robots and embodied intelligence are the future.</blockquote>
+        <p>So I switched to mechatronics and moved to Erlangen — to learn the control loops, the manipulators, and the AI tools that will, sooner or later, walk through every kitchen and every factory floor.</p>
+        <div class="now" aria-labelledby="now-h">
+          <h3 id="now-h">Now <span class="muted">· October 2026</span></h3>
+          <!-- TODO(Dingshuai): the items below are carried over from the May 2026 version; please confirm or update them. -->
+          <ul>
+            <li>Studying CS fundamentals, AI, Machine Learning, LLMs, and Prompt Engineering.</li>
+            <li>Building personal projects in AI and automation.</li>
+            <li>Looking for internships and Werkstudent roles in robotics, control, AI.</li>
+          </ul>
         </div>
       </section>
 
-      <section id="now" class="section now-section">
-        <div class="now-head">
-          <p class="section-label" data-i18n="nowLabel">Now</p>
-          <p class="now-sub" data-i18n="nowSub">May 2026</p>
-        </div>
-        <ul class="now-list">
-          <li>
-            <span class="now-dot dot-learn" aria-hidden="true"></span>
-            <span data-i18n="nowItem1">Studying CS fundamentals, AI, Machine Learning, LLMs, and Prompt Engineering.</span>
-          </li>
-          <li>
-            <span class="now-dot dot-build" aria-hidden="true"></span>
-            <span data-i18n="nowItem2">Building personal projects in AI and automation.</span>
-          </li>
-          <li>
-            <span class="now-dot dot-seek" aria-hidden="true"></span>
-            <span data-i18n="nowItem3">Looking for internships and Werkstudent roles in robotics, control, AI.</span>
-          </li>
-        </ul>
-      </section>
-
-      <section id="education" class="section">
-        <div class="section-heading">
-          <p class="section-label" data-i18n="educationLabel">Education</p>
-          <h2 data-i18n="educationTitle">Where I have studied.</h2>
-        </div>
+      <!--
+        TODO(Dingshuai): Experience section. The CV (10.10.2026) lists no work/internship
+        entries yet, so this stays hidden. Copy the Education timeline markup below, fill in
+        real entries and add an "Experience" link to the nav.
+      <section id="experience" class="section" aria-labelledby="experience-h">
+        <h2 id="experience-h">Experience</h2>
         <ol class="timeline">
-          <li class="timeline-item">
-            <div class="timeline-date">2025.04 — 2027.04</div>
-            <div class="timeline-body">
-              <h3 data-i18n="edu1Degree">M.Sc. Mechatronics</h3>
-              <p class="timeline-meta" data-i18n="edu1School">Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany</p>
-              <p class="timeline-status" data-i18n="edu1Status">In progress</p>
+          <li><span class="tl-date">YYYY.MM – YYYY.MM</span><div><h3>Role</h3><p class="muted">Company · City</p></div></li>
+        </ol>
+      </section>
+      -->
+
+      <section id="education" class="section" aria-labelledby="education-h">
+        <h2 id="education-h">Education</h2>
+        <ol class="timeline">
+          <li>
+            <span class="tl-date">2025.04 – 2028.03</span>
+            <div>
+              <h3>M.Sc. Mechatronics</h3>
+              <p class="muted">Friedrich-Alexander University Erlangen-Nürnberg (FAU) · Erlangen, Germany</p>
+              <p class="tl-note">In progress · expected 03/2028</p>
             </div>
           </li>
-          <li class="timeline-item">
-            <div class="timeline-date">2019.09 — 2023.07</div>
-            <div class="timeline-body">
-              <h3 data-i18n="edu2Degree">B.Eng. Materials Processing &amp; Controlling Engineering</h3>
-              <p class="timeline-meta" data-i18n="edu2School">Guangdong University of Technology (GDUT) · Guangzhou, China</p>
+          <li>
+            <span class="tl-date">2023.07 – 2025.03</span>
+            <div>
+              <h3>Intensive German Language Studies</h3>
+              <p class="muted">Goethe-Institut (Qingdao/Shanghai) · Dr. Juno Sprachschule (Dortmund)</p>
+            </div>
+          </li>
+          <li>
+            <span class="tl-date">2019.09 – 2023.07</span>
+            <div>
+              <h3>B.Eng. Materials Processing &amp; Controlling Engineering</h3>
+              <p class="muted">Guangdong University of Technology (GDUT) · Guangzhou, China</p>
             </div>
           </li>
         </ol>
       </section>
 
-      <section id="courses" class="section">
-        <div class="section-heading">
-          <p class="section-label" data-i18n="coursesLabel">Courses</p>
-          <h2 data-i18n="coursesTitle">Core coursework at FAU.</h2>
-        </div>
-        <div class="course-grid">
-          <article class="course-module">
-            <div class="course-module-head">
-              <h3 data-i18n="cm1Title">Control Engineering</h3>
-              <span class="course-meta" data-i18n="cm1Meta">Vertiefung</span>
-            </div>
-            <ul class="course-list">
-              <li>Regelungstechnik A</li>
-              <li>Regelungstechnik B</li>
-              <li>Robotics I</li>
-              <li>Robotics II</li>
-              <li>Nonlinear Control Systems</li>
-            </ul>
-            <p class="course-note" data-i18n="cm1Note">From classical PID through state-space and Lyapunov stability into robot kinematics and nonlinear observers — the long process of really understanding how to make a system behave.</p>
-          </article>
-          <article class="course-module">
-            <div class="course-module-head">
-              <h3 data-i18n="cm2Title">Computer Science &amp; AI</h3>
-              <span class="course-meta" data-i18n="cm2Meta">Currently learning</span>
-            </div>
-            <ul class="course-list">
-              <li>Introduction to Machine Learning</li>
-              <li>Deep Learning</li>
-            </ul>
-            <p class="course-note" data-i18n="cm2Note">Filling in the math and engineering chain of ML/DL from scratch. The goal is to combine it with my control background and do learning-based control.</p>
-          </article>
-          <article class="course-module">
-            <div class="course-module-head">
-              <h3 data-i18n="cm3Title">Engineering Fundamentals</h3>
-              <span class="course-meta" data-i18n="cm3Meta">Technical</span>
-            </div>
-            <ul class="course-list">
-              <li>Semiconductor Fundamentals</li>
-              <li>Rigid Body Dynamics</li>
-              <li>Production Engineering</li>
-            </ul>
-            <p class="course-note" data-i18n="cm3Note">From semiconductors on one end to production lines on the other — a complete engineering view of how a robot actually gets built.</p>
-          </article>
+      <section id="courses" class="section" aria-labelledby="courses-h">
+        <h2 id="courses-h">Courses</h2>
+        <p class="section-intro">Core coursework at FAU.</p>
+        <div class="course-groups">
+          <div class="course-group">
+            <h3>Control Engineering <span class="muted">· Vertiefung</span></h3>
+            <p>Regelungstechnik A · Regelungstechnik B · Robotics I · Robotics II · Nonlinear Control Systems · Numerical Optimization · Model Predictive Control</p>
+          </div>
+          <div class="course-group">
+            <h3>Computer Science &amp; AI</h3>
+            <p>Introduction to Machine Learning · Deep Learning · Pattern Recognition</p>
+          </div>
+          <div class="course-group">
+            <h3>Engineering Fundamentals</h3>
+            <p>Semiconductor Fundamentals · Rigid Body Dynamics · Production Engineering · Cyber-Physical Systems</p>
+          </div>
         </div>
       </section>
 
-      <section id="skills" class="section">
-        <div class="section-heading">
-          <p class="section-label" data-i18n="skillsLabel">Skills</p>
-          <h2 data-i18n="skillsTitle">A practical stack across control, robot software, and AI tools.</h2>
-        </div>
-        <dl class="skill-table">
-          <div class="skill-row">
-            <dt data-i18n="skillCat1">Languages</dt>
-            <dd>
-              <span class="tag">Python</span>
-              <span class="tag">C++</span>
-              <span class="tag">MATLAB</span>
-            </dd>
-          </div>
-          <div class="skill-row">
-            <dt data-i18n="skillCat2">Robotics &amp; Sim</dt>
-            <dd>
-              <span class="tag">Simulink</span>
-              <span class="tag">ROS / ROS2</span>
-              <span class="tag">OpenCV</span>
-            </dd>
-          </div>
-          <div class="skill-row">
-            <dt data-i18n="skillCat4">ML &amp; AI</dt>
-            <dd>
-              <span class="tag">PyTorch</span>
-              <span class="tag">LLMs</span>
-              <span class="tag">Prompt Engineering</span>
-            </dd>
-          </div>
-          <div class="skill-row">
-            <dt data-i18n="skillCat5">Dev Tools</dt>
-            <dd>
-              <span class="tag">Linux</span>
-              <span class="tag">Git / GitHub</span>
-            </dd>
-          </div>
-          <div class="skill-row">
-            <dt data-i18n="skillCat3">Domains</dt>
-            <dd>
-              <span class="tag">Robotics</span>
-              <span class="tag">Control Engineering</span>
-              <span class="tag">Mechatronics</span>
-              <span class="tag">AI / LLMs</span>
-            </dd>
-          </div>
+      <section id="skills" class="section" aria-labelledby="skills-h">
+        <h2 id="skills-h">Skills</h2>
+        <dl class="defs">
+          <div><dt>Programming</dt><dd>Python, MATLAB</dd></div>
+          <div><dt>Robotics &amp; simulation</dt><dd>Simulink, ROS / ROS2, OpenCV</dd></div>
+          <div><dt>ML &amp; AI</dt><dd>PyTorch, LLMs, Prompt Engineering</dd></div>
+          <div><dt>Tools</dt><dd>Linux, Git / GitHub</dd></div>
+          <div><dt>Languages</dt><dd>Chinese (native), German (C1), English (B2), Japanese (≈ N4)</dd></div>
         </dl>
       </section>
 
-      <section id="languages" class="section">
-        <div class="section-heading">
-          <p class="section-label" data-i18n="languagesLabel">Languages</p>
-          <h2 data-i18n="languagesTitle">Languages I speak.</h2>
-        </div>
-        <dl class="language-defs">
-          <div class="language-row">
-            <dt data-i18n="lang1Name">Chinese</dt>
-            <dd data-i18n="lang1Level">Native</dd>
-          </div>
-          <div class="language-row">
-            <dt data-i18n="lang2Name">German</dt>
-            <dd data-i18n="lang2Level">C1</dd>
-          </div>
-          <div class="language-row">
-            <dt data-i18n="lang3Name">English</dt>
-            <dd data-i18n="lang3Level">B2</dd>
-          </div>
-          <div class="language-row">
-            <dt data-i18n="lang4Name">Japanese</dt>
-            <dd data-i18n="lang4Level">≈ N4</dd>
-          </div>
-        </dl>
+      <section id="projects" class="section" aria-labelledby="projects-h">
+        <h2 id="projects-h">Projects</h2>
+        <p class="section-intro">Coursework and self-built experiments.</p>
+        <ol class="projects">
+          <li class="project">
+            <div class="project-thumb"><picture><source srcset="assets/thumbs/matlab-lab.webp" type="image/webp" /><img src="assets/thumbs/matlab-lab.jpg" alt="Static truss experiment from the MATLAB laboratory course" width="960" height="540" loading="lazy" decoding="async" /></picture></div>
+            <div class="project-body">
+              <h3 class="project-title">MATLAB Laboratory Course</h3>
+              <p class="project-meta">Course lab  ·  WS 2025/26</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.</dd></div>
+                <div><dt>Approach</dt><dd>Modelled a static truss and a dynamic crane, ran ODE simulations, analysed measurement data with FFT, and optimised a truss structure using symbolic and numerical methods.</dd></div>
+                <!-- TODO(Dingshuai): add a measured result / key figure for the MATLAB lab (not in CV). -->
+              </dl>
+              <p class="project-tags">MATLAB · ODE Solver · FFT · Symbolic Math · Optimization</p>
+            </div>
+          </li>
+          <li class="project">
+            <div class="project-thumb"><picture><source srcset="assets/thumbs/automatic-control-lab.webp" type="image/webp" /><img src="assets/thumbs/automatic-control-lab.jpg" alt="General information slide for the Automatic Control I laboratory" width="960" height="540" loading="lazy" decoding="async" /></picture></div>
+            <div class="project-body">
+              <h3 class="project-title">Automatic Control I Lab / Regelungstechnik I</h3>
+              <p class="project-meta">Course lab  ·  SS 2026</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.</dd></div>
+                <div><dt>Approach</dt><dd>Applied PID tuning, state-space and feedforward control, Bode-plot analysis with gain and phase margins, and anti-windup for actuator saturation.</dd></div>
+                <div><dt>Result</dt><dd>Modelled, controlled, and experimentally validated real lab systems: a two-tank process, a rotary arm, an active suspension, and an open-loop unstable magnetic levitation system.</dd></div>
+              </dl>
+              <p class="project-tags">MATLAB / Simulink · Controller Design · Two Tank · Rotary Arm · MagLev · Active Suspension</p>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="demos/pendulum.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/pendulum.webp" type="image/webp" /><img src="assets/thumbs/pendulum.jpg" alt="Pendulum-cart visualizer screenshot" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h3 class="project-title"><a href="demos/pendulum.html" target="_blank" rel="noopener">Pendulum-Cart Visualizer</a></h3>
+              <p class="project-meta">Interactive demo  ·  2025</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>An in-browser interactive simulation of an inverted pendulum on a cart. Tunable mass, length, damping, and live state plotting.</dd></div>
+                <div><dt>Approach</dt><dd>HTML / JS, Dynamics, Control, Physics Sim</dd></div>
+                <div><dt>Result</dt><dd>Runs in the browser — open the interactive demo.</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="demos/planar-2r.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/planar-2r.webp" type="image/webp" /><img src="assets/thumbs/planar-2r.jpg" alt="Planar 2R robot simulator screenshot" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h3 class="project-title"><a href="demos/planar-2r.html" target="_blank" rel="noopener">Planar 2R Robot Simulator</a></h3>
+              <p class="project-meta">Interactive demo  ·  2025</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Two-link planar manipulator: drag the end-effector to explore forward and inverse kinematics.</dd></div>
+                <div><dt>Approach</dt><dd>Kinematics, Robotics, HTML / JS, Interactive</dd></div>
+                <div><dt>Result</dt><dd>Runs in the browser — open the interactive demo.</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="demos/arm-7dof.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/arm-7dof.webp" type="image/webp" /><img src="assets/thumbs/arm-7dof.jpg" alt="7-DOF robot arm simulator screenshot" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h3 class="project-title"><a href="demos/arm-7dof.html" target="_blank" rel="noopener">7-DOF Robot Arm Simulator</a></h3>
+              <p class="project-meta">Interactive demo  ·  2025</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>A 7-degree-of-freedom robotic arm in the browser. Joint-by-joint control with DH-based modelling.</dd></div>
+                <div><dt>Approach</dt><dd>7-DoF, Kinematics, Robotics, 3D</dd></div>
+                <div><dt>Result</dt><dd>Runs in the browser — open the interactive demo.</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/rrt.webp" type="image/webp" /><img src="assets/thumbs/rrt.jpg" alt="RRT path planning illustration" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h3 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener">RRT — Rapidly-exploring Random Tree</a></h3>
+              <p class="project-meta">Python source  ·  2025</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Single-tree sampling-based planner. Animated tree growth with obstacle avoidance, written in Python with tkinter.</dd></div>
+                <div><dt>Approach</dt><dd>Python, tkinter, Sampling-based, Single tree</dd></div>
+                <div><dt>Result</dt><dd>Python source code on GitHub.</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/bidirectional-rrt.webp" type="image/webp" /><img src="assets/thumbs/bidirectional-rrt.jpg" alt="Bidirectional RRT illustration" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h3 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener">Bidirectional RRT</a></h3>
+              <p class="project-meta">Python source  ·  2025</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Two trees grow simultaneously from start and goal; the planner stitches them together once they meet. Live animation in tkinter.</dd></div>
+                <div><dt>Approach</dt><dd>Python, tkinter, Bi-directional, Sampling-based</dd></div>
+                <div><dt>Result</dt><dd>Python source code on GitHub.</dd></div>
+              </dl>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/prm.webp" type="image/webp" /><img src="assets/thumbs/prm.jpg" alt="Probabilistic roadmap illustration" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h3 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">PRM — Probabilistic Roadmap</a></h3>
+              <p class="project-meta">Python source  ·  2025</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Random sampling builds a connectivity graph in free space; Dijkstra finds the shortest collision-free path. Ideal for multi-query static scenes.</dd></div>
+                <div><dt>Approach</dt><dd>Python, tkinter, Roadmap, Dijkstra</dd></div>
+                <div><dt>Result</dt><dd>Python source code on GitHub.</dd></div>
+              </dl>
+            </div>
+          </li>
+        </ol>
       </section>
 
-      <section id="projects" class="section">
-        <div class="section-heading">
-          <p class="section-label" data-i18n="projectsLabel">Labs &amp; Experiments</p>
-          <h2 data-i18n="projectsTitle">Coursework and self-built experiments.</h2>
-        </div>
-        <div class="project-list">
-          <article class="project-card">
-            <div class="project-media image-frame">
-              <img src="assets/matlab-lab.jpg" alt="Static truss experiment from the MATLAB laboratory course" />
+      <section id="blog" class="section" aria-labelledby="blog-h">
+        <h2 id="blog-h">Blog</h2>
+        <!-- BLOG:START (generated by tools/build_blog.py) -->
+        <ul class="post-list">
+          <li class="post-item has-thumb">
+            <picture class="post-thumb"><source srcset="assets/blog/beginning-german-life-thumb.webp" type="image/webp" /><img src="assets/blog/beginning-german-life-thumb.jpg" alt="" width="480" height="270" loading="lazy" decoding="async" /></picture>
+            <div class="post-text">
+            <p class="post-meta"><span class="post-tag">Life</span><time datetime="2024-05-11">May 11, 2024</time><span class="post-read">7 min read</span><span class="post-views" data-views-path="/blog/2024-05-11-beginning-my-german-life.html" hidden></span></p>
+            <h3><a href="blog/2024-05-11-beginning-my-german-life.html">Beginning My German Life</a></h3>
+            <p>One suitcase, one backpack, and the beginning of a new chapter.</p>
             </div>
-            <div>
-              <h3 data-i18n="project1Title">MATLAB Laboratory Course</h3>
-              <p class="project-meta" data-i18n="project1Timeline">Course lab  ·  WS 2025/26</p>
-              <p data-i18n="project1Text">Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.</p>
-              <div class="tag-row">
-                <span class="tag">MATLAB</span>
-                <span class="tag">ODE Solver</span>
-                <span class="tag">FFT</span>
-                <span class="tag">Symbolic Math</span>
-                <span class="tag">Optimization</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <div class="project-media image-frame">
-              <img src="assets/automatic-control-lab.jpg" alt="General information slide for the Automatic Control I laboratory" />
-            </div>
-            <div>
-              <h3 data-i18n="project2Title">Automatic Control I Lab / Regelungstechnik I</h3>
-              <p class="project-meta" data-i18n="project2Timeline">Course lab  ·  SS 2026</p>
-              <p data-i18n="project2Text">Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.</p>
-              <div class="tag-row">
-                <span class="tag">MATLAB / Simulink</span>
-                <span class="tag">Controller Design</span>
-                <span class="tag">Two Tank</span>
-                <span class="tag">Rotary Arm</span>
-                <span class="tag">MagLev</span>
-                <span class="tag">Active Suspension</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <a class="project-media image-frame demo-thumb" href="demos/pendulum.html" target="_blank" rel="noopener">
-              <img src="assets/demos/pendulum.jpg" alt="Pendulum-cart visualizer screenshot" loading="lazy" />
-              <span class="demo-open" aria-hidden="true">Open ↗</span>
-            </a>
-            <div>
-              <h3 data-i18n="demo1Title">Pendulum-Cart Visualizer</h3>
-              <p class="project-meta" data-i18n="demo1Meta">Interactive demo  ·  2025</p>
-              <p data-i18n="demo1Text">An in-browser interactive simulation of an inverted pendulum on a cart. Tunable mass, length, damping, and live state plotting.</p>
-              <div class="tag-row">
-                <span class="tag">HTML / JS</span>
-                <span class="tag">Dynamics</span>
-                <span class="tag">Control</span>
-                <span class="tag">Physics Sim</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <a class="project-media image-frame demo-thumb" href="demos/planar-2r.html" target="_blank" rel="noopener">
-              <img src="assets/demos/planar-2r.jpg" alt="Planar 2R robot simulator screenshot" loading="lazy" />
-              <span class="demo-open" aria-hidden="true">Open ↗</span>
-            </a>
-            <div>
-              <h3 data-i18n="demo2Title">Planar 2R Robot Simulator</h3>
-              <p class="project-meta" data-i18n="demo2Meta">Interactive demo  ·  2025</p>
-              <p data-i18n="demo2Text">Two-link planar manipulator: drag the end-effector to explore forward and inverse kinematics.</p>
-              <div class="tag-row">
-                <span class="tag">Kinematics</span>
-                <span class="tag">Robotics</span>
-                <span class="tag">HTML / JS</span>
-                <span class="tag">Interactive</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <a class="project-media image-frame demo-thumb" href="demos/arm-7dof.html" target="_blank" rel="noopener">
-              <img src="assets/demos/arm-7dof.jpg" alt="7-DOF robot arm simulator screenshot" loading="lazy" />
-              <span class="demo-open" aria-hidden="true">Open ↗</span>
-            </a>
-            <div>
-              <h3 data-i18n="demo3Title">7-DOF Robot Arm Simulator</h3>
-              <p class="project-meta" data-i18n="demo3Meta">Interactive demo  ·  2025</p>
-              <p data-i18n="demo3Text">A 7-degree-of-freedom robotic arm in the browser. Joint-by-joint control with DH-based modelling.</p>
-              <div class="tag-row">
-                <span class="tag">7-DoF</span>
-                <span class="tag">Kinematics</span>
-                <span class="tag">Robotics</span>
-                <span class="tag">3D</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener">
-              <img src="assets/demos/rrt.jpg" alt="RRT path planning illustration" loading="lazy" />
-              <span class="demo-open" aria-hidden="true">GitHub ↗</span>
-            </a>
-            <div>
-              <h3 data-i18n="demo5Title">RRT — Rapidly-exploring Random Tree</h3>
-              <p class="project-meta" data-i18n="demo5Meta">Python source  ·  2025</p>
-              <p data-i18n="demo5Text">Single-tree sampling-based planner. Animated tree growth with obstacle avoidance, written in Python with tkinter.</p>
-              <div class="tag-row">
-                <span class="tag">Python</span>
-                <span class="tag">tkinter</span>
-                <span class="tag">Sampling-based</span>
-                <span class="tag">Single tree</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener">
-              <img src="assets/demos/bidirectional-rrt.jpg" alt="Bidirectional RRT illustration" loading="lazy" />
-              <span class="demo-open" aria-hidden="true">GitHub ↗</span>
-            </a>
-            <div>
-              <h3 data-i18n="demo6Title">Bidirectional RRT</h3>
-              <p class="project-meta" data-i18n="demo6Meta">Python source  ·  2025</p>
-              <p data-i18n="demo6Text">Two trees grow simultaneously from start and goal; the planner stitches them together once they meet. Live animation in tkinter.</p>
-              <div class="tag-row">
-                <span class="tag">Python</span>
-                <span class="tag">tkinter</span>
-                <span class="tag">Bi-directional</span>
-                <span class="tag">Sampling-based</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card">
-            <a class="project-media image-frame demo-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">
-              <img src="assets/demos/prm.jpg" alt="Probabilistic roadmap illustration" loading="lazy" />
-              <span class="demo-open" aria-hidden="true">GitHub ↗</span>
-            </a>
-            <div>
-              <h3 data-i18n="demo7Title">PRM — Probabilistic Roadmap</h3>
-              <p class="project-meta" data-i18n="demo7Meta">Python source  ·  2025</p>
-              <p data-i18n="demo7Text">Random sampling builds a connectivity graph in free space; Dijkstra finds the shortest collision-free path. Ideal for multi-query static scenes.</p>
-              <div class="tag-row">
-                <span class="tag">Python</span>
-                <span class="tag">tkinter</span>
-                <span class="tag">Roadmap</span>
-                <span class="tag">Dijkstra</span>
-              </div>
-            </div>
-          </article>
-        </div>
+          </li>
+        </ul>
+        <!-- BLOG:END -->
+        <p><a class="text-link" href="blog/">All posts →</a></p>
       </section>
 
-      <section id="contact" class="section contact-section">
-        <div>
-          <p class="section-label" data-i18n="contactLabel">Contact me</p>
-          <h2 data-i18n="contactTitle">Ask me about robotics, control systems, AI tools, and LLMs.</h2>
-        </div>
-        <div class="contact-right">
-        <div class="contact-actions">
-          <a class="contact-link outlook" href="mailto:dingshuai.yang@outlook.com">
-            <img class="contact-icon" src="assets/outlook.svg" alt="" aria-hidden="true" />
-            <span class="contact-text">
-              <span class="contact-label">Outlook</span>
-              <span class="contact-value">dingshuai.yang@outlook.com</span>
-            </span>
-          </a>
-          <a class="contact-link gmail" href="mailto:dingshuai.yang1999@gmail.com">
-            <img class="contact-icon" src="assets/gmail.svg" alt="" aria-hidden="true" />
-            <span class="contact-text">
-              <span class="contact-label">Gmail</span>
-              <span class="contact-value">dingshuai.yang1999@gmail.com</span>
-            </span>
-          </a>
-        </div>
-        <div class="contact-socials">
-          <span class="contact-socials-label" data-i18n="followLabel">Follow me</span>
-          <a class="contact-glyph brand-x" href="https://x.com/Charles42ouh" aria-label="X">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#000000" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-          </a>
-          <a class="contact-glyph brand-github" href="https://github.com/DingshuaiYang1999" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="#181717" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.54 2.87 8.39 6.84 9.74.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05.8-.23 1.65-.34 2.5-.34s1.7.12 2.5.34c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49 3.97-1.35 6.83-5.2 6.83-9.74C22 6.58 17.52 2 12 2z"/>
-            </svg>
-          </a>
-          <a class="contact-glyph brand-linkedin" href="https://www.linkedin.com/in/dingshuai-y-69b8a6405/" aria-label="LinkedIn">
-            <img src="assets/linkedin.svg" alt="" aria-hidden="true" />
-          </a>
-        </div>
-        </div>
+      <section id="contact" class="section" aria-labelledby="contact-h">
+        <h2 id="contact-h">Contact</h2>
+        <p class="section-intro">Open to internships, working-student roles and research collaboration.</p>
+        <p class="contact-cta"><a class="button primary" href="contact/">Send me a message</a></p>
+        <ul class="icon-links" aria-label="Contact details">
+          <li><a href="mailto:dingshuai.yang@fau.de"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M3.5 6.5h17v11h-17z M3.8 7l8.2 6.2L20.2 7"/></svg><span><span class="visually-hidden">Academic email: </span>dingshuai.yang@fau.de</span></a></li>
+          <li><a href="https://github.com/DingshuaiYang1999" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.25c0 4.54 2.87 8.39 6.84 9.74.5.1.68-.22.68-.49v-1.7c-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.49-1.11-1.49-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05.8-.23 1.65-.34 2.5-.34s1.7.12 2.5.34c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9v2.81c0 .27.18.59.69.49 3.97-1.35 6.83-5.2 6.83-9.74C22 6.58 17.52 2 12 2z"/></svg><span>GitHub</span></a></li>
+          <li><a href="https://www.linkedin.com/in/dingshuai-y-69b8a6405/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zm7 0h3.8v1.6h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.35h-4v-4.75c0-1.13-.02-2.6-1.58-2.6-1.59 0-1.83 1.24-1.83 2.52v4.83h-4z"/></svg><span>LinkedIn</span></a></li>
+          <li><span class="icon-text"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg><span>Erlangen, Germany</span></span></li>
+        </ul>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p data-i18n="footerText">© 2026 Dingshuai Yang.</p>
-      <div class="footer-meta">
-        <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener" data-i18n="footerSource">Source ↗</a>
-        <span class="footer-sep" aria-hidden="true">·</span>
-        <time class="footer-updated" data-i18n="footerUpdated" data-updated datetime="2026-05-26">Updated May 26, 2026</time>
-        <span class="footer-sep" aria-hidden="true">·</span>
-        <a href="#top" data-i18n="backToTop">Back to top</a>
-      </div>
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a> · Updated <time datetime="2026-10-10">Oct 10, 2026</time></p>
+      <p><a href="#top">Back to top</a></p>
     </footer>
   </body>
 </html>

@@ -1,0 +1,11 @@
+{
+  "name": "Dingshuai Yang",
+  "short_name": "D. Yang",
+  "icons": [
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#04316A",
+  "background_color": "#ffffff",
+  "display": "browser"
+}
