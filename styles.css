@@ -3,13 +3,13 @@
   --bg: #f7f6f2;
   --surface: #ffffff;
   --ink: #14201b;
-  --muted: #6b7670;
+  --muted: #5c6761;
   --line: #e3e6e0;
   --line-strong: #c9d0c8;
   --accent: #2f5d4f;
   --accent-strong: #1c4034;
   --accent-soft: #e6ece9;
-  --warm: #b86a3f;
+  --warm: #a0582f;
   --blue: #355c81;
   --shadow: 0 14px 40px rgba(20, 32, 27, 0.06);
   --radius: 6px;
@@ -1512,4 +1512,17 @@ a {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* Dark mode: code blocks would otherwise be light-on-light (background uses --ink) */
+:root[data-theme="dark"] .post-body pre {
+  background: #0a0d0c;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+
+.theme-toggle:focus-visible,
+.language-switcher a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -127,6 +127,10 @@ const translations = {
     project2Result: "Modelled, controlled, and experimentally validated real lab systems: a two-tank process, a rotary arm, an active suspension, and an open-loop unstable magnetic levitation system.",
     cvDownload: "Download CV (PDF)",
     skipLink: "Skip to content",
+    courseNumOpt: "Numerical Optimization",
+    courseMpc: "Model Predictive Control",
+    coursePatRec: "Pattern Recognition",
+    courseCps: "Cyber-Physical Systems",
     backToTop: "Back to top"
   },
   de: {
@@ -257,6 +261,10 @@ const translations = {
     project2Result: "Modellierung, Regelung und experimentelle Validierung realer Laborsysteme: Zwei-Tank-System, Dreharm, aktive Federung und ein im offenen Kreis instabiles Magnetschwebesystem.",
     cvDownload: "Lebenslauf herunterladen (PDF)",
     skipLink: "Zum Inhalt springen",
+    courseNumOpt: "Numerische Optimierung",
+    courseMpc: "Modellprädiktive Regelung",
+    coursePatRec: "Mustererkennung",
+    courseCps: "Cyber-Physische Systeme",
     backToTop: "Nach oben"
   },
   zh: {
@@ -386,6 +394,10 @@ const translations = {
     project2Result: "对多个真实实验系统完成建模、控制与实验验证：双容水箱过程、旋转臂、主动悬架，以及开环不稳定的磁悬浮系统。",
     cvDownload: "下载简历（PDF，英文）",
     skipLink: "跳到正文",
+    courseNumOpt: "数值优化",
+    courseMpc: "模型预测控制",
+    coursePatRec: "模式识别",
+    courseCps: "信息物理系统",
     backToTop: "回到顶部"
   },
   zhTw: {
@@ -515,6 +527,10 @@ const translations = {
     project2Result: "對多個真實實驗系統完成建模、控制與實驗驗證：雙容水箱程序、旋轉臂、主動懸吊，以及開迴路不穩定的磁浮系統。",
     cvDownload: "下載履歷（PDF，英文）",
     skipLink: "跳到內容",
+    courseNumOpt: "數值最佳化",
+    courseMpc: "模型預測控制",
+    coursePatRec: "圖形識別",
+    courseCps: "虛實整合系統",
     backToTop: "回到頂部"
   },
   ja: {
@@ -645,6 +661,10 @@ const translations = {
     project2Result: "実際の実験装置（二容量タンク、回転アーム、アクティブサスペンション、開ループ不安定な磁気浮上システム）のモデル化・制御・実験検証を行いました。",
     cvDownload: "履歴書をダウンロード（PDF・英語）",
     skipLink: "本文へスキップ",
+    courseNumOpt: "数値最適化",
+    courseMpc: "モデル予測制御",
+    coursePatRec: "パターン認識",
+    courseCps: "サイバーフィジカルシステム",
     backToTop: "上に戻る"
   }
 };
@@ -729,26 +749,53 @@ document.querySelectorAll("[data-lang]").forEach((link) => {
 // Blog pages are single-language and keep their own <title>; skip i18n there.
 if (!document.body.hasAttribute("data-no-i18n")) applyLanguage(getInitialLanguage());
 
-// Theme toggle
-function getInitialTheme() {
-  const saved = localStorage.getItem("theme");
-  if (saved === "light" || saved === "dark") return saved;
-  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+// Theme: OS preference by default, explicit choice persisted in localStorage.
+// The inline <head> script applies the same logic before first paint (no flash).
+const themeQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+
+function getSavedTheme() {
+  try {
+    const saved = localStorage.getItem("theme");
+    return saved === "light" || saved === "dark" ? saved : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function getSystemTheme() {
+  return themeQuery && themeQuery.matches ? "dark" : "light";
 }
 
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
-  localStorage.setItem("theme", theme);
+  document.querySelectorAll(".theme-toggle").forEach((btn) => {
+    const dark = theme === "dark";
+    btn.setAttribute("aria-pressed", String(dark));
+    btn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    btn.setAttribute("title", dark ? "Switch to light mode" : "Switch to dark mode");
+  });
 }
 
 document.querySelectorAll(".theme-toggle").forEach((btn) => {
   btn.addEventListener("click", () => {
     const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    // Manual override is optional: choosing the OS theme again returns to automatic mode.
+    try {
+      if (next === getSystemTheme()) localStorage.removeItem("theme");
+      else localStorage.setItem("theme", next);
+    } catch (e) {}
     applyTheme(next);
   });
 });
 
-applyTheme(getInitialTheme());
+// Follow OS changes live as long as the visitor has not made an explicit choice.
+if (themeQuery) {
+  const onSystemChange = () => { if (!getSavedTheme()) applyTheme(getSystemTheme()); };
+  if (themeQuery.addEventListener) themeQuery.addEventListener("change", onSystemChange);
+  else if (themeQuery.addListener) themeQuery.addListener(onSystemChange);
+}
+
+applyTheme(getSavedTheme() || getSystemTheme());
 
 // Scroll-triggered fade-in reveal
 (function setupReveal() {

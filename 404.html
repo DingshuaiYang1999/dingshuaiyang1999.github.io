@@ -11,19 +11,19 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314201b'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='30' font-family='-apple-system,BlinkMacSystemFont,Inter,Arial,sans-serif' font-weight='800' letter-spacing='-1' fill='white'%3EDY%3C/text%3E%3C/svg%3E"
     />
     <script>
+      // Apply theme before first paint: saved choice, else OS preference.
       (function () {
+        var theme = "light";
         try {
           var saved = localStorage.getItem("theme");
-          var prefers =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          document.documentElement.setAttribute("data-theme", saved || prefers);
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
         } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
     <link rel="stylesheet" href="/styles.css" />
+    <script src="/script.js" defer></script>
     <style>
       .nf-wrap {
         min-height: 100vh;
@@ -69,9 +69,34 @@
         gap: 12px;
         flex-wrap: wrap;
       }
+      .nf-toggle {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+      }
     </style>
   </head>
-  <body>
+  <body data-no-i18n>
+    <div class="nf-toggle">
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <line x1="12" y1="2.5" x2="12" y2="5"/>
+              <line x1="12" y1="19" x2="12" y2="21.5"/>
+              <line x1="2.5" y1="12" x2="5" y2="12"/>
+              <line x1="19" y1="12" x2="21.5" y2="12"/>
+              <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+              <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+              <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+              <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+            </g>
+          </svg>
+          <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+          </svg>
+        </button>
+    </div>
     <main class="nf-wrap">
       <div class="nf-card">
         <p class="nf-code">404 · Page not found</p>

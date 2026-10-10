@@ -74,17 +74,15 @@
     </script>
     <link rel="stylesheet" href="../styles.css" />
     <script>
-      // Set theme as early as possible to avoid flash
+      // Apply theme before first paint: saved choice, else OS preference.
       (function () {
+        var theme = "light";
         try {
           var saved = localStorage.getItem("theme");
-          var prefers =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          document.documentElement.setAttribute("data-theme", saved || prefers);
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
         } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
     <script src="../script.js" defer></script>
@@ -106,7 +104,7 @@
         <a href="#contact" data-i18n="navContact">連絡先</a>
       </nav>
       <div class="header-tools">
-        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+        <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
             <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -281,6 +279,8 @@
               <li>Robotics I</li>
               <li>Robotics II</li>
               <li>Nonlinear Control Systems</li>
+              <li data-i18n="courseNumOpt">数値最適化</li>
+              <li data-i18n="courseMpc">モデル予測制御</li>
             </ul>
             <p class="course-note" data-i18n="cm1Note">古典 PID から状態空間、Lyapunov 安定性、ロボット運動学、非線形オブザーバーまで — 系をいかに望ましく振る舞わせるかを本当に理解するまでの長い道のり。</p>
           </article>
@@ -292,6 +292,7 @@
             <ul class="course-list">
               <li>Introduction to Machine Learning</li>
               <li>Deep Learning</li>
+              <li data-i18n="coursePatRec">パターン認識</li>
             </ul>
             <p class="course-note" data-i18n="cm2Note">ML/DL の数学と工学のチェーンをゼロから埋めています。目標は制御の経験と組み合わせて、learning-based control に取り組むこと。</p>
           </article>
@@ -304,6 +305,7 @@
               <li>Semiconductor Fundamentals</li>
               <li>Rigid Body Dynamics</li>
               <li>Production Engineering</li>
+              <li data-i18n="courseCps">サイバーフィジカルシステム</li>
             </ul>
             <p class="course-note" data-i18n="cm3Note">半導体からプロダクションラインまで — ロボットがどう作られるのかを工学的に俯瞰する視点を与えてくれた科目。</p>
           </article>
@@ -320,7 +322,6 @@
             <dt data-i18n="skillCat1">言語</dt>
             <dd>
               <span class="tag">Python</span>
-              <span class="tag">C++</span>
               <span class="tag">MATLAB</span>
             </dd>
           </div>

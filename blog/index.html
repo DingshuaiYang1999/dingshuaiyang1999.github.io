@@ -17,12 +17,15 @@
     <meta name="theme-color" content="#14201b" />
     <link rel="stylesheet" href="../styles.css" />
     <script>
+      // Apply theme before first paint: saved choice, else OS preference.
       (function () {
+        var theme = "light";
         try {
           var saved = localStorage.getItem("theme");
-          var prefers = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-          document.documentElement.setAttribute("data-theme", saved || prefers);
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
         } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
     <script src="../script.js" defer></script>
@@ -41,7 +44,7 @@
         <a href="../#contact">Contact</a>
       </nav>
       <div class="header-tools">
-        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+        <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/><line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/><line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/><line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/></g></svg>
           <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/></svg>
         </button>

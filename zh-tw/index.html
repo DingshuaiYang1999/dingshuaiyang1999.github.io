@@ -74,17 +74,15 @@
     </script>
     <link rel="stylesheet" href="../styles.css" />
     <script>
-      // Set theme as early as possible to avoid flash
+      // Apply theme before first paint: saved choice, else OS preference.
       (function () {
+        var theme = "light";
         try {
           var saved = localStorage.getItem("theme");
-          var prefers =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          document.documentElement.setAttribute("data-theme", saved || prefers);
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
         } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
     <script src="../script.js" defer></script>
@@ -106,7 +104,7 @@
         <a href="#contact" data-i18n="navContact">聯絡</a>
       </nav>
       <div class="header-tools">
-        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle theme">
+        <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
             <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -281,6 +279,8 @@
               <li>Robotics I</li>
               <li>Robotics II</li>
               <li>Nonlinear Control Systems</li>
+              <li data-i18n="courseNumOpt">數值最佳化</li>
+              <li data-i18n="courseMpc">模型預測控制</li>
             </ul>
             <p class="course-note" data-i18n="cm1Note">從經典 PID 到狀態空間、Lyapunov 穩定性，再到機器人運動學和非線性觀測器——把如何讓一個系統按預期運動這件事徹底搞懂的過程。</p>
           </article>
@@ -292,6 +292,7 @@
             <ul class="course-list">
               <li>Introduction to Machine Learning</li>
               <li>Deep Learning</li>
+              <li data-i18n="coursePatRec">圖形識別</li>
             </ul>
             <p class="course-note" data-i18n="cm2Note">正在從手撕梯度開始補齊 ML/DL 的數學和工程鏈路。目標是把它和我的控制經驗結合，做 learning-based control。</p>
           </article>
@@ -304,6 +305,7 @@
               <li>Semiconductor Fundamentals</li>
               <li>Rigid Body Dynamics</li>
               <li>Production Engineering</li>
+              <li data-i18n="courseCps">虛實整合系統</li>
             </ul>
             <p class="course-note" data-i18n="cm3Note">從微觀的半導體到宏觀的生產線——讓我對一臺機器人是如何被打造出來的，有完整的工程視角。</p>
           </article>
@@ -320,7 +322,6 @@
             <dt data-i18n="skillCat1">程式語言</dt>
             <dd>
               <span class="tag">Python</span>
-              <span class="tag">C++</span>
               <span class="tag">MATLAB</span>
             </dd>
           </div>
