@@ -191,7 +191,7 @@ def audio_player(p):
         </div>"""
 
 
-ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js")
+ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js", "certs.js")
 
 
 def bust(text):

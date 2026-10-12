@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /404.html
+Disallow: /assets/certs/
 
 Sitemap: https://dingshuaiyang1999.github.io/sitemap.xml

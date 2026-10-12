@@ -66,7 +66,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="styles.css?v=ad7f41c7" />
+    <link rel="stylesheet" href="styles.css?v=258ab5a8" />
     <script>
       // Apply theme before first paint: saved choice, else OS preference.
       (function () {
@@ -80,6 +80,7 @@
       })();
     </script>
     <script src="script.js?v=98f308e2" defer></script>
+    <script src="certs.js?v=59825405" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -194,6 +195,35 @@
             <div>
               <h3>Intensive German Language Studies</h3>
               <p class="muted">Goethe-Institut (Qingdao/Shanghai) · Dr. Juno Sprachschule (Dortmund)</p>
+              <p class="tl-actions"><button type="button" class="button secondary" data-cert-open aria-haspopup="dialog">View German Certificates</button></p>
+              <dialog class="cert-dialog" id="cert-dialog" aria-labelledby="cert-dialog-title">
+                <div class="cert-head">
+                  <h3 id="cert-dialog-title">German Language Certificates</h3>
+                  <button type="button" class="cert-close" data-cert-close aria-label="Close certificate viewer">×</button>
+                </div>
+                <p class="cert-note">Personal details are redacted. Copies are for viewing only.</p>
+                <div class="cert-tabs" role="tablist" aria-label="Certificates">
+                  <button type="button" role="tab" id="cert-tab-dsh" aria-controls="cert-panel-dsh" aria-selected="true" tabindex="0">DSH-2</button>
+                  <button type="button" role="tab" id="cert-tab-telc" aria-controls="cert-panel-telc" aria-selected="false" tabindex="-1">telc Deutsch C1 Hochschule</button>
+                  <button type="button" role="tab" id="cert-tab-goethe" aria-controls="cert-panel-goethe" aria-selected="false" tabindex="-1">Goethe-Zertifikat B2</button>
+                </div>
+                <div class="cert-body">
+              <div role="tabpanel" id="cert-panel-dsh" aria-labelledby="cert-tab-dsh" tabindex="0">
+                <p class="cert-meta">Deutsche Sprachprüfung für den Hochschulzugang · FH Aachen · 2024</p>
+                <img data-src="assets/certs/dsh-1.webp" alt="DSH-2 certificate, page 1 of 2 (personal details redacted)" width="1240" height="1708" draggable="false" decoding="async" />
+                <img data-src="assets/certs/dsh-2.webp" alt="DSH-2 certificate, page 2 of 2 (personal details redacted)" width="1240" height="1708" draggable="false" decoding="async" />
+              </div>
+              <div role="tabpanel" id="cert-panel-telc" aria-labelledby="cert-tab-telc" tabindex="0" hidden>
+                <p class="cert-meta">telc · Swan Schule Sprachinstitut · 2024</p>
+                <img data-src="assets/certs/telc-1.webp" alt="telc Deutsch C1 Hochschule certificate, page 1 of 1 (personal details redacted)" width="1240" height="1765" draggable="false" decoding="async" />
+              </div>
+              <div role="tabpanel" id="cert-panel-goethe" aria-labelledby="cert-tab-goethe" tabindex="0" hidden>
+                <p class="cert-meta">Goethe-Institut Peking · 2024</p>
+                <img data-src="assets/certs/goethe-1.webp" alt="Goethe-Zertifikat B2 certificate, page 1 of 2 (personal details redacted)" width="1240" height="1763" draggable="false" decoding="async" />
+                <img data-src="assets/certs/goethe-2.webp" alt="Goethe-Zertifikat B2 certificate, page 2 of 2 (personal details redacted)" width="1240" height="1769" draggable="false" decoding="async" />
+              </div>
+                </div>
+              </dialog>
             </div>
           </li>
           <li>

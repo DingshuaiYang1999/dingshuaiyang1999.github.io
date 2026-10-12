@@ -1514,3 +1514,52 @@ p {
   font-size: 12.5px;
 }
 
+
+/* ---------- German certificate viewer ---------- */
+.tl-actions { margin: 0.7rem 0 0; }
+.tl-actions .button { font-size: 0.9rem; padding: 0.45rem 0.95rem; }
+html.cert-open { overflow: hidden; }
+.cert-dialog {
+  width: min(920px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: 0;
+  border: 1px solid var(--rule-strong);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+.cert-dialog[open] { display: flex; flex-direction: column; }
+.cert-dialog::backdrop { background: rgba(10, 16, 28, 0.62); }
+.cert-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.9rem 1.2rem 0.2rem; }
+.cert-head h3 { margin: 0; font-size: 1.15rem; }
+.cert-close {
+  width: 2.25rem; height: 2.25rem; flex: none;
+  border: 1px solid transparent; border-radius: 50%;
+  background: transparent; color: inherit; font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.cert-close:hover { background: var(--accent-soft); color: var(--accent); }
+.cert-dialog .cert-note { margin: 0 0 0.6rem; padding: 0 1.2rem; font-size: 0.85rem; color: var(--muted); }
+.cert-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 1.2rem 0.8rem; border-bottom: 1px solid var(--rule-strong); }
+.cert-tabs [role="tab"] {
+  padding: 0.4rem 0.85rem; border: 1px solid var(--rule-strong); border-radius: 999px;
+  background: transparent; color: inherit; font: inherit; font-size: 0.88rem; cursor: pointer;
+}
+.cert-tabs [role="tab"]:hover { border-color: var(--accent); color: var(--accent); }
+.cert-tabs [role="tab"][aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .cert-tabs [role="tab"][aria-selected="true"] { color: #0d1117; }
+.cert-body { overflow-y: auto; padding: 1rem 1.2rem 1.4rem; background: var(--accent-soft); overscroll-behavior: contain; }
+.cert-dialog .cert-meta { margin: 0 0 0.8rem; font-size: 0.88rem; color: var(--muted); }
+.cert-body img {
+  display: block; width: 100%; height: auto; margin: 0 auto 1rem; max-width: 760px;
+  border-radius: 4px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none;
+}
+:root[data-theme="dark"] .cert-body img { filter: brightness(0.92); }
+@media (max-width: 600px) {
+  .cert-dialog { width: 100vw; max-width: 100vw; max-height: 100dvh; height: 100dvh; margin: 0; border-radius: 0; border: 0; }
+  .cert-head { padding: 0.75rem 0.9rem 0.1rem; }
+  .cert-dialog .cert-note, .cert-tabs { padding-left: 0.9rem; padding-right: 0.9rem; }
+  .cert-body { padding: 0.8rem 0.6rem 1.2rem; }
+}
