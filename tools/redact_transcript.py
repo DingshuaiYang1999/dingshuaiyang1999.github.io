@@ -3,7 +3,8 @@
 
 Usage:
     python3 tools/redact_transcript.py ~/Downloads/campo.pdf
-        -> assets/transcript/Dingshuai_Yang_Transcript_of_Records.pdf (same URL as before)
+        -> ~/Transcript_redacted.pdf (OUTSIDE the repo: the PDF is no longer published, only the page images)
+    Then: python3 tools/render_docs.py --transcript ~/Transcript_redacted.pdf
     python3 tools/redact_transcript.py in.pdf --out other.pdf --preview-dir shots/
 
 How it works (needs poppler-utils; tesseract optional for the OCR check):
@@ -30,7 +31,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_OUT = ROOT / "assets" / "transcript" / "Dingshuai_Yang_Transcript_of_Records.pdf"
+DEFAULT_OUT = Path.home() / "Transcript_redacted.pdf"  # kept out of the repo on purpose
 DPI = 200
 PAD = 1.2  # pt around each redacted word
 
