@@ -44,6 +44,11 @@ GERMAN_TERMS = {
     "Goethe-Institut": "Goethe-Institut",
     "Goethe": "Goethe",
     "Peking": "Peking",
+    "Goethe-Sprachlernzentrum": "Goethe-Sprachlernzentrum",
+    "Düsseldorf": "Düsseldorf",
+    "München": "München",
+    "Universität Duisburg-Essen": "Universität Duisburg-Essen",
+    "Duisburg-Essen": "Duisburg-Essen",
     "telc Deutsch C1 Hochschule": "telc Deutsch C1 Hochschule",
     "telc": "telc",
     "DSH-2": "D S H zwei",      # letters spelled the German way
