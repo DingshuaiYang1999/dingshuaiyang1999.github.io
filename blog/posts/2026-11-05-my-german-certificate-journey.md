@@ -26,14 +26,14 @@ The following is a short summary.
 
 The Goethe-Zertifikat examinations are organised by level. A1 is the first level, and each following level (A2, B1 and B2) builds on the previous one. I passed all four, at four different centres:
 
-- **B1 (2023):** Goethe-Institut Peking and Goethe-Sprachlernzentrum Shanghai (Jinchuang).
+- **B1 (2023):** Goethe-Institut Peking and [Goethe-Jinchuang Language Centre Shanghai](https://goetheslz.com/shanghai/).
 - **A1 (2024):** Goethe-Institut Düsseldorf.
 - **B2 (2024):** Goethe-Institut Peking.
 - **A2 (2025):** Goethe-Institut München.
 
 The list follows the dates on my certificates, so the years do not run in the order of the levels. For the examinations in China, I travelled back and forth between Qingdao, Beijing and Shanghai.
 
-<!-- TODO(Dingshuai): (1) Why do A1 (2024) and A2 (2025) come after B1 and B2? I wrote the years neutrally and did not give a reason. (2) Please confirm the official name of the Shanghai centre ("Goethe-Sprachlernzentrum Shanghai (Jinchuang)"), and whether you passed B1 as a whole at both centres or took parts at each. (3) Did the travel between Qingdao, Beijing and Shanghai apply to B1 and B2 only? (4) Add the months of A1, A2 and B1 if you want them. -->
+<!-- TODO(Dingshuai): (1) Why do A1 (2024) and A2 (2025) come after B1 and B2? I wrote the years neutrally and did not give a reason. (2) Did you pass B1 as a whole at both centres, or take parts at each? (3) Did the travel between Qingdao, Beijing and Shanghai apply to B1 and B2 only? (4) Add the months of A1, A2 and B1 if you want them. -->
 
 I describe the B2 examination in most detail. I took it at the Goethe-Institut Peking in February 2024; the certificate gives the exact date as 21 February 2024. The four modules are Reading, Listening, Writing and Speaking, and each one is scored out of 100 points. My scores were 70 for Reading, 63 for Listening, 63 for Writing and 62 for Speaking.
 
@@ -79,9 +79,9 @@ This account is not intended as a guide, since learners differ. These are only m
 
 **Everyday German comes from communication.** My own method was simple: I listened a lot and I spoke a lot. For daily life, German grows from listening, speaking and communicating with people.
 
-**There is no shortcut.** The Goethe C1 examination was unsuccessful, the DSH needed three attempts in Aachen, and one attempt in Duisburg-Essen did not succeed. The DSH-2 came on the third attempt in Aachen. My successes came after failures, and a further attempt was always possible.
+**There is no shortcut.** The Goethe C1 examination was unsuccessful, the DSH needed three attempts in Aachen, and one attempt in Duisburg-Essen did not succeed. The DSH-2 came on the third attempt in Aachen. Success comes after failure. A further attempt was always possible.
 
-<!-- TODO(Dingshuai): I wrote "my successes came after failures" instead of "every success came after failures", because the telc examination was passed on the first try and I do not know the order of the A1 to B2 attempts. Change it if you want the stronger wording. Also add anything you did differently between the DSH attempts, which materials helped, or advice for someone preparing for C1 or DSH. -->
+<!-- TODO(Dingshuai): Add anything you did differently between the DSH attempts, which materials helped, or advice for someone preparing for C1 or DSH. -->
 
 <div class="post-closing" markdown="1">
 

@@ -44,7 +44,7 @@ GERMAN_TERMS = {
     "Goethe-Institut": "Goethe-Institut",
     "Goethe": "Goethe",
     "Peking": "Peking",
-    "Goethe-Sprachlernzentrum": "Goethe-Sprachlernzentrum",
+    "Goethe-Jinchuang": "Goethe Dschintschuang",   # German voice for "Goethe"; respelled so the Chinese name is not mangled
     "Düsseldorf": "Düsseldorf",
     "München": "München",
     "Universität Duisburg-Essen": "Universität Duisburg-Essen",
