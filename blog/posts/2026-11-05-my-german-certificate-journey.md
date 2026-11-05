@@ -16,10 +16,10 @@ Learning German involved a long series of examinations. I passed many of them, f
 
 The following is a short summary.
 
-- I passed the Goethe-Zertifikat examinations A1, A2, B1 and B2.
-- I took the Goethe C1 examination once, in Munich, and failed every part.
-- I passed telc Deutsch C1 Hochschule on my first attempt, with a moderate result.
-- I took the DSH at FH Aachen three times. The first two attempts resulted in DSH-1, and the third resulted in DSH-2.
+- I passed the Goethe-Zertifikat examinations [A1](https://www.goethe.de/ins/de/en/prf/prf/gzsd1.html), [A2](https://www.goethe.de/ins/de/en/prf/prf/gzsd2.html), [B1](https://www.goethe.de/ins/de/en/prf/prf/gzb1.html) and [B2](https://www.goethe.de/ins/de/en/prf/prf/gzb2.html).
+- I took the Goethe [C1](https://www.goethe.de/ins/de/en/prf/prf/gzc1.html) examination once, in Munich, and failed every part.
+- I passed [telc Deutsch C1 Hochschule](https://www.telc.net/sprachpruefungen/zertifikatspruefung/deutsch/telc-deutsch-c1-hochschule/) on my first attempt, with a moderate result.
+- I took the [DSH](https://www.spraachen.org/de/pruefungen/deutschpruefungen/dsh/) at FH Aachen three times. The first two attempts resulted in DSH-1, and the third resulted in DSH-2.
 - I took the DSH once at the Universität Duisburg-Essen and did not pass.
 
 ## The Goethe Examinations: A1 to B2
