@@ -656,6 +656,18 @@ p {
   margin: 0;
 }
 
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.project-actions .button {
+  min-height: 40px;
+  padding: 0 18px;
+}
+
 .project-tags {
   margin: 8px 0 0;
   color: var(--muted);
@@ -894,6 +906,10 @@ p {
     grid-template-columns: 1fr;
     gap: 0;
     margin-bottom: 8px;
+  }
+
+  .project-actions .button {
+    flex: 1 1 0;
   }
 
   .cv-actions {

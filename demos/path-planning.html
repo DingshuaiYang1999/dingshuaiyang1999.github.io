@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Path-planning visualizer: RRT, Bidirectional RRT, PRM · Dingshuai Yang</title>
+    <meta
+      name="description"
+      content="Interactive path-planning demo: place a start and goal, draw obstacles, and watch RRT, Bidirectional RRT, PRM (with A*) and RRT* search for a path, step by step."
+    />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/path-planning.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/demos/path-planning.html" />
+    <meta property="og:title" content="Interactive path-planning visualizer: RRT, Bidirectional RRT, PRM" />
+    <meta property="og:description" content="Draw obstacles, set a start and a goal, and watch sampling-based planners find a path in your browser." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dingshuai Yang — Robotics, Control, AI" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Interactive path-planning visualizer: RRT, Bidirectional RRT, PRM" />
+    <meta name="twitter:description" content="Draw obstacles, set a start and a goal, and watch sampling-based planners find a path in your browser." />
+    <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css?v=ea1abc90" />
+    <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <script>
+      // Apply theme before first paint: saved choice, else OS preference.
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js?v=98f308e2" defer></script>
+    <script src="path-planning.js?v=393f8937" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+          <div class="header-inner">
+            <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+              <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+              <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+              <span class="brand-name">Dingshuai Yang</span>
+            </a>
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+              <ul class="nav-links">
+                <li><a href="../#about" data-nav="about">About</a></li>
+                <li><a href="../#education" data-nav="education">Education</a></li>
+                <li><a href="../#projects" data-nav="projects">Projects</a></li>
+                <li><a href="../blog/" data-nav="blog">Blog</a></li>
+                <li><a href="../contact/" data-nav="contact">Contact</a></li>
+              </ul>
+            </nav>
+            <div class="header-tools">
+              <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+              <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <line x1="12" y1="2.5" x2="12" y2="5"/>
+                  <line x1="12" y1="19" x2="12" y2="21.5"/>
+                  <line x1="2.5" y1="12" x2="5" y2="12"/>
+                  <line x1="19" y1="12" x2="21.5" y2="12"/>
+                  <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+                  <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+                  <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+                  <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+                </g>
+              </svg>
+              <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+              </svg>
+            </button>
+              <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+    <main id="main" class="page planner-page" tabindex="-1">
+      <p class="section-label"><a href="../#projects">← Projects</a></p>
+      <h1>Path-planning visualizer</h1>
+      <p class="section-intro">How does a robot find a way around obstacles? Set a start and a goal, draw walls anywhere you like, then press Run and watch the algorithm think. The same ideas are in my <a href="https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/04_robotics/path_planning" target="_blank" rel="noopener">Python code<span class="visually-hidden"> (GitHub, opens in a new tab)</span></a>, re-implemented here in JavaScript so you can play with them.</p>
+
+      <fieldset class="algo-switch">
+        <legend class="visually-hidden">Algorithm</legend>
+        <input type="radio" name="algo" id="algo-rrt" value="rrt" checked /><label for="algo-rrt">RRT</label>
+        <input type="radio" name="algo" id="algo-birrt" value="birrt" /><label for="algo-birrt">Bidirectional RRT</label>
+        <input type="radio" name="algo" id="algo-prm" value="prm" /><label for="algo-prm">PRM</label>
+        <input type="radio" name="algo" id="algo-rrtstar" value="rrtstar" /><label for="algo-rrtstar">RRT* <span class="extra">extra</span></label>
+      </fieldset>
+
+      <section class="stage" aria-label="Interactive map">
+        <div class="runbar" role="group" aria-label="Run controls">
+          <button type="button" class="button primary small" id="btn-run" aria-label="Run the search">▶ Run</button>
+          <button type="button" class="button secondary small" id="btn-step" aria-label="Advance one step">Step</button>
+          <button type="button" class="button secondary small" id="btn-reset">Reset</button>
+          <span class="speed">
+            <label for="speed">Speed <output id="speed-out" for="speed">medium</output></label>
+            <input type="range" id="speed" min="1" max="10" step="1" value="5" />
+          </span>
+        </div>
+
+        <p class="status" id="status" role="status" aria-live="polite">Loading…</p>
+
+        <div class="toolbar" role="group" aria-label="Map tools">
+          <button type="button" class="tool" data-tool="start" aria-pressed="false">Set start</button>
+          <button type="button" class="tool" data-tool="goal" aria-pressed="false">Set goal</button>
+          <button type="button" class="tool" data-tool="rect" aria-pressed="true">Draw rectangle</button>
+          <button type="button" class="tool" data-tool="brush" aria-pressed="false">Paint</button>
+          <button type="button" class="tool" data-tool="erase" aria-pressed="false">Erase</button>
+          <span class="brush" id="brush-wrap" hidden>
+            <label for="brush">Brush size <output id="brush-out" for="brush">14</output></label>
+            <input type="range" id="brush" min="4" max="40" step="1" value="14" />
+          </span>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="map" width="800" height="500" tabindex="0" role="application" aria-roledescription="interactive map" aria-label="Path-planning map. Drag the green S and red G markers to move them, or draw obstacles with the selected tool." aria-describedby="tool-hint kbd-hint"></canvas>
+        </div>
+        <p class="hint" id="tool-hint"></p>
+        <p class="hint visually-hidden" id="kbd-hint">Keyboard: focus the map, use the arrow keys to move the crosshair (hold Shift for bigger steps), press S to place the start, G to place the goal, Space to add an obstacle, E to erase.</p>
+
+        <dl class="stats" aria-label="Search statistics">
+          <div><dt id="st-iter-l">Iterations</dt><dd id="st-iter">—</dd></div>
+          <div><dt>Nodes</dt><dd id="st-nodes">—</dd></div>
+          <div><dt>Path length</dt><dd id="st-path">—</dd></div>
+          <div><dt>Compute time</dt><dd id="st-time">—</dd></div>
+          <div class="result"><dt>Result</dt><dd id="st-result">—</dd></div>
+        </dl>
+        <p class="note" id="note"></p>
+      </section>
+
+      <div class="panels">
+        <section class="panel" aria-labelledby="opts-title">
+          <h2 id="opts-title">Settings</h2>
+          <div id="params"></div>
+          <div class="pl-param pl-check">
+            <label class="check"><input type="checkbox" id="smooth" /> Smooth the path (shortcut)</label>
+            <p class="pl-hint">Cuts corners wherever a straight line is clear. The result is shorter, but still not guaranteed to be the shortest.</p>
+          </div>
+          <div class="pl-param pl-seed">
+            <label class="check"><input type="checkbox" id="seed-fixed" checked /> Fixed random seed</label>
+            <input type="number" id="seed" value="27" min="0" max="999999" step="1" aria-label="Seed value" />
+            <p class="pl-hint">With a fixed seed the same map and settings give the same result every time. Untick for a new random run each time.</p>
+          </div>
+          <h3>Map</h3>
+          <div class="pl-param">
+            <label for="preset">Load a map</label>
+            <select id="preset"></select>
+          </div>
+          <div class="map-buttons">
+            <button type="button" class="button secondary small" id="btn-random">Random obstacles</button>
+            <button type="button" class="button secondary small" id="btn-clear">Clear map</button>
+            <button type="button" class="button secondary small" id="btn-swap">Swap S and G</button>
+          </div>
+        </section>
+
+        <section class="panel explain-panel" aria-labelledby="explain-title">
+          <div id="explain"></div>
+          <h3>Legend</h3>
+          <ul class="legend" id="legend"></ul>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>
