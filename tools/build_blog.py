@@ -193,7 +193,8 @@ def audio_player(p):
         </div>"""
 
 
-ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js", "certs.js")
+ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js", "certs.js",
+          "demos/path-planning.css", "demos/path-planning.js")
 
 
 def stamp(text):
@@ -211,7 +212,12 @@ def bust(text):
         if not f.exists():
             continue
         v = hashlib.sha1(f.read_bytes()).hexdigest()[:8]
-        text = re.sub(r'((?:\.\./|/)?' + re.escape(name) + r')(\?v=[0-9a-f]+)?"', lambda m: f'{m.group(1)}?v={v}"', text)
+        # root assets match "styles.css", "../styles.css"; demo assets also match their bare name next to the page
+        if "/" in name:
+            pat = r'((?:[\w.\-]+/)*' + re.escape(name.rsplit("/", 1)[1]) + r')(\?v=[0-9a-f]+)?"'
+        else:
+            pat = r'((?:\.\./|/)?' + re.escape(name) + r')(\?v=[0-9a-f]+)?"'
+        text = re.sub(pat, lambda m: f'{m.group(1)}?v={v}"', text)
     return text
 
 
@@ -320,7 +326,7 @@ def main():
     print("wrote blog/index.html")
 
     write_home_snippet(posts)
-    for static in ("index.html", "404.html", "contact/index.html"):
+    for static in ("index.html", "404.html", "contact/index.html", "demos/path-planning.html"):
         f = ROOT / static
         f.write_text(bust(stamp(f.read_text(encoding="utf-8"))), encoding="utf-8")
     write_sitemap(posts)
