@@ -395,6 +395,12 @@ p {
   margin-top: 22px;
 }
 
+/* Hero: View CV / View Transcript, two equal buttons */
+.hero .cv-actions .button {
+  min-width: 10.5rem;
+  justify-content: center;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -937,6 +943,19 @@ p {
 
   .cv-actions .button {
     width: 100%;
+  }
+
+  .hero .cv-actions {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .hero .cv-actions .button {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }
 
