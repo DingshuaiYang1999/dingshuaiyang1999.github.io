@@ -19,6 +19,8 @@ BLOG = ROOT / "blog"
 POSTS = BLOG / "posts"
 BASE = "https://dingshuaiyang1999.github.io"
 TAGS = {"Life", "Study", "Work"}
+# Bump this (YYYY-MM) when the site content is updated; build_blog.py rewrites the footer line of every page.
+LAST_UPDATED = "2026-11"
 
 
 def parse(path, required=("title", "date")):
@@ -137,7 +139,7 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
 {main}
     </main>
     <footer class="site-footer">
-      <p>© {datetime.date.today().year} Dingshuai Yang · <a href="../">Home</a></p>
+      <p>© {datetime.date.today().year} Dingshuai Yang · <a href="../">Home</a><br /><!--UPDATED--><!--/UPDATED--></p>
       <p><a href="#top">Back to top</a></p>
     </footer>
   </body>
@@ -145,7 +147,7 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
 """
     if current == "blog":
         extra_head = '    <script src="../views.js" defer></script>\n' + extra_head
-    return bust(out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1))
+    return bust(stamp(out.replace(f'data-nav="{current}">', f'data-nav="{current}" aria-current="page">', 1).replace("</head>", extra_head + "</head>", 1)))
 
 
 def audio_player(p):
@@ -192,6 +194,13 @@ def audio_player(p):
 
 
 ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js", "certs.js")
+
+
+def stamp(text):
+    """Write the 'Last updated' footer line (between the UPDATED markers) from LAST_UPDATED."""
+    month = datetime.date.fromisoformat(LAST_UPDATED + "-01").strftime("%B %Y")
+    line = f'<!--UPDATED--><span class="footer-updated">Last updated: <time datetime="{LAST_UPDATED}">{month}</time></span><!--/UPDATED-->'
+    return re.sub(r"<!--UPDATED-->.*?<!--/UPDATED-->", lambda m: line, text, flags=re.S)
 
 
 def bust(text):
@@ -313,7 +322,7 @@ def main():
     write_home_snippet(posts)
     for static in ("index.html", "404.html", "contact/index.html"):
         f = ROOT / static
-        f.write_text(bust(f.read_text(encoding="utf-8")), encoding="utf-8")
+        f.write_text(bust(stamp(f.read_text(encoding="utf-8"))), encoding="utf-8")
     write_sitemap(posts)
     print("wrote sitemap.xml")
 
