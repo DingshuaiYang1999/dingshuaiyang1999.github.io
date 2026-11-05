@@ -441,31 +441,6 @@ p {
 }
 
 /* ---------- About ---------- */
-.quote {
-  margin: 22px 0;
-  padding: 2px 0 2px 18px;
-  border-left: 2px solid var(--accent);
-  font-family: var(--serif);
-  font-size: 20px;
-  font-style: italic;
-  line-height: 1.5;
-}
-
-.now {
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px dashed var(--rule-strong);
-}
-
-.now h3 {
-  font-size: 17px;
-}
-
-.now ul {
-  margin: 8px 0 0;
-  padding-left: 20px;
-}
-
 /* ---------- Timeline ---------- */
 .timeline {
   margin: 0;
@@ -504,6 +479,35 @@ p {
 .tl-note {
   margin-top: 4px !important;
   color: var(--accent);
+}
+
+/* ---------- News ---------- */
+.news-list .tl-date {
+  display: block;
+}
+
+.news-more {
+  margin-top: 4px;
+  border-top: 1px solid var(--rule);
+}
+
+.news-more > summary {
+  display: inline-block;
+  margin: 12px 0;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.news-more > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.news-more[open] > summary {
+  margin-bottom: 4px;
 }
 
 /* ---------- Courses / definition lists ---------- */
@@ -634,7 +638,7 @@ p {
 
 .pa > div {
   display: grid;
-  grid-template-columns: 82px 1fr;
+  grid-template-columns: 96px 1fr;
   gap: 12px;
   margin-bottom: 6px;
 }
