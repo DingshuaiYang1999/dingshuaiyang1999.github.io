@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Planar 2R Robot Simulator</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <style>
       :root {
         color-scheme: dark;
@@ -276,6 +280,20 @@
           border-top: 1px solid var(--line);
         }
       }
+
+      /* two-layer explanation: plain sentence + hints, then collapsible technical details */
+      .twolayer { margin: 0 0 16px; font-size: 13px; line-height: 1.5; }
+      .twolayer .lead { margin: 0 0 8px; color: var(--text); font-size: 14px; line-height: 1.5; }
+      .twolayer .try { margin: 0 0 8px; padding: 8px 10px 6px 12px; border-left: 3px solid var(--accent); background: rgba(255, 255, 255, 0.04); border-radius: 4px; }
+      .twolayer .try b { display: block; margin-bottom: 3px; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); }
+      .twolayer .try ul { margin: 0; padding-left: 16px; color: var(--muted); }
+      .twolayer .try li { margin-bottom: 3px; }
+      .twolayer details { border: 1px solid var(--line); border-radius: 6px; }
+      .twolayer summary { cursor: pointer; padding: 9px 10px; min-height: 40px; color: var(--accent); font-weight: 600; }
+      .twolayer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .twolayer .tech { padding: 2px 12px 10px; color: var(--muted); }
+      .twolayer .tech p { margin: 6px 0; }
+      .twolayer .tech .f { margin: 6px 0; padding: 6px 8px; overflow-x: auto; white-space: nowrap; background: rgba(255, 255, 255, 0.05); border-radius: 4px; color: var(--text); font-family: Georgia, serif; font-style: italic; }
     </style>
   </head>
   <body>
@@ -297,6 +315,22 @@
       <aside>
         <h1>Planar 2R Robot</h1>
         <p class="sub">Two revolute joints rotating in one plane. J1 rotates link 1 from the base; J2 rotates link 2 relative to link 1.</p>
+
+        <div class="twolayer">
+          <p class="lead">A robot arm made of two rods joined by two motors. Move the two joint sliders and watch the tip, or choose a target point and let the arm work out the joint angles.</p>
+          <div class="try"><b>Try this</b><ul>
+            <li>Move the Theta 1 and Theta 2 sliders and watch where the tip goes.</li>
+            <li>Press “Elbow up” and “Elbow down”: the same tip position can be reached in two different ways.</li>
+            <li>Move the Target X and Target Y sliders and press “Go target”: the arm computes the joint angles itself.</li>
+          </ul></div>
+          <details><summary>How it works (technical details)</summary><div class="tech">
+            <p>With link lengths l₁, l₂ and joint angles θ₁, θ₂ the tool position follows from <em>forward kinematics</em>:</p>
+            <p class="f">x = l₁ cos θ₁ + l₂ cos(θ₁ + θ₂) &nbsp; y = l₁ sin θ₁ + l₂ sin(θ₁ + θ₂)</p>
+            <p><em>Inverse kinematics</em> goes the other way. For a target (x, y) within reach:</p>
+            <p class="f">cos θ₂ = (x² + y² − l₁² − l₂²) / (2 l₁ l₂) &nbsp; θ₁ = atan2(y, x) − atan2(l₂ sin θ₂, l₁ + l₂ cos θ₂)</p>
+            <p>The sign of sin θ₂ selects “elbow up” or “elbow down”. Targets with x² + y² &gt; (l₁ + l₂)² or &lt; (l₁ − l₂)² have no solution. At a fully stretched or folded arm the Jacobian loses rank (a singularity) and the joints must move very fast for small tool motions.</p>
+          </div></details>
+        </div>
 
         <div class="buttons">
           <button class="primary" id="playBtn" type="button">Play</button>

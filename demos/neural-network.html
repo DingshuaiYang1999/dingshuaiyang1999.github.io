@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Neural-network playground: decision boundary · Dingshuai Yang</title>
+    <meta name="description" content="Interactive neural network written from scratch: add points, choose hidden layers, neurons and activation, and watch the decision boundary, the weights and the loss change while it trains." />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/neural-network.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/demos/neural-network.html" />
+    <meta property="og:title" content="Neural-network decision-boundary playground" />
+    <meta property="og:description" content="Train a small neural network in the browser and watch its decision boundary, weights and loss change live." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dingshuai Yang — Robotics, Control, AI" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Neural-network decision-boundary playground" />
+    <meta name="twitter:description" content="Train a small neural network in the browser and watch its decision boundary, weights and loss change live." />
+    <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css?v=243ae775" />
+    <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
+    <link rel="stylesheet" href="neural-network.css?v=8f508cff" />
+    <script>
+      // Apply theme before first paint: saved choice, else OS preference.
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js?v=98f308e2" defer></script>
+    <script src="neural-network.js?v=e18b0167" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+          <div class="header-inner">
+            <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+              <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+              <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+              <span class="brand-name">Dingshuai Yang</span>
+            </a>
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+              <ul class="nav-links">
+                <li><a href="../#about" data-nav="about">About</a></li>
+                <li><a href="../#education" data-nav="education">Education</a></li>
+                <li><a href="../#projects" data-nav="projects">Projects</a></li>
+                <li><a href="../blog/" data-nav="blog">Blog</a></li>
+                <li><a href="../contact/" data-nav="contact">Contact</a></li>
+              </ul>
+            </nav>
+            <div class="header-tools">
+              <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+              <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <line x1="12" y1="2.5" x2="12" y2="5"/>
+                  <line x1="12" y1="19" x2="12" y2="21.5"/>
+                  <line x1="2.5" y1="12" x2="5" y2="12"/>
+                  <line x1="19" y1="12" x2="21.5" y2="12"/>
+                  <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+                  <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+                  <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+                  <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+                </g>
+              </svg>
+              <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+              </svg>
+            </button>
+              <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+    <main id="main" class="page planner-page cv-page nn-page" tabindex="-1">
+      <p class="section-label"><a href="../#projects">← Projects</a></p>
+      <h1>Neural-network playground: learning a decision boundary</h1>
+
+      <div class="explain-block">
+        <p class="lead-plain">A neural network is a function with many adjustable numbers. Here it learns, from examples, to say whether a spot on the plane is blue or orange. The background shows its current answer everywhere, and it improves while you watch.</p>
+        <div class="try-box">
+          <h2>Try this</h2>
+          <ul>
+            <li>Training starts by itself. Watch the background change from grey to a clear boundary, and the loss curve fall.</li>
+            <li>Click or tap the field to add points while it trains. The boundary adapts to each new point.</li>
+            <li>Choose <strong>Spiral</strong> and remove all hidden layers. A straight line cannot separate the arms; then add layers and neurons until it can.</li>
+            <li>Choose <strong>Overfit me</strong>: the training loss falls while the dashed test loss rises. Then raise <strong>Regularisation</strong> and see the boundary become smoother.</li>
+            <li>Pick a <strong>challenge</strong>, for example the circle with as few neurons as possible.</li>
+          </ul>
+        </div>
+        <details class="how-it-works">
+          <summary>How it works (technical details)</summary>
+          <div class="how-body">
+            <h3>Model</h3>
+            <p>The input is a point <em>x</em> = (x₁, x₂) in [−1, 1]². Layer <em>l</em> (with <em>h</em><sup>(0)</sup> = <em>x</em>) computes</p>
+            <p class="formula">z<sup>(l)</sup> = W<sup>(l)</sup> h<sup>(l−1)</sup> + b<sup>(l)</sup>, &nbsp; h<sup>(l)</sup> = φ(z<sup>(l)</sup>)</p>
+            <p>and the last layer has one unit with a sigmoid, so that the output ŷ = σ(z) is the estimated probability of the orange class:</p>
+            <p class="formula">σ(z) = 1 / (1 + e<sup>−z</sup>)</p>
+            <p>The hidden activation φ is ReLU, φ(z) = max(0, z), tanh, or the sigmoid. Without a hidden layer the model is logistic regression, whose decision boundary {ŷ = 0.5} is a straight line. With hidden layers, ReLU produces a piecewise-linear boundary and tanh or sigmoid a smooth one. A network with one sufficiently wide hidden layer can approximate any continuous decision boundary on a bounded region (universal approximation theorem); depth often achieves the same shape with fewer neurons.</p>
+            <h3>Loss</h3>
+            <p>With labels y ∈ {0, 1} the training loss is the binary cross-entropy plus an optional L2 penalty on the weights:</p>
+            <p class="formula">L = −(1/N) Σ [ y log ŷ + (1 − y) log(1 − ŷ) ] + (λ/2) Σ W²</p>
+            <p>A network that always answers 0.5 has loss ln 2 ≈ 0.693, the dotted “chance level” in the loss plot. The plot shows the data term only, for the training points (solid) and, where available, for held-out test points (dashed).</p>
+            <h3>Back-propagation</h3>
+            <p>For a sigmoid output with cross-entropy the error at the output is δ<sup>(L)</sup> = ŷ − y. It is propagated backwards with the chain rule:</p>
+            <p class="formula">δ<sup>(l)</sup> = ( W<sup>(l+1)</sup>ᵀ δ<sup>(l+1)</sup> ) ⊙ φ′(z<sup>(l)</sup>), &nbsp; ∂L/∂W<sup>(l)</sup> = δ<sup>(l)</sup> h<sup>(l−1)</sup>ᵀ, &nbsp; ∂L/∂b<sup>(l)</sup> = δ<sup>(l)</sup></p>
+            <p>with φ′(z) = 1 − tanh²(z) for tanh, σ(z)(1 − σ(z)) for the sigmoid, and 1 for z &gt; 0 (otherwise 0) for ReLU.</p>
+            <h3>Optimisation</h3>
+            <p>One <em>epoch</em> is one pass over all training points in random order, in mini-batches of 10. After each mini-batch the parameters θ are updated with the averaged gradient g and the learning rate η. <strong>SGD with momentum</strong> uses v ← 0.9 v − η g and θ ← θ + v. <strong>Adam</strong> keeps running averages of the gradient m and of its square s, with bias correction:</p>
+            <p class="formula">m ← β₁m + (1 − β₁)g, &nbsp; s ← β₂s + (1 − β₂)g², &nbsp; θ ← θ − η · m̂ / (√ŝ + ε)</p>
+            <p>(β₁ = 0.9, β₂ = 0.999, ε = 10⁻⁸). Weights are initialised from a normal distribution with variance 2/n<sub>in</sub> for ReLU layers (He) and 1/n<sub>in</sub> otherwise; biases start at zero. Each reset draws new random weights, which is why two runs of the same network can behave differently.</p>
+            <h3>Overfitting and regularisation</h3>
+            <p>A network with many parameters can fit the noise in a small training set. The training loss then keeps falling while the loss on unseen test points rises. The “Overfit me” data set has 30 training points, 10 % of them with a wrong label, and a test set of 90 points. An L2 penalty λ shrinks the weights and limits how sharply the boundary can bend.</p>
+            <h3>Reading the picture</h3>
+            <ul>
+              <li><strong>Field:</strong> ŷ is evaluated on a 44 × 44 grid and drawn smoothed; blue means P(orange) near 0, orange near 1, neutral near 0.5. Filled marks are training points, hollow marks are test points.</li>
+              <li><strong>Diagram:</strong> each small square is the output of one neuron over the plane (scaled per neuron). Line thickness is |w|, scaled to the largest weight; solid purple lines are positive weights, dashed green lines are negative weights.</li>
+              <li><strong>Challenges</strong> count the accuracy over all points of the fixed data set and stop when it reaches 95 %.</li>
+            </ul>
+            <p>Everything runs in your browser; no data are sent anywhere. Reference code: <a href="https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/05_computer_vision/neural_network" target="_blank" rel="noopener">neural network from scratch in NumPy<span class="visually-hidden"> (GitHub, opens in a new tab)</span></a>.</p>
+          </div>
+        </details>
+      </div>
+
+      <section class="stage" aria-label="Neural-network playground">
+        <div class="runbar" role="group" aria-label="Training controls">
+          <button type="button" class="button primary small" id="btn-play" aria-pressed="false">▶ Play</button>
+          <button type="button" class="button secondary small" id="btn-step">Step (1 epoch)</button>
+          <button type="button" class="button secondary small" id="btn-reset">Reset weights</button>
+          <span class="speed"><label for="speed">Speed</label><input type="range" id="speed" min="0" max="3" step="1" value="1" /><output id="speed-out" for="speed">30 epochs/s</output></span>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite">Loading…</p>
+
+        <section class="challenge" id="chal-box" data-active="0" aria-labelledby="chal-title">
+          <div class="chal-head">
+            <h2 id="chal-title">Challenge</h2>
+            <label class="visually-hidden" for="chal">Challenge</label>
+            <select id="chal"><option value="">Free play</option></select>
+            <button type="button" class="button secondary small" id="chal-exit" hidden>Leave challenge</button>
+          </div>
+          <p id="chal-text" class="chal-text"></p>
+          <div id="chal-progress" hidden>
+            <progress id="chal-bar" value="0" max="100" aria-label="Epochs used"></progress>
+            <p class="chal-line" id="chal-progress-text"></p>
+          </div>
+          <p class="chal-line" id="chal-best"></p>
+          <p class="chal-result" id="chal-result" data-state=""></p>
+        </section>
+
+        <dl class="stats nn-stats" aria-label="Training statistics">
+          <div><dt>Epoch</dt><dd id="st-epoch">0</dd></div>
+          <div><dt>Training loss · accuracy</dt><dd id="st-train">—</dd></div>
+          <div><dt>Test loss · accuracy</dt><dd id="st-test">—</dd></div>
+          <div><dt>Network</dt><dd id="st-net">—</dd></div>
+        </dl>
+        <p class="note overfit-note" id="overfit-note" hidden>The test loss is clearly higher than the training loss: the network is starting to memorise the training points (overfitting). Fewer neurons or a higher regularisation may help.</p>
+
+        <div class="nn-grid">
+          <div class="nn-left">
+            <div class="toolbar" role="group" aria-label="Point tools">
+              <fieldset class="cls-pick">
+                <legend class="visually-hidden">Colour of new points</legend>
+                <label class="cls-opt cls-0"><input type="radio" name="cls" value="0" checked /><span class="sym" aria-hidden="true">●</span> Blue</label>
+                <label class="cls-opt cls-1"><input type="radio" name="cls" value="1" /><span class="sym" aria-hidden="true">■</span> Orange</label>
+              </fieldset>
+              <button type="button" class="tool" data-tool="add" aria-pressed="true">Add points</button>
+              <button type="button" class="tool" data-tool="erase" aria-pressed="false">Erase</button>
+            </div>
+            <div class="canvas-wrap nn-field-wrap">
+              <canvas id="field" width="560" height="560" tabindex="0" role="application" aria-roledescription="interactive plot" aria-label="Decision-boundary field. Add labelled points; the background shows what the network currently predicts." aria-describedby="tool-hint kbd-hint"></canvas>
+            </div>
+            <p class="hint" id="tool-hint"></p>
+            <p class="hint visually-hidden" id="kbd-hint">Keyboard: focus the field, use the arrow keys to move the dashed cursor (hold Shift for bigger steps), press Space or Enter to add a point, and 1 or 2 to choose blue or orange.</p>
+            <p class="hint" id="pts-count"></p>
+          </div>
+
+          <div class="nn-right">
+            <h2 class="nn-h">Network</h2>
+            <div class="arch" id="arch" role="group" aria-label="Network size"></div>
+            <p class="hint arch-note" id="arch-note"></p>
+            <div class="net-wrap"><canvas id="net" role="img" aria-label="Network diagram. Each square is one neuron; line thickness and colour show the weights."></canvas></div>
+            <p class="hint" id="net-readout" aria-live="off"></p>
+            <h2 class="nn-h">Loss</h2>
+            <div class="loss-wrap"><canvas id="loss" role="img" aria-label="Loss against epoch: training (solid) and test (dashed)"></canvas></div>
+            <ul class="legend loss-legend"><li><span class="sw sw-ltr"></span>Training loss</li><li><span class="sw sw-lte"></span>Test loss</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="panels">
+        <section class="panel" aria-labelledby="opts-title">
+          <h2 id="opts-title">Settings</h2>
+          <div class="pl-param">
+            <label for="preset">Data set</label>
+            <select id="preset"></select>
+          </div>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="noise">Noise</label><output id="noise-out" for="noise">10 %</output></div>
+            <input type="range" id="noise" min="0" max="0.5" step="0.05" value="0.1" />
+            <p class="pl-hint">How much the points are scattered around the ideal shape.</p>
+          </div>
+          <div class="map-buttons">
+            <button type="button" class="button secondary small" id="btn-regen">New sample</button>
+            <button type="button" class="button secondary small" id="btn-clear">Clear all points</button>
+          </div>
+          <div class="pl-param pl-check" style="margin-top:14px">
+            <label class="check"><input type="checkbox" id="show-test" checked /> Show test points (hollow)</label>
+            <p class="pl-hint">Test points are never used for training. They measure how well the network works on new points.</p>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="train-title">
+          <h2 id="train-title">Training</h2>
+          <div class="pl-param">
+            <label for="act">Activation of hidden neurons</label>
+            <select id="act"><option value="tanh">tanh</option><option value="relu">ReLU</option><option value="sigmoid">Sigmoid</option></select>
+          </div>
+          <div class="pl-param">
+            <label for="opt">Optimiser</label>
+            <select id="opt"><option value="adam">Adam</option><option value="sgd">SGD with momentum</option></select>
+          </div>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="lr">Learning rate</label><output id="lr-out" for="lr">0.03</output></div>
+            <input type="range" id="lr" min="0" max="6" step="1" value="3" />
+            <p class="pl-hint">The size of each update step. Too small is slow; too large is unstable. SGD usually needs a larger value than Adam.</p>
+          </div>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="l2">Regularisation (L2)</label><output id="l2-out" for="l2">off</output></div>
+            <input type="range" id="l2" min="0" max="5" step="1" value="0" />
+            <p class="pl-hint">Penalises large weights and gives smoother boundaries.</p>
+          </div>
+          <h3>Legend</h3>
+          <ul class="legend">
+            <li><span class="sw sw-c0"></span>Blue circle (class 0)</li>
+            <li><span class="sw sw-c1" style="border-radius:3px"></span>Orange square (class 1)</li>
+            <li><span class="sw sw-hollow"></span>Hollow mark: test point</li>
+            <li><span class="sw sw-pos"></span>Positive weight (solid)</li>
+            <li><span class="sw sw-neg"></span>Negative weight (dashed)</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>

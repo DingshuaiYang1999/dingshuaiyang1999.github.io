@@ -64,6 +64,7 @@ def page(title, description, canonical, main, current="blog", extra_head="", og_
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
     <link rel="canonical" href="{canonical}" />
@@ -194,7 +195,9 @@ def audio_player(p):
 
 
 ASSETS = ("styles.css", "script.js", "listen.js", "views.js", "contact.js", "certs.js",
-          "demos/path-planning.css", "demos/path-planning.js")
+          "demos/path-planning.css", "demos/path-planning.js", "demos/demo-common.css",
+          "demos/knn.css", "demos/knn.js", "demos/edge-detection.css", "demos/edge-detection.js",
+          "demos/neural-network.css", "demos/neural-network.js")
 
 
 def stamp(text):
@@ -326,7 +329,8 @@ def main():
     print("wrote blog/index.html")
 
     write_home_snippet(posts)
-    for static in ("index.html", "404.html", "contact/index.html", "demos/path-planning.html"):
+    for static in ("index.html", "404.html", "contact/index.html", "demos/path-planning.html",
+                   "demos/knn.html", "demos/edge-detection.html", "demos/neural-network.html"):
         f = ROOT / static
         f.write_text(bust(stamp(f.read_text(encoding="utf-8"))), encoding="utf-8")
     write_sitemap(posts)

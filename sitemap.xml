@@ -13,6 +13,24 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://dingshuaiyang1999.github.io/demos/edge-detection.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dingshuaiyang1999.github.io/demos/knn.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://dingshuaiyang1999.github.io/demos/neural-network.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://dingshuaiyang1999.github.io/demos/path-planning.html</loc>
     <lastmod>2026-11-05</lastmod>
     <changefreq>monthly</changefreq>

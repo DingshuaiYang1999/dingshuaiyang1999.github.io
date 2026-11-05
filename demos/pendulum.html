@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pendel-Wagen Visualizer</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <style>
       :root {
         color-scheme: dark;
@@ -305,6 +309,20 @@
           min-height: 180px;
         }
       }
+
+      /* two-layer explanation: plain sentence + hints, then collapsible technical details */
+      .twolayer { margin: 0 0 16px; font-size: 13px; line-height: 1.5; }
+      .twolayer .lead { margin: 0 0 8px; color: var(--text); font-size: 14px; line-height: 1.5; }
+      .twolayer .try { margin: 0 0 8px; padding: 8px 10px 6px 12px; border-left: 3px solid var(--accent); background: rgba(255, 255, 255, 0.04); border-radius: 4px; }
+      .twolayer .try b { display: block; margin-bottom: 3px; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); }
+      .twolayer .try ul { margin: 0; padding-left: 16px; color: var(--muted); }
+      .twolayer .try li { margin-bottom: 3px; }
+      .twolayer details { border: 1px solid var(--line); border-radius: 6px; }
+      .twolayer summary { cursor: pointer; padding: 9px 10px; min-height: 40px; color: var(--accent); font-weight: 600; }
+      .twolayer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .twolayer .tech { padding: 2px 12px 10px; color: var(--muted); }
+      .twolayer .tech p { margin: 6px 0; }
+      .twolayer .tech .f { margin: 6px 0; padding: 6px 8px; overflow-x: auto; white-space: nowrap; background: rgba(255, 255, 255, 0.05); border-radius: 4px; color: var(--text); font-family: Georgia, serif; font-style: italic; }
     </style>
   </head>
   <body>
@@ -354,6 +372,20 @@
         <p class="sub">
           Nichtlineares Modell aus D1-D10: obere Ruhelage stabilisieren, Winkel-Stoerung testen und Zustandsregler mit Wagenposition vergleichen.
         </p>
+
+        <div class="twolayer">
+          <p class="lead">A cart carries a pole that wants to fall over. A controller pushes the cart back and forth to keep the pole standing upright.</p>
+          <div class="try"><b>Try this</b><ul>
+            <li>Press “Start” and watch the controller hold the pole up.</li>
+            <li>Press “Anstupsen” (German for “nudge”) to knock the pole and watch how the controller recovers.</li>
+            <li>Choose “ohne Regler” (without controller) from the mode menu: the pole falls immediately.</li>
+          </ul></div>
+          <details><summary>How it works (technical details)</summary><div class="tech">
+            <p>The cart–pendulum is a nonlinear system with the state x = (cart position, cart velocity, angle φ, angular velocity) and the cart force F as input. The upright position is an unstable equilibrium. Near it the model can be linearised:</p>
+            <p class="f">ẋ = A x + B u &nbsp; u = F</p>
+            <p>Two controllers are offered. The <strong>PD</strong> mode feeds back the angle and its derivative. The <strong>LQR</strong> mode uses full state feedback u = −K x, where K minimises the cost ∫ (xᵀQx + uᵀRu) dt and is obtained from the algebraic Riccati equation. Full state feedback also controls the cart position, which a pure angle controller does not. The charts show the force u and the output y = x<sub>W</sub> + l sin φ.</p>
+          </div></details>
+        </div>
 
         <div class="button-row">
           <button id="playBtn" class="primary">Start</button>

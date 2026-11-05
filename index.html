@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
     <link rel="canonical" href="https://dingshuaiyang1999.github.io/" />
@@ -66,7 +67,7 @@
       ]
     }
     </script>
-    <link rel="stylesheet" href="styles.css?v=ea1abc90" />
+    <link rel="stylesheet" href="styles.css?v=243ae775" />
     <script>
       // Apply theme before first paint: saved choice, else OS preference.
       (function () {
@@ -80,7 +81,7 @@
       })();
     </script>
     <script src="script.js?v=98f308e2" defer></script>
-    <script src="certs.js?v=59825405" defer></script>
+    <script src="certs.js?v=0925a687" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -138,9 +139,9 @@
           <p class="hero-lede">Currently in Erlangen for a master's in mechatronics. Interested in control and motion planning for robotic systems; currently exploring MPC, learning-based control and manipulation.</p>
           <p class="hero-facts">Erlangen, Germany · Graduating March 2028 (expected) · Open to internships and working-student roles in robotics, control, AI</p>
           <div class="cv-actions" role="group" aria-label="CV and transcript">
-            <a class="button primary" href="assets/cv/Dingshuai_Yang_CV.pdf" target="_blank" rel="noopener">View CV<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>
+            <a class="button primary" href="assets/cv/Dingshuai_Yang_CV.pdf" data-doc-open="cv" aria-haspopup="dialog">View CV<span class="visually-hidden"> (opens a viewer on this page)</span></a>
             <a class="button secondary" href="assets/cv/Dingshuai_Yang_CV.pdf" download="Dingshuai_Yang_CV.pdf">Download CV<span class="visually-hidden"> (PDF)</span></a>
-            <a class="button secondary" href="assets/transcript/Dingshuai_Yang_Transcript_of_Records.pdf" target="_blank" rel="noopener">View Transcript<span class="visually-hidden"> of Records (PDF, opens in a new tab)</span></a>
+            <a class="button secondary" href="assets/transcript/Dingshuai_Yang_Transcript_of_Records.pdf" data-doc-open="transcript" aria-haspopup="dialog">View Transcript<span class="visually-hidden"> of Records (opens a viewer on this page)</span></a>
           </div>
           <ul class="hero-links" aria-label="Contact and profiles">
             <li><a href="mailto:dingshuai.yang@fau.de"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M3.5 6.5h17v11h-17z M3.8 7l8.2 6.2L20.2 7"/></svg><span>dingshuai.yang@fau.de</span></a></li>
@@ -161,7 +162,7 @@
         <ol class="timeline news-list">
           <li>
             <time class="tl-date" datetime="2026-10-13">Oct 13, 2026</time>
-            <div><p>Updated my <a href="assets/transcript/Dingshuai_Yang_Transcript_of_Records.pdf" target="_blank" rel="noopener">Transcript of Records<span class="visually-hidden"> (PDF, opens in a new tab)</span></a>: current M.Sc. average 2.0 with 67.5 ECTS completed.</p></div>
+            <div><p>Updated my <a href="assets/transcript/Dingshuai_Yang_Transcript_of_Records.pdf" data-doc-open="transcript" aria-haspopup="dialog">Transcript of Records<span class="visually-hidden"> (opens a viewer on this page)</span></a>: current M.Sc. average 2.0 with 67.5 ECTS completed.</p></div>
           </li>
           <li>
             <time class="tl-date" datetime="2026-10-10">Oct 10, 2026</time>
@@ -288,11 +289,12 @@
       <section id="projects" class="section" aria-labelledby="projects-h">
         <h2 id="projects-h">Projects</h2>
         <p class="section-intro">Coursework and self-built experiments.</p>
+        <h3 class="project-group" id="projects-robotics">Courses, Robotics &amp; Simulation</h3>
         <ol class="projects">
           <li class="project">
             <div class="project-thumb"><picture><source srcset="assets/thumbs/matlab-lab.webp" type="image/webp" /><img src="assets/thumbs/matlab-lab.jpg" alt="Static truss experiment from the MATLAB laboratory course" width="960" height="540" loading="lazy" decoding="async" /></picture></div>
             <div class="project-body">
-              <h3 class="project-title">MATLAB Laboratory Course</h3>
+              <h4 class="project-title">MATLAB Laboratory Course</h4>
               <p class="project-meta">Course lab  ·  WS 2025/26</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Content: Static truss, Dynamic Crane, Measurement Data Analysis, and truss structure optimisation. The lab used MATLAB for structural mechanics modeling, ODE simulation, FFT signal analysis, symbolic computation, and optimisation tasks.</dd></div>
@@ -305,7 +307,7 @@
           <li class="project">
             <div class="project-thumb"><picture><source srcset="assets/thumbs/automatic-control-lab.webp" type="image/webp" /><img src="assets/thumbs/automatic-control-lab.jpg" alt="General information slide for the Automatic Control I laboratory" width="960" height="540" loading="lazy" decoding="async" /></picture></div>
             <div class="project-body">
-              <h3 class="project-title">Automatic Control I Lab / Regelungstechnik I</h3>
+              <h4 class="project-title">Automatic Control I Lab / Regelungstechnik I</h4>
               <p class="project-meta">Course lab  ·  SS 2026</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Content: lab stations include Two Tank System, MATLAB 1, MATLAB 2, Rotary Arm, Active Suspension, and Magnetic Levitation System. The lab applies fundamentals from Regelungstechnik A / dynamical systems and control to modeling, simulation, controller design, and experimental observation.</dd></div>
@@ -318,7 +320,7 @@
           <li class="project">
             <a class="project-thumb" href="demos/pendulum.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/pendulum.webp" type="image/webp" /><img src="assets/thumbs/pendulum.jpg" alt="Pendulum-cart visualizer screenshot" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
-              <h3 class="project-title"><a href="demos/pendulum.html" target="_blank" rel="noopener">Pendulum-Cart Visualizer</a></h3>
+              <h4 class="project-title"><a href="demos/pendulum.html" target="_blank" rel="noopener">Pendulum-Cart Visualizer</a></h4>
               <p class="project-meta">Interactive demo  ·  2025</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>An in-browser interactive simulation of an inverted pendulum on a cart. Mass, length and damping are adjustable, and the states are plotted live.</dd></div>
@@ -331,7 +333,7 @@
           <li class="project">
             <a class="project-thumb" href="demos/planar-2r.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/planar-2r.webp" type="image/webp" /><img src="assets/thumbs/planar-2r.jpg" alt="Planar 2R robot simulator screenshot" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
-              <h3 class="project-title"><a href="demos/planar-2r.html" target="_blank" rel="noopener">Planar 2R Robot Simulator</a></h3>
+              <h4 class="project-title"><a href="demos/planar-2r.html" target="_blank" rel="noopener">Planar 2R Robot Simulator</a></h4>
               <p class="project-meta">Interactive demo  ·  2025</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Two-link planar manipulator: drag the end-effector to explore forward and inverse kinematics.</dd></div>
@@ -344,7 +346,7 @@
           <li class="project">
             <a class="project-thumb" href="demos/arm-7dof.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/arm-7dof.webp" type="image/webp" /><img src="assets/thumbs/arm-7dof.jpg" alt="7-DOF robot arm simulator screenshot" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
-              <h3 class="project-title"><a href="demos/arm-7dof.html" target="_blank" rel="noopener">7-DOF Robot Arm Simulator</a></h3>
+              <h4 class="project-title"><a href="demos/arm-7dof.html" target="_blank" rel="noopener">7-DOF Robot Arm Simulator</a></h4>
               <p class="project-meta">Interactive demo  ·  2025</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>A 7-degree-of-freedom robotic arm in the browser. Joint-by-joint control with DH-based modelling.</dd></div>
@@ -357,7 +359,7 @@
           <li class="project">
             <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/rrt.webp" type="image/webp" /><img src="assets/thumbs/rrt.jpg" alt="RRT path planning illustration" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
-              <h3 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener">RRT — Rapidly-exploring Random Tree</a></h3>
+              <h4 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/rrt.py" target="_blank" rel="noopener">RRT — Rapidly-exploring Random Tree</a></h4>
               <p class="project-meta">Python source + interactive demo  ·  2025</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Single-tree sampling-based planner. Animated tree growth with obstacle avoidance, written in Python with tkinter.</dd></div>
@@ -371,7 +373,7 @@
           <li class="project">
             <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/bidirectional-rrt.webp" type="image/webp" /><img src="assets/thumbs/bidirectional-rrt.jpg" alt="Bidirectional RRT illustration" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
-              <h3 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener">Bidirectional RRT</a></h3>
+              <h4 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/bidirectional_rrt.py" target="_blank" rel="noopener">Bidirectional RRT</a></h4>
               <p class="project-meta">Python source + interactive demo  ·  2025</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Two trees grow simultaneously from start and goal; the planner stitches them together once they meet. Live animation in tkinter.</dd></div>
@@ -385,7 +387,7 @@
           <li class="project">
             <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/prm.webp" type="image/webp" /><img src="assets/thumbs/prm.jpg" alt="Probabilistic roadmap illustration" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
-              <h3 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">PRM — Probabilistic Roadmap</a></h3>
+              <h4 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">PRM — Probabilistic Roadmap</a></h4>
               <p class="project-meta">Python source + interactive demo  ·  2025</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Random sampling builds a connectivity graph in free space, and Dijkstra's algorithm finds the shortest collision-free path. The roadmap can be reused for repeated queries in a static environment.</dd></div>
@@ -394,6 +396,51 @@
               <div><dt>What I did</dt><dd>Wrote the planner, its tkinter animation and the test in my python-robotics-learning repository (first committed May 26, 2026).</dd></div>
               </dl>
               <p class="project-actions"><a class="button primary" href="demos/path-planning.html?algo=prm">▶ Try it live<span class="visually-hidden"> (PRM interactive demo)</span></a><a class="button secondary" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/04_robotics/path_planning/prm.py" target="_blank" rel="noopener">Code<span class="visually-hidden"> (PRM Python source on GitHub, opens in a new tab)</span></a></p>
+            </div>
+          </li>
+        </ol>
+        <h3 class="project-group" id="projects-cv">Computer Vision &amp; Machine Learning</h3>
+        <ol class="projects">
+          <li class="project">
+            <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/knn/knn_from_scratch.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/knn.webp" type="image/webp" /><img src="assets/thumbs/knn.jpg" alt="Interactive k-nearest-neighbour demo showing labelled points, a query point and the decision boundary" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h4 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/knn/knn_from_scratch.py" target="_blank" rel="noopener">k-Nearest Neighbours Classifier</a></h4>
+              <p class="project-meta">Python source + interactive demo  ·  2026</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Classify a new point by the labels of the k closest labelled points. The demo shows how the choice of k and of the distance measure changes the decision boundary.</dd></div>
+                <div><dt>Approach</dt><dd>Python, NumPy, OpenCV, scikit-learn; k-NN with Euclidean and Manhattan distance; browser demo in JavaScript</dd></div>
+                <div><dt>Result</dt><dd>Python source with a NumPy implementation that is compared with scikit-learn and OpenCV, plus unit tests (<a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/tests/test_computer_vision.py" target="_blank" rel="noopener">test file<span class="visually-hidden"> (opens in a new tab)</span></a>), and an interactive demo with draggable points and a live decision boundary.</dd></div>
+                <div><dt>What I did</dt><dd>Wrote the classifier, its tests and this browser demo in my python-robotics-learning repository and on this website.</dd></div>
+              </dl>
+              <p class="project-actions"><a class="button primary" href="demos/knn.html">▶ Try it live<span class="visually-hidden"> (k-NN interactive demo)</span></a><a class="button secondary" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/knn/knn_from_scratch.py" target="_blank" rel="noopener">Code<span class="visually-hidden"> (k-NN Python source on GitHub, opens in a new tab)</span></a></p>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/edge_detection/edge_detection.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/edge-detection.webp" type="image/webp" /><img src="assets/thumbs/edge-detection.jpg" alt="Gradient images and Canny edges computed from my profile photograph" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h4 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/edge_detection/edge_detection.py" target="_blank" rel="noopener">Edge Detection — Sobel and Canny</a></h4>
+              <p class="project-meta">Python source + interactive demo  ·  2026</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Find where the brightness in a picture changes quickly. The demo shows the steps from a grayscale picture to Sobel gradients and the final Canny edge map.</dd></div>
+                <div><dt>Approach</dt><dd>Python, NumPy, OpenCV; Gaussian blur, Sobel x/y, gradient magnitude, non-maximum suppression and hysteresis thresholding; browser demo in JavaScript</dd></div>
+                <div><dt>Result</dt><dd>Python source with a NumPy Canny implementation that is compared with <code>cv2.Canny</code>, plus unit tests, and an interactive demo with live sliders for the blur and the two thresholds.</dd></div>
+                <div><dt>What I did</dt><dd>Wrote the NumPy and OpenCV examples, their tests and this browser demo in my python-robotics-learning repository and on this website.</dd></div>
+              </dl>
+              <p class="project-actions"><a class="button primary" href="demos/edge-detection.html">▶ Try it live<span class="visually-hidden"> (edge detection interactive demo)</span></a><a class="button secondary" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/edge_detection/edge_detection.py" target="_blank" rel="noopener">Code<span class="visually-hidden"> (edge detection Python source on GitHub, opens in a new tab)</span></a></p>
+            </div>
+          </li>
+          <li class="project">
+            <a class="project-thumb" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/neural_network/nn_decision_boundary.py" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><picture><source srcset="assets/thumbs/neural-network.webp" type="image/webp" /><img src="assets/thumbs/neural-network.jpg" alt="Neural-network playground showing a decision boundary on two intertwined spirals and the network diagram" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <div class="project-body">
+              <h4 class="project-title"><a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/neural_network/nn_decision_boundary.py" target="_blank" rel="noopener">Neural Network Playground</a></h4>
+              <p class="project-meta">Python source + interactive demo  ·  2026</p>
+              <dl class="pa">
+                <div><dt>Problem</dt><dd>Show how a small feed-forward network learns a non-linear decision boundary, and how depth, width, the activation function and the learning rate affect training.</dd></div>
+                <div><dt>Approach</dt><dd>Fully connected network with forward pass, back-propagation and mini-batch Adam or momentum SGD, written from scratch (NumPy in Python, plain JavaScript in the browser, no machine-learning libraries)</dd></div>
+                <div><dt>Result</dt><dd>Python source with a NumPy implementation and unit tests (<a href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/tests/test_computer_vision.py" target="_blank" rel="noopener">test file<span class="visually-hidden"> (opens in a new tab)</span></a>), and an interactive playground with a live decision-boundary heat map, a network diagram, a loss curve and a challenge mode.</dd></div>
+                <div><dt>What I did</dt><dd>Wrote the network, its gradient check and tests, and this browser playground in my python-robotics-learning repository and on this website.</dd></div>
+              </dl>
+              <p class="project-actions"><a class="button primary" href="demos/neural-network.html">▶ Try it live<span class="visually-hidden"> (neural-network interactive playground)</span></a><a class="button secondary" href="https://github.com/DingshuaiYang1999/python-robotics-learning/blob/main/05_computer_vision/neural_network/nn_decision_boundary.py" target="_blank" rel="noopener">Code<span class="visually-hidden"> (neural-network Python source on GitHub, opens in a new tab)</span></a></p>
             </div>
           </li>
         </ol>
@@ -435,6 +482,25 @@
           <li><span class="icon-text"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg><span>Erlangen, Germany</span></span></li>
         </ul>
       </section>
+      <dialog class="cert-dialog doc-dialog" id="doc-dialog" aria-labelledby="doc-title">
+        <div class="cert-head">
+          <h3 id="doc-title">Document</h3>
+          <button type="button" class="cert-close" data-doc-close aria-label="Close viewer">×</button>
+        </div>
+        <p class="cert-note" id="doc-note"></p>
+        <p class="doc-tools" id="doc-tools" hidden><a class="button secondary" href="assets/cv/Dingshuai_Yang_CV.pdf" download="Dingshuai_Yang_CV.pdf">Download CV<span class="visually-hidden"> (PDF)</span></a></p>
+        <div class="cert-body" id="doc-body" tabindex="0" role="region" aria-label="Document pages">
+        <div data-doc-panel="cv" hidden>
+          <img data-src="assets/cv/cv-1.webp" alt="Curriculum vitae of Dingshuai Yang, page 1 of 1" width="1406" height="1988" draggable="false" decoding="async" />
+        </div>
+        <div data-doc-panel="transcript" hidden>
+          <img data-src="assets/transcript/transcript-1.webp" alt="Transcript of Records, page 1 of 4 (personal details redacted)" width="1654" height="2339" draggable="false" decoding="async" />
+          <img data-src="assets/transcript/transcript-2.webp" alt="Transcript of Records, page 2 of 4 (personal details redacted)" width="1654" height="2339" draggable="false" decoding="async" />
+          <img data-src="assets/transcript/transcript-3.webp" alt="Transcript of Records, page 3 of 4 (personal details redacted)" width="1654" height="2339" draggable="false" decoding="async" />
+          <img data-src="assets/transcript/transcript-4.webp" alt="Transcript of Records, page 4 of 4 (personal details redacted)" width="1654" height="2339" draggable="false" decoding="async" />
+        </div>
+        </div>
+      </dialog>
     </main>
 
     <footer class="site-footer">

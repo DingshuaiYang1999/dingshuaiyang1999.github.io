@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Edge detection: Sobel x, Sobel y and Canny · Dingshuai Yang</title>
+    <meta name="description" content="Interactive edge-detection explorer: compare grayscale, Sobel x, Sobel y, gradient magnitude and the Canny edge detector, with live sliders for blur and thresholds." />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/edge-detection.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/demos/edge-detection.html" />
+    <meta property="og:title" content="Interactive edge detection: Sobel x, Sobel y and Canny" />
+    <meta property="og:description" content="Move the blur and threshold sliders and watch Sobel x, Sobel y, the gradient magnitude and the Canny edges change live." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dingshuai Yang — Robotics, Control, AI" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Interactive edge detection: Sobel x, Sobel y and Canny" />
+    <meta name="twitter:description" content="Move the blur and threshold sliders and watch Sobel x, Sobel y, the gradient magnitude and the Canny edges change live." />
+    <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css?v=243ae775" />
+    <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
+    <link rel="stylesheet" href="edge-detection.css?v=b3102017" />
+    <script>
+      // Apply theme before first paint: saved choice, else OS preference.
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js?v=98f308e2" defer></script>
+    <script src="edge-detection.js?v=ebdb3de4" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+          <div class="header-inner">
+            <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+              <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+              <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+              <span class="brand-name">Dingshuai Yang</span>
+            </a>
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+              <ul class="nav-links">
+                <li><a href="../#about" data-nav="about">About</a></li>
+                <li><a href="../#education" data-nav="education">Education</a></li>
+                <li><a href="../#projects" data-nav="projects">Projects</a></li>
+                <li><a href="../blog/" data-nav="blog">Blog</a></li>
+                <li><a href="../contact/" data-nav="contact">Contact</a></li>
+              </ul>
+            </nav>
+            <div class="header-tools">
+              <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+              <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <line x1="12" y1="2.5" x2="12" y2="5"/>
+                  <line x1="12" y1="19" x2="12" y2="21.5"/>
+                  <line x1="2.5" y1="12" x2="5" y2="12"/>
+                  <line x1="19" y1="12" x2="21.5" y2="12"/>
+                  <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+                  <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+                  <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+                  <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+                </g>
+              </svg>
+              <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+              </svg>
+            </button>
+              <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+    <main id="main" class="page planner-page cv-page edge-page" tabindex="-1">
+      <p class="section-label"><a href="../#projects">← Projects</a></p>
+      <h1>Edge detection: Sobel x, Sobel y and Canny</h1>
+
+      <div class="explain-block">
+        <p class="lead-plain">An edge is a place where a picture changes quickly from dark to light. This page shows how a computer finds edges, step by step, and updates the result while you move the sliders.</p>
+        <div class="try-box">
+          <h2>Try this</h2>
+          <ul>
+            <li>Watch the demo play once, then drag <strong>Blur</strong> upwards: the noise disappears, but so do the fine details.</li>
+            <li>Lower the two <strong>thresholds</strong>: more and more faint edges appear. Raise them and only the strongest outlines remain.</li>
+            <li>Compare <strong>Sobel x</strong> and <strong>Sobel y</strong>: the first finds up-and-down lines, such as the sides of the head; the second finds side-to-side lines.</li>
+            <li>Switch on <strong>Show the Canny steps</strong> to see how thick edges are thinned and how faint pieces are kept only when they join a strong edge.</li>
+          </ul>
+        </div>
+        <details class="how-it-works">
+          <summary>How it works (technical details)</summary>
+          <div class="how-body">
+            <h3>Pipeline</h3>
+            <ol>
+              <li><strong>Grayscale:</strong> <span class="formula-inline">I = 0.299 R + 0.587 G + 0.114 B</span> (the weights used by <code>cv2.cvtColor</code>).</li>
+              <li><strong>Gaussian blur</strong> with kernel size <em>k</em> and standard deviation σ suppresses noise. The kernel is separable: <span class="formula-inline">G(x) ∝ exp(−x² / 2σ²)</span>, applied to rows and then columns, with mirrored borders (<code>cv2.GaussianBlur</code>).</li>
+              <li><strong>Sobel</strong> approximates the image derivative with 3 × 3 kernels that also smooth across the derivative direction.</li>
+              <li><strong>Non-maximum suppression</strong> thins the edges to one pixel.</li>
+              <li><strong>Double threshold</strong> and <strong>hysteresis</strong> keep strong edges and the weak edges connected to them.</li>
+            </ol>
+            <h3>Sobel kernels</h3>
+            <p class="formula">Gx = [ −1 0 +1 ; −2 0 +2 ; −1 0 +1 ] ∗ I &nbsp;&nbsp; Gy = [ −1 −2 −1 ; 0 0 0 ; +1 +2 +1 ] ∗ I</p>
+            <p><strong>Sobel x</strong> (Gx) is the horizontal derivative: it responds to brightness changes from left to right and therefore highlights <em>vertical</em> edges. <strong>Sobel y</strong> (Gy) is the vertical derivative and highlights <em>horizontal</em> edges. Each is signed (dark-to-bright positive, bright-to-dark negative); the panels show |G| by default, and the option “Show Sobel as signed” maps zero to mid-gray. Both panels use the same scale so that they can be compared.</p>
+            <h3>Gradient magnitude and direction</h3>
+            <p class="formula">|G| = √(Gx² + Gy²) &nbsp;(L2) &nbsp;or&nbsp; |G| ≈ |Gx| + |Gy| &nbsp;(L1) &nbsp;&nbsp; θ = atan2(Gy, Gx)</p>
+            <p>The magnitude image shows edges of every orientation but they are several pixels wide, and a single global threshold on it either keeps noise or breaks contours. OpenCV’s default is L1; <code>L2gradient=True</code> selects L2. The setting above changes the units of the thresholds: with L2 the thresholds are compared against |G|².</p>
+            <h3>Canny</h3>
+            <ul>
+              <li><strong>Non-maximum suppression:</strong> θ is rounded to one of four directions (horizontal, vertical, two diagonals). A pixel survives only if its magnitude is larger than that of its two neighbours along θ. This is why Canny edges are one pixel wide, unlike Sobel.</li>
+              <li><strong>Double threshold:</strong> pixels with |G| &gt; high are <em>strong</em>, pixels between low and high are <em>weak</em>, and the rest are discarded.</li>
+              <li><strong>Hysteresis:</strong> a weak pixel is kept only if it is 8-connected, through other weak or strong pixels, to a strong pixel. Isolated faint responses (noise) disappear, while faint continuations of real contours are kept.</li>
+            </ul>
+            <h3>Sobel versus Canny in short</h3>
+            <p>Sobel is a <em>filter</em>: it outputs a continuous edge-strength image in one direction (x or y) or in combination. Canny is a complete <em>detector</em>: it uses the Sobel gradients, but outputs a binary map of thin, connected edges, controlled by blur and two thresholds.</p>
+            <h3>OpenCV equivalents</h3>
+            <p class="formula">cv2.GaussianBlur(gray, (k, k), sigma) → cv2.Sobel(blur, cv2.CV_16S, 1, 0) / (…, 0, 1) → cv2.Canny(blur, low, high, L2gradient=…)</p>
+            <p><code>cv2.Canny</code> does not blur by itself. The JavaScript code here follows the same steps and the same comparison rules as OpenCV, and the repository’s Python script checks a NumPy version against <code>cv2.Canny</code> pixel by pixel. Reference code: <a href="https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/05_computer_vision/edge_detection" target="_blank" rel="noopener">edge detection in Python<span class="visually-hidden"> (GitHub, opens in a new tab)</span></a>.</p>
+          </div>
+        </details>
+      </div>
+
+      <section class="stage" aria-label="Edge detection panels">
+        <div class="runbar" role="group" aria-label="Demo controls">
+          <button type="button" class="button primary small" id="btn-tour">▶ Play demo</button>
+          <button type="button" class="button secondary small" id="btn-defaults">Reset settings</button>
+          <span class="tour-note" id="tour-note" hidden>Demo running. Move any slider to take over.</span>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite">Loading…</p>
+
+        <section class="ed-controls" aria-labelledby="opts-title">
+          <h2 id="opts-title">Settings <span class="muted">· drag a slider and all panels update</span></h2>
+          <div class="ed-ctl-grid">
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="sigma">Blur strength (sigma)</label><output id="sigma-out" for="sigma">1.4</output></div>
+            <input type="range" id="sigma" min="0.3" max="5" step="0.1" value="1.4" />
+            <p class="pl-hint">More blur removes noise and fine detail.</p>
+          </div>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="ksize">Blur window (kernel size)</label><output id="ksize-out" for="ksize">5 × 5</output></div>
+            <input type="range" id="ksize" min="1" max="15" step="2" value="5" />
+            <p class="pl-hint">The size of the neighbourhood that is averaged. A window that is too small cuts the blur short.</p>
+          </div>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="low">Canny low threshold</label><output id="low-out" for="low">50</output></div>
+            <input type="range" id="low" min="0" max="500" step="1" value="50" />
+            <p class="pl-hint">Edges weaker than this are discarded.</p>
+          </div>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="high">Canny high threshold</label><output id="high-out" for="high">150</output></div>
+            <input type="range" id="high" min="0" max="500" step="1" value="150" />
+            <p class="pl-hint">Edges stronger than this are always kept. Edges in between are kept only if they touch a strong one.</p>
+          </div>
+          <div class="pl-param pl-check">
+            <label class="check"><input type="checkbox" id="l2" /> L2 gradient (more exact)</label>
+            <p class="pl-hint" id="l2-note"></p>
+          </div>
+          <div class="pl-param pl-check">
+            <label class="check"><input type="checkbox" id="steps" /> Show the Canny steps</label>
+          </div>
+          <div class="pl-param pl-check">
+            <label class="check"><input type="checkbox" id="signed" /> Show Sobel as signed (gray = zero)</label>
+            <p class="pl-hint">Bright: brightness increases along x or y. Dark: it decreases.</p>
+          </div>
+          </div>
+        </section>
+
+        <div class="ed-grid">
+          <figure class="ed-panel">
+            <canvas id="p-orig" width="400" height="400" role="img" aria-label="Original"></canvas>
+            <figcaption><strong>Original</strong><span>The picture used here: the portrait photograph of the site owner (the same image as on the home page).</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="p-gray" width="400" height="400" role="img" aria-label="Grayscale"></canvas>
+            <figcaption><strong>Grayscale</strong><span>Brightness only. Edges are quick changes in brightness.</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="p-sx" width="400" height="400" role="img" aria-label="Sobel x"></canvas>
+            <figcaption><strong>Sobel x</strong><span>Finds <em>vertical</em> edges: brightness changing from left to right.</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="p-sy" width="400" height="400" role="img" aria-label="Sobel y"></canvas>
+            <figcaption><strong>Sobel y</strong><span>Finds <em>horizontal</em> edges: brightness changing from top to bottom.</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="p-mag" width="400" height="400" role="img" aria-label="Gradient magnitude"></canvas>
+            <figcaption><strong>Gradient magnitude</strong><span>Edge strength in any direction. Bright means a sharp change; the lines are thick.</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="p-canny" width="400" height="400" role="img" aria-label="Canny result"></canvas>
+            <figcaption><strong>Canny result</strong><span>Thin, clean outlines. Canny keeps the strongest edges and joins them up.</span></figcaption>
+          </figure>
+        </div>
+
+        <div id="steps-wrap" hidden>
+          <h2 class="ed-sub">Canny, step by step</h2>
+          <div class="ed-grid ed-grid4">
+          <figure class="ed-panel">
+            <canvas id="s-blur" width="400" height="400" role="img" aria-label="1 · Blurred"></canvas>
+            <figcaption><strong>1 · Blurred</strong><span>The grayscale picture after the Gaussian blur.</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="s-thin" width="400" height="400" role="img" aria-label="2 · Thin edges"></canvas>
+            <figcaption><strong>2 · Thin edges</strong><span>Only the strongest pixel across each edge is kept (non-maximum suppression).</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="s-thr" width="400" height="400" role="img" aria-label="3 · Two thresholds"></canvas>
+            <figcaption><strong>3 · Two thresholds</strong><span>White: strong edge. Gray: weak edge. Black: discarded.</span></figcaption>
+          </figure>
+          <figure class="ed-panel">
+            <canvas id="s-final" width="400" height="400" role="img" aria-label="4 · Final edges"></canvas>
+            <figcaption><strong>4 · Final edges</strong><span>Weak edges stay only when they connect to a strong one (hysteresis).</span></figcaption>
+          </figure>
+          </div>
+        </div>
+
+        <dl class="stats ed-stats" aria-label="Edge statistics">
+          <div><dt>Image size</dt><dd id="st-size">—</dd></div>
+          <div><dt>Strong pixels</dt><dd id="st-strong">—</dd></div>
+          <div><dt>Weak pixels</dt><dd id="st-weak">—</dd></div>
+          <div><dt>Edge pixels kept</dt><dd id="st-edges">—</dd></div>
+          <div><dt>Compute time</dt><dd id="st-time">—</dd></div>
+        </dl>
+      </section>
+
+      <div class="panels panels-one">
+        <section class="panel" aria-labelledby="pic-title">
+          <h2 id="pic-title">Picture</h2>
+          <figure class="pic-src">
+            <img src="../assets/avatar.webp" alt="" width="72" height="72" />
+            <figcaption>The only picture used by this demo is the portrait photograph of the site owner that is already shown on the home page. It cannot be replaced: there is no upload, no camera access and no file selection.</figcaption>
+          </figure>
+          <h3>Reading the panels</h3>
+          <p>Bright pixels mark where the picture changes quickly. Sobel x and Sobel y each look in one direction only; their combination is the gradient magnitude; Canny turns that magnitude into thin black-and-white outlines.</p>
+          <h3>Privacy</h3>
+          <p>No picture is uploaded and nothing is sent to any server: the page loads the portrait that is already part of this website and all calculations run in your browser.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+/* Neural-network playground. Builds on styles.css, path-planning.css (layout, buttons, stats) and demo-common.css. */
+:root { --kn-c0: #2a6fbb; --kn-c1: #d2823f; --nn-pos: #6d4ab5; --nn-neg: #1f8f80; --nn-tr: #04316a; }
+:root[data-theme="dark"] { --kn-c0: #6fa3e0; --kn-c1: #e5985c; --nn-pos: #a98be6; --nn-neg: #4fc4b3; --nn-tr: #8fb4ec; }
+
+.nn-page .cls-pick { display: inline-flex; gap: 0; margin: 0 4px 0 0; padding: 0; border: 0; min-width: 0; }
+.nn-page .cls-opt {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 14px;
+  border: 1px solid var(--rule-strong); margin-left: -1px; background: var(--bg); color: var(--text);
+  font-size: 15px; font-weight: 600; cursor: pointer; user-select: none; position: relative;
+}
+.nn-page .cls-opt:first-of-type { margin-left: 0; border-radius: 6px 0 0 6px; }
+.nn-page .cls-opt:last-of-type { border-radius: 0 6px 6px 0; }
+.nn-page .cls-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.nn-page .cls-opt .sym { font-size: 17px; line-height: 1; }
+.nn-page .cls-0 .sym { color: var(--kn-c0); } .nn-page .cls-1 .sym { color: var(--kn-c1); }
+.nn-page .cls-opt:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); z-index: 1; color: var(--accent); }
+.nn-page .cls-opt:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; z-index: 2; }
+.nn-page .tool:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* challenge box */
+.challenge { margin: 4px 0 12px; padding: 12px 16px 10px; border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--bg); }
+.challenge[data-active="1"] { border-color: var(--accent); background: var(--accent-soft); }
+.chal-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.chal-head h2 { margin: 0; font-size: 17px; }
+.chal-head select {
+  min-height: 40px; padding: 0 10px; font: inherit; font-size: 15px; color: var(--text); background: var(--bg);
+  border: 1px solid var(--rule-strong); border-radius: 6px; max-width: 100%;
+}
+.chal-head select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.chal-text { margin: 8px 0 4px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.chal-line { margin: 4px 0 0; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+.chal-result { margin: 6px 0 2px; font-size: 15.5px; font-weight: 600; line-height: 1.5; }
+.chal-result:empty { display: none; }
+.chal-result[data-state="ok"] { color: var(--ok); } .chal-result[data-state="fail"] { color: var(--fail); }
+#chal-bar { width: 100%; height: 10px; accent-color: var(--accent); margin-top: 6px; }
+
+.nn-stats { grid-template-columns: 0.6fr 1.3fr 1.3fr 1.5fr; margin-top: 8px; }
+.nn-stats dd { font-size: 15px; }
+.overfit-note { color: var(--fail); font-weight: 600; margin: 8px 0 0; min-height: 0; }
+.overfit-note[hidden] { display: none; }
+
+.nn-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 24px; margin-top: 14px; align-items: start; }
+.nn-left .toolbar { margin-bottom: 8px; }
+.nn-page .canvas-wrap.nn-field-wrap { width: 100%; margin: 0; }
+.nn-page #field { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; touch-action: pan-y; cursor: crosshair; }
+.nn-h { font-size: 16px; margin: 0 0 8px; }
+.nn-right .nn-h:not(:first-child) { margin-top: 14px; }
+.arch { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 4px; }
+.stepper { display: inline-flex; align-items: center; gap: 4px; }
+.st-label { font-size: 13.5px; font-weight: 600; color: var(--muted); margin-right: 4px; }
+.st-btn {
+  width: 34px; height: 34px; border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--bg); color: var(--text);
+  font: inherit; font-size: 18px; line-height: 1; cursor: pointer; padding: 0;
+}
+.st-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.st-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.st-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.st-val { min-width: 20px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+.arch-note { margin: 2px 0 6px; min-height: 0; }
+.arch-note:empty { display: none; }
+.net-wrap, .loss-wrap { border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--pl-bg); line-height: 0; overflow: hidden; }
+#net { display: block; width: 100%; height: 300px; touch-action: pan-y; }
+#loss { display: block; width: 100%; height: 150px; }
+#net-readout { min-height: 3em; }
+.loss-legend { grid-template-columns: auto auto; justify-content: start; gap: 4px 24px; margin-top: 6px; }
+
+.sw-ltr { border-radius: 2px; height: 3px; background: var(--nn-tr); border: 0; }
+.sw-lte { border-radius: 0; height: 0; border: 0; border-top: 3px dashed var(--kn-c1); background: transparent; }
+.sw-pos { border-radius: 2px; height: 4px; background: var(--nn-pos); border: 0; }
+.sw-neg { border-radius: 0; height: 0; border: 0; border-top: 4px dashed var(--nn-neg); background: transparent; }
+.sw-c0 { background: var(--kn-c0); } .sw-c1 { background: var(--kn-c1); }
+.sw-hollow { background: var(--pl-bg); border: 3px solid var(--kn-c0); }
+
+@media (max-width: 760px) {
+  .nn-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .nn-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nn-stats > div { border-left: 0; border-top: 1px solid var(--rule); }
+  .nn-stats > div:nth-child(-n+2) { border-top: 0; }
+  .nn-stats > div:nth-child(even) { border-left: 1px solid var(--rule); }
+}
+@media (max-width: 600px) {
+  .nn-page .cls-pick { width: 100%; }
+  .nn-page .cls-opt { flex: 1 1 0; justify-content: center; padding: 0 6px; min-height: 44px; }
+  .nn-page .toolbar .tool { flex: 1 1 auto; min-height: 44px; }
+  .nn-page .runbar .button { flex: 1 1 auto; }
+  .st-btn { width: 40px; height: 40px; }
+  .stepper { flex: 1 1 45%; }
+  .nn-page .legend { grid-template-columns: 1fr; }
+  .nn-page .loss-legend { grid-template-columns: auto auto; }
+  .chal-head select { flex: 1 1 100%; }
+  #net { height: 280px; }
+}
+
+.nn-page .button[hidden] { display: none; }

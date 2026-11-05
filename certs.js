@@ -48,3 +48,56 @@
   // Discourage saving: no context menu / drag on certificate images.
   ["contextmenu", "dragstart"].forEach((ev) => dlg.addEventListener(ev, (e) => { if (e.target.tagName === "IMG") e.preventDefault(); }));
 })();
+
+// CV / Transcript viewer: the same modal as above, filled with page images (PDF iframes fail on iPhone).
+// Without JavaScript the buttons are plain links to the PDF.
+(function () {
+  const dlg = document.getElementById("doc-dialog");
+  const openers = Array.from(document.querySelectorAll("[data-doc-open]"));
+  if (!dlg || !openers.length || typeof dlg.showModal !== "function") return;
+  const body = document.getElementById("doc-body");
+  const panels = Array.from(dlg.querySelectorAll("[data-doc-panel]"));
+  const tools = document.getElementById("doc-tools");
+  const INFO = {
+    cv: { title: "Curriculum Vitae", note: "One page. The PDF can be downloaded with the button below." },
+    transcript: { title: "Transcript of Records", note: "View only. Personal details are redacted. Four pages." },
+  };
+  let lastOpener = null, scrollY = 0;
+
+  function open(kind, opener) {
+    lastOpener = opener; scrollY = window.scrollY;
+    panels.forEach((p) => { p.hidden = p.dataset.docPanel !== kind; });
+    panels.filter((p) => !p.hidden).forEach((p) => p.querySelectorAll("img[data-src]").forEach((img) => { img.src = img.dataset.src; img.removeAttribute("data-src"); }));
+    document.getElementById("doc-title").textContent = INFO[kind].title;
+    document.getElementById("doc-note").textContent = INFO[kind].note;
+    tools.hidden = kind !== "cv";
+    body.scrollTop = 0;
+    dlg.showModal();
+    document.documentElement.classList.add("cert-open");
+    dlg.querySelector("[data-doc-close]").focus({ preventScroll: true });
+  }
+
+  openers.forEach((a) => a.addEventListener("click", (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return; // let "open in new tab" shortcuts through
+    e.preventDefault();
+    open(a.dataset.docOpen, a);
+  }));
+  dlg.addEventListener("close", () => {
+    document.documentElement.classList.remove("cert-open");
+    if (window.scrollY !== scrollY) window.scrollTo(0, scrollY); // same scroll position as before opening
+    if (lastOpener) lastOpener.focus({ preventScroll: true });
+  });
+  dlg.querySelector("[data-doc-close]").addEventListener("click", () => dlg.close());
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+
+  dlg.addEventListener("keydown", (e) => { // focus trap: close button, download link and the scrollable page area
+    if (e.key !== "Tab") return;
+    const f = Array.from(dlg.querySelectorAll("button, a[href]")).filter((el) => el.offsetParent !== null);
+    f.push(body);
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  ["contextmenu", "dragstart"].forEach((ev) => dlg.addEventListener(ev, (e) => { if (e.target.tagName === "IMG") e.preventDefault(); }));
+})();

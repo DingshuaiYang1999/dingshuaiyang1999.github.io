@@ -12,6 +12,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
     <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/path-planning.html" />
@@ -30,8 +31,9 @@
     <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
-    <link rel="stylesheet" href="../styles.css?v=ea1abc90" />
+    <link rel="stylesheet" href="../styles.css?v=243ae775" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
     <script>
       // Apply theme before first paint: saved choice, else OS preference.
       (function () {
@@ -45,7 +47,7 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="path-planning.js?v=393f8937" defer></script>
+    <script src="path-planning.js?v=40160bd6" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -96,7 +98,18 @@
     <main id="main" class="page planner-page" tabindex="-1">
       <p class="section-label"><a href="../#projects">← Projects</a></p>
       <h1>Path-planning visualizer</h1>
-      <p class="section-intro">How does a robot find a way around obstacles? Set a start and a goal, draw walls anywhere you like, then press Run and watch the algorithm think. The same ideas are in my <a href="https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/04_robotics/path_planning" target="_blank" rel="noopener">Python code<span class="visually-hidden"> (GitHub, opens in a new tab)</span></a>, re-implemented here in JavaScript so you can play with them.</p>
+      <div class="explain-block">
+        <p class="lead-plain">A robot has to find a way around obstacles. Here you draw walls, mark a start and a goal, and watch different search methods look for a route, one step at a time.</p>
+        <div class="try-box">
+          <h2>Try this</h2>
+          <ul>
+            <li>Press <strong>Run</strong> and watch the search grow. Then drag the green S or the red G to new places and run it again.</li>
+            <li>Draw a wall across the middle with <strong>Draw rectangle</strong> and leave only a small gap. Which method finds the gap fastest?</li>
+            <li>Switch between <strong>RRT</strong>, <strong>Bidirectional RRT</strong> and <strong>PRM</strong>, or turn the speed to “instant” to compare results.</li>
+          </ul>
+        </div>
+        <p>The same ideas are in my <a href="https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/04_robotics/path_planning" target="_blank" rel="noopener">Python code<span class="visually-hidden"> (GitHub, opens in a new tab)</span></a>, re-implemented here in JavaScript so you can play with them. The technical details of each method are in the “How it works” section below the map.</p>
+      </div>
 
       <fieldset class="algo-switch">
         <legend class="visually-hidden">Algorithm</legend>

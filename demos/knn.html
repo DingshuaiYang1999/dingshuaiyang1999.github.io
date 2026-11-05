@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>k-Nearest Neighbours visualizer · Dingshuai Yang</title>
+    <meta name="description" content="Interactive k-NN classifier: place labelled points, drag them, change k and the distance metric, and watch the decision boundary update live." />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon-48.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/knn.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://dingshuaiyang1999.github.io/demos/knn.html" />
+    <meta property="og:title" content="Interactive k-Nearest Neighbours visualizer" />
+    <meta property="og:description" content="Place and drag labelled dots, change k and the distance metric, and watch the decision boundary update instantly." />
+    <meta property="og:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dingshuai Yang — Robotics, Control, AI" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Interactive k-Nearest Neighbours visualizer" />
+    <meta name="twitter:description" content="Place and drag labelled dots, change k and the distance metric, and watch the decision boundary update instantly." />
+    <meta name="twitter:image" content="https://dingshuaiyang1999.github.io/assets/og-card.jpg" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css?v=243ae775" />
+    <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
+    <link rel="stylesheet" href="knn.css?v=448c8ad4" />
+    <script>
+      // Apply theme before first paint: saved choice, else OS preference.
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js?v=98f308e2" defer></script>
+    <script src="knn.js?v=af87e260" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+          <div class="header-inner">
+            <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+              <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+              <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+              <span class="brand-name">Dingshuai Yang</span>
+            </a>
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
+              <ul class="nav-links">
+                <li><a href="../#about" data-nav="about">About</a></li>
+                <li><a href="../#education" data-nav="education">Education</a></li>
+                <li><a href="../#projects" data-nav="projects">Projects</a></li>
+                <li><a href="../blog/" data-nav="blog">Blog</a></li>
+                <li><a href="../contact/" data-nav="contact">Contact</a></li>
+              </ul>
+            </nav>
+            <div class="header-tools">
+              <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+              <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <line x1="12" y1="2.5" x2="12" y2="5"/>
+                  <line x1="12" y1="19" x2="12" y2="21.5"/>
+                  <line x1="2.5" y1="12" x2="5" y2="12"/>
+                  <line x1="19" y1="12" x2="21.5" y2="12"/>
+                  <line x1="5.2" y1="5.2" x2="6.9" y2="6.9"/>
+                  <line x1="17.1" y1="17.1" x2="18.8" y2="18.8"/>
+                  <line x1="5.2" y1="18.8" x2="6.9" y2="17.1"/>
+                  <line x1="17.1" y1="6.9" x2="18.8" y2="5.2"/>
+                </g>
+              </svg>
+              <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/>
+              </svg>
+            </button>
+              <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+    <main id="main" class="page planner-page cv-page" tabindex="-1">
+      <p class="section-label"><a href="../#projects">← Projects</a></p>
+      <h1>k-Nearest Neighbours: guess a colour from its neighbours</h1>
+
+      <div class="explain-block">
+        <p class="lead-plain">The coloured dots are examples whose colour is already known. Move the pointer over the picture, or tap it, and the computer guesses the colour of that spot by asking the closest dots to vote.</p>
+        <div class="try-box">
+          <h2>Try this</h2>
+          <ul>
+            <li>Pick a colour and click or tap an empty spot to add dots. Drag any dot to move it: the coloured background changes immediately.</li>
+            <li>Slide <strong>k</strong> from 1 to 15. A small k follows every single dot; a larger k gives a smoother, more cautious guess.</li>
+            <li>Press <strong>Mix up some labels</strong> while k is 1, then raise k to see how a larger k ignores a few wrong dots.</li>
+            <li>Load <strong>Two moons</strong> or <strong>Three-arm spiral</strong> and look for the k that separates the shapes best.</li>
+          </ul>
+        </div>
+        <details class="how-it-works">
+          <summary>How it works (technical details)</summary>
+          <div class="how-body">
+            <h3>Algorithm</h3>
+            <p>k-NN is a non-parametric, instance-based classifier. “Training” stores the labelled points. To classify a query point <em>q</em> it</p>
+            <ol>
+              <li>computes the distance from <em>q</em> to every stored point (brute force, O(n) per query),</li>
+              <li>selects the <em>k</em> points with the smallest distances, and</li>
+              <li>predicts the class with the most votes among them.</li>
+            </ol>
+            <h3>Distance metrics</h3>
+            <p class="formula">Euclidean (L2): d(a, b) = √( (a₁ − b₁)² + (a₂ − b₂)² )</p>
+            <p class="formula">Manhattan (L1): d(a, b) = |a₁ − b₁| + |a₂ − b₂|</p>
+            <p>The metric changes which points count as “near”: L2 neighbourhoods are circles, L1 neighbourhoods are diamonds. The dashed outline in the demo is the L2 circle or L1 diamond that just reaches the k-th neighbour.</p>
+            <h3>Ties</h3>
+            <p>If several classes receive the same number of votes, the class that contains the single nearest of the tied points wins. Equal distances are resolved by the older point. This rule is identical in the Python reference code.</p>
+            <h3>Decision boundary and the effect of k</h3>
+            <p>The coloured background evaluates the classifier on a 160 × 120 grid. The colour intensity grows with the fraction of neighbours that agree with the winning class. For k = 1 the regions form a Voronoi diagram of the points and fit noise perfectly; a larger k reduces variance and increases bias. The statistic “Leave-one-out accuracy” classifies each stored point using all <em>other</em> points, which gives an honest estimate that, unlike training accuracy, does not trivially reach 100 % at k = 1.</p>
+            <h3>Practical notes</h3>
+            <ul>
+              <li>Features should be on a comparable scale, otherwise one coordinate dominates the distance.</li>
+              <li>With many features, distances become less informative (curse of dimensionality).</li>
+              <li>Prediction cost grows linearly with the number of stored points; k-d trees or approximate search reduce it.</li>
+            </ul>
+            <p>Reference code: <a href="https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/05_computer_vision/knn" target="_blank" rel="noopener">k-NN from scratch in Python<span class="visually-hidden"> (GitHub, opens in a new tab)</span></a>, compared against scikit-learn and OpenCV’s <code>cv2.ml.KNearest</code>.</p>
+          </div>
+        </details>
+      </div>
+
+      <section class="stage" aria-label="Interactive k-NN canvas">
+        <div class="runbar" role="group" aria-label="Demo controls">
+          <button type="button" class="button primary small" id="btn-tour">▶ Play demo</button>
+          <span class="tour-note" id="tour-note" hidden>Demo running. Touch the picture or press Stop to take over.</span>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite">Loading…</p>
+
+        <div class="toolbar" role="group" aria-label="Point tools">
+          <fieldset class="cls-pick">
+            <legend class="visually-hidden">Class of new points</legend>
+            <label class="cls-opt cls-0"><input type="radio" name="cls" value="0" checked /><span class="sym" aria-hidden="true">●</span> Blue</label>
+            <label class="cls-opt cls-1"><input type="radio" name="cls" value="1" /><span class="sym" aria-hidden="true">■</span> Orange</label>
+            <label class="cls-opt cls-2"><input type="radio" name="cls" value="2" /><span class="sym" aria-hidden="true">▲</span> Green</label>
+          </fieldset>
+          <button type="button" class="tool" data-tool="add" aria-pressed="true">Add / drag dots</button>
+          <button type="button" class="tool" data-tool="query" aria-pressed="false">Move query</button>
+          <button type="button" class="tool" data-tool="erase" aria-pressed="false">Erase</button>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="map" width="800" height="600" tabindex="0" role="application" aria-roledescription="interactive scatter plot" aria-label="k-nearest-neighbour canvas. Add and drag labelled dots; the diamond is the query point." aria-describedby="tool-hint kbd-hint"></canvas>
+        </div>
+        <p class="hint" id="tool-hint"></p>
+        <p class="hint visually-hidden" id="kbd-hint">Keyboard: focus the canvas, use the arrow keys to move the query diamond (hold Shift for bigger steps), press Space or Enter to add a dot of the selected colour at the query position, Backspace to remove the nearest dot, and 1, 2 or 3 to choose a colour.</p>
+
+        <dl class="stats" aria-label="Prediction for the query point">
+          <div><dt>Prediction</dt><dd id="st-pred">—</dd></div>
+          <div><dt>Votes (k nearest)</dt><dd id="st-votes">—</dd></div>
+          <div><dt>Points</dt><dd id="st-points">0</dd></div>
+          <div><dt>Leave-one-out accuracy</dt><dd id="st-loo">—</dd></div>
+        </dl>
+      </section>
+
+      <div class="panels">
+        <section class="panel" aria-labelledby="opts-title">
+          <h2 id="opts-title">Settings</h2>
+          <div class="pl-param">
+            <div class="pl-param-head"><label for="k">k (number of neighbours)</label><output id="k-out" for="k">5</output></div>
+            <input type="range" id="k" min="1" max="25" step="1" value="5" />
+            <p class="pl-hint">The number of closest dots that get a vote.</p>
+          </div>
+          <fieldset class="metric-pick pl-param">
+            <legend>Distance</legend>
+            <label class="check"><input type="radio" name="metric" value="euclidean" checked /> Euclidean (straight line)</label>
+            <label class="check"><input type="radio" name="metric" value="manhattan" id="metric-l1" /> Manhattan (along the grid)</label>
+          </fieldset>
+          <div class="pl-param pl-check">
+            <label class="check"><input type="checkbox" id="boundary" checked /> Show decision boundary (background colours)</label>
+            <p class="pl-hint">Colours every position by the class k-NN would predict there; stronger colour means the neighbours agree more.</p>
+          </div>
+          <h3>Data</h3>
+          <div class="pl-param">
+            <label for="preset">Load a data set</label>
+            <select id="preset"></select>
+          </div>
+          <div class="map-buttons">
+            <button type="button" class="button secondary small" id="btn-random">Random clusters</button>
+            <button type="button" class="button secondary small" id="btn-shuffle">Mix up some labels</button>
+            <button type="button" class="button secondary small" id="btn-clear">Clear</button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="legend-title">
+          <h2 id="legend-title">Legend</h2>
+          <ul class="legend">
+            <li><span class="sw sw-c0"></span>Blue circles (class 1)</li>
+            <li><span class="sw sw-c1" style="border-radius:3px"></span>Orange squares (class 2)</li>
+            <li><span class="sw sw-c2" style="border-radius:3px"></span>Green triangles (class 3)</li>
+            <li><span class="sw sw-q" style="border-radius:3px;transform:rotate(45deg) scale(.8)"></span>Query point (colour = prediction)</li>
+            <li><span class="sw sw-ring"></span>Ring: the k nearest dots</li>
+            <li><span class="sw sw-dash"></span>Dashed outline: reaches the k-th neighbour</li>
+          </ul>
+          <h3>About the data</h3>
+          <p>All data sets are generated in your browser from a fixed random seed; nothing is sent anywhere. The colours are chosen to be distinguishable by shape as well as by hue.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>

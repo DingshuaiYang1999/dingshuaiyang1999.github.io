@@ -1,0 +1,44 @@
+/* Edge-detection explorer. Builds on styles.css, path-planning.css and demo-common.css. */
+.edge-page .stage { margin-top: 4px; }
+.ed-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 10px 0 16px; }
+.ed-grid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ed-panel { margin: 0; min-width: 0; }
+.ed-panel canvas {
+  display: block; width: 100%; height: auto; background: #000; border: 1px solid var(--rule-strong); border-radius: 6px;
+  image-rendering: auto;
+}
+.ed-panel figcaption { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; font-size: 14px; line-height: 1.4; color: var(--muted); }
+.ed-panel figcaption strong { color: var(--text); font-size: 15px; }
+.ed-sub { font-size: 20px; margin: 22px 0 4px; }
+.ed-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.ed-stats dd { font-size: 14.5px; }
+.formula-inline { font-family: var(--serif); font-style: italic; }
+.pic-src { display: flex; gap: 12px; align-items: center; margin: 0 0 10px; }
+.pic-src img { flex: none; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--rule-strong); object-fit: cover; }
+.pic-src figcaption { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.tour-note { color: var(--muted); font-size: 14.5px; }
+
+@media (max-width: 760px) {
+  .ed-grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ed-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ed-stats > div { border-left: 0; border-top: 1px solid var(--rule); }
+  .ed-stats > div:nth-child(-n+2) { border-top: 0; }
+  .ed-stats > div:nth-child(even) { border-left: 1px solid var(--rule); }
+  .ed-stats > div:last-child { grid-column: 1 / -1; border-left: 0 !important; }
+}
+@media (max-width: 600px) {
+  .ed-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ed-panel figcaption { font-size: 13px; }
+  .ed-panel figcaption strong { font-size: 14px; }
+  .cv-page .runbar .button { flex: 1 1 auto; }
+}
+
+/* sliders sit directly above the panels */
+.ed-controls { margin: 4px 0 14px; padding: 14px 16px 6px; border: 1px solid var(--rule); border-radius: 6px; background: var(--accent-soft); }
+.ed-controls h2 { font-size: 17px; margin: 0 0 10px; }
+.ed-controls h2 .muted { font-family: inherit; font-weight: 400; font-size: 14px; color: var(--muted); }
+.ed-ctl-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
+.ed-ctl-grid .pl-hint { margin-bottom: 0; }
+.ed-ctl-grid .pl-check { margin-bottom: 10px; }
+.panels-one { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 600px) { .ed-ctl-grid { grid-template-columns: 1fr; } .ed-controls h2 .muted { display: block; } }

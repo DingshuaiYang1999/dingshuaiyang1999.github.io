@@ -562,6 +562,7 @@
       ],
       legend: [["tree", "Tree grown from the start"], ["sample", "Random sample (ring)"], ["new", "Newest branch"], ["path", "Path found"]],
       explain: {
+        tech: '<p>Let T be a tree rooted at x<sub>start</sub>. Each iteration draws x<sub>rand</sub> uniformly from the free space (with probability p<sub>goal</sub> it is x<sub>goal</sub> instead, the “goal bias”), finds x<sub>near</sub> = argmin<sub>x∈T</sub> ‖x − x<sub>rand</sub>‖ by a linear scan, and steers one step:</p><p class="formula">x<sub>new</sub> = x<sub>near</sub> + min(δ, ‖x<sub>rand</sub> − x<sub>near</sub>‖) · (x<sub>rand</sub> − x<sub>near</sub>) / ‖x<sub>rand</sub> − x<sub>near</sub>‖</p><p>The node is added only if the segment x<sub>near</sub>→x<sub>new</sub> is collision-free (tested at 4-unit intervals against the obstacle bitmap, padded by a small clearance). The search stops when the segment from a new node to x<sub>goal</sub> is free. RRT is probabilistically complete (the probability of finding an existing path tends to 1 as the number of samples grows) but not asymptotically optimal. The step size δ trades exploration speed against the ability to pass through narrow gaps.</p>',
         summary: "RRT searches by growing a tree of short branches out of the start point, like a plant exploring a room. It never plans a whole route in advance; it just keeps trying random directions.",
         steps: ["Pick a random point on the map (now and then, pick the goal itself).", "Find the closest branch tip already in the tree.", "Grow one short step from that tip toward the random point, but only if the way is clear.", "Stop as soon as a branch can reach the goal, then read the path back along the branches."],
         notice: "The tree spreads into big open areas first, then squeezes through gaps. A higher goal bias makes it rush toward the goal, but it can also get stuck in dead ends.",
@@ -574,6 +575,7 @@
       ],
       legend: [["tree", "Tree from the start"], ["tree2", "Tree from the goal"], ["sample", "Random sample (ring)"], ["path", "Path found"]],
       explain: {
+        tech: '<p>Two trees T<sub>a</sub> (from x<sub>start</sub>) and T<sub>b</sub> (from x<sub>goal</sub>) are grown. In each iteration T<sub>a</sub> is extended toward a random sample as in RRT, giving x<sub>new</sub>. Then T<sub>b</sub> repeatedly extends toward x<sub>new</sub> (the “connect” step) until it reaches it, is blocked by an obstacle, or the iteration budget ends. If T<sub>b</sub> reaches x<sub>new</sub>, the path is the branch from x<sub>start</sub> to x<sub>new</sub> joined with the branch from x<sub>goal</sub>. Otherwise the roles of the trees are exchanged. The result is probabilistically complete and usually needs fewer samples than single-tree RRT, but it is also not optimal.</p>',
         summary: "Two trees grow at the same time: one from the start and one from the goal. The search is finished the moment they touch, which usually takes far fewer samples than one tree reaching a faraway goal.",
         steps: ["Grow the smaller tree one step toward a random point.", "Then let the other tree try to chase that new tip, step by step.", "If it gets there, the two trees are joined: start and goal are connected.", "Otherwise swap roles and repeat."],
         notice: "Watch the blue and orange trees reach out toward each other. In maps with a narrow gap in the middle, the meeting point usually lands right in the gap.",
@@ -588,6 +590,7 @@
       select: { id: "search", label: "Graph search", options: [["astar", "A* (guided by distance to goal)"], ["dijkstra", "Dijkstra (no guidance)"]] },
       legend: [["sample", "Sampled point"], ["edge", "Safe connection"], ["visited", "Explored by the search"], ["path", "Shortest path in the roadmap"]],
       explain: {
+        tech: '<p>PRM has two phases. <strong>Learning phase:</strong> draw N random configurations in free space (rejecting points within a clearance of obstacles and points too close to an existing sample), then connect each sample to up to k nearest samples within the connection radius r when the straight segment is collision-free. This builds an undirected weighted graph G = (V, E) with edge weight equal to segment length. <strong>Query phase:</strong> connect x<sub>start</sub> and x<sub>goal</sub> to the roadmap and search G.</p><p class="formula">Dijkstra: expand the node with the smallest g(n).  A*: expand the node with the smallest f(n) = g(n) + h(n), h(n) = ‖n − x<sub>goal</sub>‖</p><p>The Euclidean heuristic h is admissible and consistent here, so A* returns the same shortest roadmap path as Dijkstra while usually exploring fewer nodes. The path is optimal only within the roadmap; as N grows (with a suitable radius) it approaches the true shortest path. The roadmap is independent of the query, so it can be reused for many start–goal pairs in a static map.</p>',
         summary: "PRM first builds a road network. It scatters random points over the free space and links nearby points with straight lines that do not touch an obstacle. Then a graph search finds the shortest route along those roads from start to goal.",
         steps: ["Scatter random points that are not inside (or too close to) obstacles.", "Link each point to its nearest neighbours when the straight line between them is clear.", "Run A* (or Dijkstra) on that network from start to goal.", "Highlight the cheapest chain of roads."],
         notice: "The roadmap does not depend on where you start or end, so a real robot could reuse it for many trips in the same static map. Add more samples to see the path get closer to the true shortest route.",
@@ -602,6 +605,7 @@
       ],
       legend: [["tree", "Tree"], ["sample", "Random sample (ring)"], ["new", "Newest branch"], ["path", "Best path so far"]],
       explain: {
+        tech: '<p>RRT* adds two steps to RRT. <strong>Choose parent:</strong> among the nodes within the rewire radius r of x<sub>new</sub> that can see it, pick the one minimising cost-to-come c(x<sub>near</sub>) + ‖x<sub>near</sub> − x<sub>new</sub>‖. <strong>Rewire:</strong> for each neighbour x within r, if</p><p class="formula">c(x<sub>new</sub>) + ‖x<sub>new</sub> − x‖ &lt; c(x)</p><p>and the segment is free, x switches its parent to x<sub>new</sub>. With a suitable radius that shrinks like (log n / n)<sup>1/d</sup>, RRT* is asymptotically optimal: the cost of the best path converges to the optimum as the number of samples grows. This page uses a fixed rewire radius, which is a common simplification, and keeps sampling after the first solution so that the best path improves. The extra neighbour search and rewiring make each iteration more expensive than RRT.</p>',
         summary: "RRT* is a refinement of RRT that keeps polishing the answer. Every new branch picks the cheapest parent nearby, then offers its neighbours a cheaper route through itself (“rewiring”). The path found gets shorter as sampling continues.",
         steps: ["Grow the tree like RRT.", "Among nearby nodes, connect the new node to whichever gives the shortest trip back to the start.", "Check whether the new node can give any neighbour a shorter trip; if so, rewire that neighbour.", "Keep sampling after the first path appears; the best path keeps improving."],
         notice: "After the goal is first reached, keep watching: the yellow path straightens out over time. This is an extra algorithm I added here; it is not in the Python repository.",
@@ -947,9 +951,10 @@
   function swatch(kind) { return '<span class="sw sw-' + kind + '" aria-hidden="true"></span>'; }
   function buildExplain() {
     var spec = ALGOS[S.algo], ex = spec.explain, h = "";
-    h += "<h2 id=\"explain-title\">" + spec.full + "</h2><p>" + ex.summary + "</p><h3>How it works</h3><ol>";
+    h += "<h2 id=\"explain-title\">" + spec.full + "</h2><p>" + ex.summary + "</p><h3>In simple steps</h3><ol>";
     ex.steps.forEach(function (s) { h += "<li>" + s + "</li>"; });
     h += "</ol><h3>What to watch for</h3><p>" + ex.notice + "</p><h3>Good to know</h3><p>" + ex.limits + "</p>";
+    h += "<details class=\"how-it-works\"><summary>How it works (technical details)</summary><div class=\"how-body\">" + ex.tech + "<p>Reference code: <a href=\"https://github.com/DingshuaiYang1999/python-robotics-learning/tree/main/04_robotics/path_planning\" target=\"_blank\" rel=\"noopener\">Python implementations on GitHub<span class=\"visually-hidden\"> (opens in a new tab)</span></a>.</p></div></details>";
     $("explain").innerHTML = h;
     var lg = "";
     spec.legend.forEach(function (l) { lg += "<li>" + swatch(l[0]) + l[1] + "</li>"; });

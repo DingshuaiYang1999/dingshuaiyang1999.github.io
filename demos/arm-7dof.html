@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>7-DOF Robot Arm Simulator</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <style>
       :root {
         color-scheme: dark;
@@ -265,6 +269,20 @@
           border-top: 1px solid var(--line);
         }
       }
+
+      /* two-layer explanation: plain sentence + hints, then collapsible technical details */
+      .twolayer { margin: 0 0 16px; font-size: 13px; line-height: 1.5; }
+      .twolayer .lead { margin: 0 0 8px; color: var(--text); font-size: 14px; line-height: 1.5; }
+      .twolayer .try { margin: 0 0 8px; padding: 8px 10px 6px 12px; border-left: 3px solid var(--accent); background: rgba(255, 255, 255, 0.04); border-radius: 4px; }
+      .twolayer .try b { display: block; margin-bottom: 3px; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); }
+      .twolayer .try ul { margin: 0; padding-left: 16px; color: var(--muted); }
+      .twolayer .try li { margin-bottom: 3px; }
+      .twolayer details { border: 1px solid var(--line); border-radius: 6px; }
+      .twolayer summary { cursor: pointer; padding: 9px 10px; min-height: 40px; color: var(--accent); font-weight: 600; }
+      .twolayer summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+      .twolayer .tech { padding: 2px 12px 10px; color: var(--muted); }
+      .twolayer .tech p { margin: 6px 0; }
+      .twolayer .tech .f { margin: 6px 0; padding: 6px 8px; overflow-x: auto; white-space: nowrap; background: rgba(255, 255, 255, 0.05); border-radius: 4px; color: var(--text); font-family: Georgia, serif; font-style: italic; }
     </style>
   </head>
   <body>
@@ -286,6 +304,22 @@
       <aside>
         <h1>7-DOF Robot Arm</h1>
         <p class="sub">Forward-kinematics simulator with seven revolute joints, live end-effector position, trail, and interactive orbit view.</p>
+
+        <div class="twolayer">
+          <p class="lead">A robot arm with seven joints, like a human arm with a wrist. Move the joint sliders and watch where the hand ends up.</p>
+          <div class="try"><b>Try this</b><ul>
+            <li>Press “Inspect”, “Reach” or “Fold” to see three ready-made poses.</li>
+            <li>Drag in the 3D view to look at the arm from other sides.</li>
+            <li>Change one joint at a time and see how the hand moves.</li>
+          </ul></div>
+          <details><summary>How it works (technical details)</summary><div class="tech">
+            <p>Each joint i is described by Denavit–Hartenberg parameters (θ<sub>i</sub>, d<sub>i</sub>, a<sub>i</sub>, α<sub>i</sub>). Its homogeneous transform is</p>
+            <p class="f">A<sub>i</sub> = Rot<sub>z</sub>(θ<sub>i</sub>) · Trans<sub>z</sub>(d<sub>i</sub>) · Trans<sub>x</sub>(a<sub>i</sub>) · Rot<sub>x</sub>(α<sub>i</sub>)</p>
+            <p>and the end-effector pose is the product (forward kinematics):</p>
+            <p class="f">T = A₁ A₂ A₃ A₄ A₅ A₆ A₇</p>
+            <p>The tool position is the translation part of T. A pose in space has six degrees of freedom, so seven joints are <em>redundant</em>: a continuum of joint configurations reaches the same hand pose (the null space of the Jacobian), which allows extra goals such as avoiding obstacles.</p>
+          </div></details>
+        </div>
 
         <div class="toolbar">
           <button class="primary" id="playBtn" type="button">Play</button>
