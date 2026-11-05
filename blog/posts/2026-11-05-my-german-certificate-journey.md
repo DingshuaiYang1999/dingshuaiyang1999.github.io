@@ -26,16 +26,16 @@ The following is a short summary.
 
 The Goethe-Zertifikat examinations are organised by level. A1 is the first level, and each following level (A2, B1 and B2) builds on the previous one. I passed all four, at four different centres:
 
-- **B1 (2023):** Goethe-Institut Peking and [Goethe-Jinchuang Language Centre Shanghai](https://goetheslz.com/shanghai/).
-- **A1 (2024):** Goethe-Institut Düsseldorf.
-- **B2 (2024):** Goethe-Institut Peking.
-- **A2 (2025):** Goethe-Institut München.
+- **B1 (2023):** [Goethe-Institut Peking](https://www.goethe.de/ins/cn/zh/index.html) and [Goethe-Jinchuang Language Centre Shanghai](https://goetheslz.com/shanghai/).
+- **A1 (2024):** [Goethe-Institut Düsseldorf](https://www.goethe.de/ins/de/en/ort/due.html).
+- **B2 (2024):** [Goethe-Institut Peking](https://www.goethe.de/ins/cn/zh/index.html).
+- **A2 (2025):** [Goethe-Institut München](https://www.goethe.de/ins/de/en/ort/mue.html).
 
 The list follows the dates on my certificates, so the years do not run in the order of the levels. For the examinations in China, I travelled back and forth between Qingdao, Beijing and Shanghai.
 
 <!-- TODO(Dingshuai): (1) Why do A1 (2024) and A2 (2025) come after B1 and B2? I wrote the years neutrally and did not give a reason. (2) Did you pass B1 as a whole at both centres, or take parts at each? (3) Did the travel between Qingdao, Beijing and Shanghai apply to B1 and B2 only? (4) Add the months of A1, A2 and B1 if you want them. -->
 
-I describe the B2 examination in most detail. I took it at the Goethe-Institut Peking in February 2024; the certificate gives the exact date as 21 February 2024. The four modules are Reading, Listening, Writing and Speaking, and each one is scored out of 100 points. My scores were 70 for Reading, 63 for Listening, 63 for Writing and 62 for Speaking.
+I describe the B2 examination in most detail. I took it at the [Goethe-Institut Peking](https://www.goethe.de/ins/cn/zh/index.html) in February 2024; the certificate gives the exact date as 21 February 2024. The four modules are Reading, Listening, Writing and Speaking, and each one is scored out of 100 points. My scores were 70 for Reading, 63 for Listening, 63 for Writing and 62 for Speaking.
 
 A module counts as passed at 60 points, so my lowest score, in Speaking, was two points above the pass mark.
 
