@@ -29,7 +29,7 @@ The Goethe-Zertifikat examinations are organised by level. A1 is the first level
 - **B1 (2023):** [Goethe-Institut Peking](https://www.goethe.de/ins/cn/zh/index.html) and [Goethe-Jinchuang Language Centre Shanghai](https://goetheslz.com/shanghai/).
 - **A1 (2024):** [Goethe-Institut Düsseldorf](https://www.goethe.de/ins/de/en/ort/due.html).
 - **B2 (2024):** [Goethe-Institut Peking](https://www.goethe.de/ins/cn/zh/index.html).
-- **A2 (2025):** [Goethe-Institut München](https://www.goethe.de/ins/de/en/ort/mue.html).
+- **A2 (2025):** [Goethe-Institut München](https://www.goethe.de/ins/de/de/m/ort/mue.html).
 
 The list follows the dates on my certificates, so the years do not run in the order of the levels. For the examinations in China, I travelled back and forth between Qingdao, Beijing and Shanghai.
 
