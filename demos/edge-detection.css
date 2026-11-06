@@ -116,7 +116,7 @@
 .edge-page math { color: var(--text); font-size: 1.05rem; }
 .math-inline { font-family: var(--serif); }
 .formula-card p, .plot-card p { margin: 8px 0 0; font-size: 14.5px; line-height: 1.5; }
-.kernel-plot { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; color: var(--text); }
+.kernel-plot { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; background: #fff; }
 .plot-card.wide .kernel-plot { max-width: 520px; }
 .kernel-plot text { font-family: var(--sans); }
 .sign-legend {
