@@ -16,7 +16,17 @@
 .pic-src { display: flex; gap: 12px; align-items: center; margin: 0 0 10px; }
 .pic-src img { flex: none; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--rule-strong); object-fit: cover; }
 .pic-src figcaption { font-size: 14.5px; line-height: 1.5; color: var(--muted); }
-.tour-note { color: var(--muted); font-size: 14.5px; }
+.stale-note {
+  flex: 1 1 100%; margin: 0; padding: 8px 12px;
+  border-left: 3px solid var(--accent); background: var(--accent-soft);
+  color: var(--text); font-size: 15px; line-height: 1.45;
+}
+.stale-note[hidden] { display: none; }
+.ed-live {
+  margin: 0 0 12px; padding: 8px 12px;
+  border-left: 3px solid var(--accent); background: var(--accent-soft);
+  color: var(--text); font-size: 15.5px; line-height: 1.45;
+}
 
 @media (max-width: 760px) {
   .ed-grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -42,3 +52,89 @@
 .ed-ctl-grid .pl-check { margin-bottom: 10px; }
 .panels-one { grid-template-columns: minmax(0, 1fr); }
 @media (max-width: 600px) { .ed-ctl-grid { grid-template-columns: 1fr; } .ed-controls h2 .muted { display: block; } }
+
+/* Comparison and Laplacian readings. Captions state the scale; pictures do not share one. */
+.ed-note { margin: 0 0 10px; max-width: 74ch; color: var(--text); font-size: 15.5px; line-height: 1.55; }
+.ed-compare, .ed-pair, .ed-lap { display: grid; gap: 14px; margin: 10px 0 18px; }
+.ed-compare { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ed-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ed-lap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 720px) {
+  .ed-compare, .ed-pair { grid-template-columns: 1fr; }
+  .ed-lap { grid-template-columns: 1fr; }
+}
+
+/* Revision notes: one idea per block, cards instead of a single formula line. */
+.edge-page .how-body { min-width: 0; }
+.edge-page .explain-block { min-width: 0; }
+.how-sec { margin: 26px 0 8px; }
+.how-sec > h3 { margin: 0 0 8px; }
+.how-sec > p { margin: 0 0 10px; }
+.card-row, .plot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 12px;
+  margin: 0 0 12px;
+}
+.formula-card, .plot-card {
+  margin: 0 0 12px;
+  padding: 12px 14px 10px;
+  min-width: 0;
+  max-width: 100%;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--rule-strong);
+  border-radius: 6px;
+  background: var(--accent-soft);
+}
+.card-row .formula-card, .card-row .plot-card, .plot-grid .plot-card { margin: 0; }
+.plot-card.wide { grid-column: 1 / -1; }
+.k-flag {
+  display: inline-block;
+  margin: 0 0 6px;
+  padding: 1px 7px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--bg);
+}
+.formula-card figcaption, .plot-card figcaption {
+  margin: 0 0 8px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 14.5px;
+  font-weight: 650;
+  line-height: 1.4;
+  color: var(--text);
+}
+.math-scroll { max-width: 100%; overflow-x: auto; }
+.edge-page math { color: var(--text); font-size: 1.05rem; }
+.math-inline { font-family: var(--serif); }
+.formula-card p, .plot-card p { margin: 8px 0 0; font-size: 14.5px; line-height: 1.5; }
+.kernel-plot { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; color: var(--text); }
+.plot-card.wide .kernel-plot { max-width: 520px; }
+.kernel-plot text { font-family: var(--sans); }
+.sign-legend {
+  display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+  margin: 0 0 8px; font-size: 14px; line-height: 1.4;
+}
+.sign-legend .sw {
+  display: inline-block; width: 14px; height: 14px; margin-right: 5px;
+  border-radius: 2px; border: 1px solid var(--rule-strong); vertical-align: -2px;
+}
+.sw-neg { background: #3d6fbf; }
+.sw-pos { background: #c4722a; }
+.sw-zero { background: #a8aeb6; }
+.sw-g { background: #144e8c; }
+.how-sec .refs { margin-top: 4px; }
+@media (max-width: 600px) {
+  .edge-page .how-body { padding-left: 12px; padding-right: 12px; }
+  .formula-card, .plot-card { padding: 10px 10px 8px; }
+  .edge-page math { font-size: 1rem; }
+  .how-sec { margin-top: 22px; }
+}

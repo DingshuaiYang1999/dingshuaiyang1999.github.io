@@ -68,6 +68,133 @@
     return { gx: gx, gy: gy };
   }
 
+  /* Sobel on a unit ramp (brightness increases by 1 per pixel) returns 8 in the interior.
+     Derivative-of-Gaussian kernels are scaled to that same ramp gain. The scale is a
+     property of the kernel, not of a particular picture. */
+  var SOBEL_RAMP_GAIN = 8;
+
+  /* Separable correlation kernels for ∂G/∂x and ∂G/∂y.
+     Analytic ∂G/∂x = −(x/σ²) G is positive for negative x. Convolution with that
+     function is a positive response when brightness increases toward +x. Correlation
+     with the flipped samples is the same operation: the weight on a positive offset
+     (right, or down) is positive. The derivative taps are stored antisymmetric, so
+     they sum to 0. smooth[] is the Gaussian factor along the other axis.
+     Returns dx already multiplied so that a unit ramp has gain SOBEL_RAMP_GAIN. */
+  function dogKernels(ksize, sigma) {
+    var empty = { dx: new Float64Array([0]), smooth: new Float64Array([1]), rampGain: 0 };
+    if (!(ksize > 1) || !(sigma > 0)) return empty;
+    var r = (ksize - 1) / 2, s2 = sigma * sigma, i, t, g;
+    var dx = new Float64Array(ksize), smooth = new Float64Array(ksize);
+    for (i = 0; i < ksize; i++) {
+      t = i - r;
+      g = Math.exp(-(t * t) / (2 * s2));
+      smooth[i] = g;
+      dx[i] = t * g;
+    }
+    for (i = 0; i < r; i++) dx[i] = -dx[ksize - 1 - i];
+    dx[r] = 0;
+    var moment = 0, mass = 0;
+    for (i = 0; i < ksize; i++) { moment += (i - r) * dx[i]; mass += smooth[i]; }
+    var rawGain = moment * mass;
+    var scale = rawGain !== 0 ? SOBEL_RAMP_GAIN / rawGain : 0;
+    for (i = 0; i < ksize; i++) dx[i] *= scale;
+    return { dx: dx, smooth: smooth, rampGain: rawGain !== 0 ? SOBEL_RAMP_GAIN : 0 };
+  }
+
+  /* Separable correlation. kx runs along x, ky along y. Borders are reflect-101. */
+  function correlateSeparable(gray, w, h, kx, ky) {
+    var out = new Float32Array(w * h);
+    if (kx.length <= 1 && ky.length <= 1) return out;
+    var rx = (kx.length - 1) / 2, ry = (ky.length - 1) / 2;
+    var tmp = new Float32Array(w * h);
+    var idx = new Int32Array(w + 2 * rx), idy = new Int32Array(h + 2 * ry), i, x, y, s;
+    for (i = 0; i < idx.length; i++) idx[i] = reflect101(i - rx, w);
+    for (i = 0; i < idy.length; i++) idy[i] = reflect101(i - ry, h);
+    for (y = 0; y < h; y++) for (x = 0; x < w; x++) {
+      s = 0; for (i = 0; i < kx.length; i++) s += kx[i] * gray[y * w + idx[x + i]];
+      tmp[y * w + x] = s;
+    }
+    for (y = 0; y < h; y++) for (x = 0; x < w; x++) {
+      s = 0; for (i = 0; i < ky.length; i++) s += ky[i] * tmp[idy[y + i] * w + x];
+      out[y * w + x] = s;
+    }
+    return out;
+  }
+
+  /* Direct first derivatives of a Gaussian on the grayscale image. Not blur-then-Sobel. */
+  function dogGradients(gray, w, h, ksize, sigma) {
+    var z = new Float32Array(w * h);
+    if (!(ksize > 1) || !(sigma > 0)) return { gx: z, gy: new Float32Array(w * h), rampGain: 0 };
+    var ker = dogKernels(ksize, sigma);
+    return {
+      gx: correlateSeparable(gray, w, h, ker.dx, ker.smooth),
+      gy: correlateSeparable(gray, w, h, ker.smooth, ker.dx),
+      rampGain: ker.rampGain
+    };
+  }
+
+  function cannyFromGradients(gx, gy, w, h, low, high, l2) {
+    var m = strength(gx, gy, l2);
+    var keep = nonMaxSuppress(gx, gy, m, w, h);
+    var st = doubleThreshold(keep, m, low, high, l2);
+    return { gx: gx, gy: gy, strength: m, thin: keep, state: st, edges: hysteresis(st, w, h) };
+  }
+
+  /* Discrete Laplacian: correlation with the symmetric 4-neighbour kernel
+     [0 1 0; 1 -4 1; 0 1 0], negative centre, replicate border (same border as Sobel).
+     Entrywise this is the second difference in x plus the second difference in y.
+     The weighted eight-neighbour kernel (1, 4, −20) is not applied. */
+  function laplacian(g, w, h) {
+    var out = new Int16Array(w * h);
+    for (var y = 0; y < h; y++) {
+      var ym = (y > 0 ? y - 1 : 0) * w, y0 = y * w, yp = (y < h - 1 ? y + 1 : y) * w;
+      for (var x = 0; x < w; x++) {
+        var xm = x > 0 ? x - 1 : 0, xp = x < w - 1 ? x + 1 : x;
+        out[y0 + x] = g[ym + x] + g[yp + x] + g[y0 + xm] + g[y0 + xp] - 4 * g[y0 + x];
+      }
+    }
+    return out;
+  }
+
+  /* Sign-change edges. A 4-connected pair counts when the samples are not the same
+     strict sign and |a − b| is at least minJump. The mark sits on the sample closer
+     to zero; an exact tie marks the negative sample; an exact zero marks that sample.
+     Thresholding |L| is a different test (see absAtLeast). */
+  function zeroCrossings(lap, w, h, minJump) {
+    var out = new Uint8Array(w * h);
+    var jump = minJump > 0 ? minJump : 0;
+    function pair(i, j) {
+      var a = lap[i], b = lap[j];
+      if ((a > 0 && b > 0) || (a < 0 && b < 0)) return;
+      if (a === 0 && b === 0) return;
+      if (Math.abs(a - b) < jump) return;
+      if (a === 0) { out[i] = 255; return; }
+      if (b === 0) { out[j] = 255; return; }
+      var aa = a < 0 ? -a : a, bb = b < 0 ? -b : b;
+      if (aa < bb) out[i] = 255;
+      else if (bb < aa) out[j] = 255;
+      else out[a < 0 ? i : j] = 255;
+    }
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
+        var i = y * w + x;
+        if (x + 1 < w) pair(i, i + 1);
+        if (y + 1 < h) pair(i, i + w);
+      }
+    }
+    return out;
+  }
+
+  /* White where |L| ≥ t. At t = 0 every pixel passes. This is not a zero-crossing map. */
+  function absAtLeast(lap, t) {
+    var out = new Uint8Array(lap.length), thr = t > 0 ? t : 0, i, a;
+    for (i = 0; i < lap.length; i++) {
+      a = lap[i] < 0 ? -lap[i] : lap[i];
+      if (a >= thr) out[i] = 255;
+    }
+    return out;
+  }
+
   /* Gradient strength in comparable units: |Gx|+|Gy| (L1, OpenCV default) or Gx^2+Gy^2 (L2, thresholds squared). */
   function strength(gx, gy, l2) {
     var m = new Float32Array(gx.length);
@@ -168,7 +295,24 @@
     return { exact: same / a.length, f1: 2 * pr * rc / Math.max(pr + rc, 1e-12), edgesA: ca, edgesB: cb };
   }
 
+  /* Selected controls versus the settings last drawn. Play copies selected onto applied.
+     It does not rewrite the selected numbers. */
+  function settingFields(p) {
+    return {
+      ksize: Number(p.ksize), sigma: Number(p.sigma), low: Number(p.low), high: Number(p.high),
+      l2: !!p.l2, lapT: Number(p.lapT), signed: !!p.signed, steps: !!p.steps
+    };
+  }
+  function settingsStale(applied, selected) {
+    var a = settingFields(applied), b = settingFields(selected), k;
+    for (k in a) if (a[k] !== b[k]) return true;
+    return false;
+  }
+
   var core = { toGray: toGray, gaussianKernel: gaussianKernel, gaussianBlur: gaussianBlur, sobel: sobel, strength: strength,
+    laplacian: laplacian, zeroCrossings: zeroCrossings, absAtLeast: absAtLeast,
+    dogKernels: dogKernels, dogGradients: dogGradients, cannyFromGradients: cannyFromGradients,
+    settingFields: settingFields, settingsStale: settingsStale,
     nonMaxSuppress: nonMaxSuppress, doubleThreshold: doubleThreshold, hysteresis: hysteresis, canny: canny, process: process, agreement: agreement };
   if (typeof module !== "undefined" && module.exports) module.exports = core;
   root.EdgeCore = core;
@@ -178,11 +322,10 @@
   /* UI                                                                   */
   /* ------------------------------------------------------------------ */
   var $ = function (id) { return document.getElementById(id); };
-  var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var DEFAULTS = { ksize: 5, sigma: 1.4, low: 50, high: 150, l2: false };
+  var DEFAULTS = { ksize: 5, sigma: 1.4, low: 50, high: 150, l2: false, lapT: 16, signed: false, steps: false };
   var S = {
-    w: 0, h: 0, rgba: null, gray: null, params: { ksize: 5, sigma: 1.4, low: 50, high: 150, l2: false },
-    signed: false, steps: false, tour: null, cache: {}, last: null
+    w: 0, h: 0, rgba: null, gray: null, params: { ksize: 5, sigma: 1.4, low: 50, high: 150, l2: false, lapT: 16 },
+    signed: false, steps: false, cache: {}, last: null
   };
   var MAX_SIDE = 400;
   var statusEl = $("status");
@@ -213,7 +356,8 @@
   }
 
   /* ----- panels ----- */
-  var panelIds = ["p-orig", "p-gray", "p-sx", "p-sy", "p-mag", "p-canny", "s-blur", "s-thin", "s-thr", "s-final"];
+  var panelIds = ["p-orig", "p-gray", "p-sx", "p-sy", "p-mag", "p-canny", "s-blur", "s-thin", "s-thr", "s-final",
+    "cmp-sobel", "cmp-canny", "cmp-lap", "pair-sobel", "pair-dog", "lap-signed", "lap-abs", "lap-thr", "lap-zero"];
   var ctxs = {};
   function layoutPanels() {
     panelIds.forEach(function (id) {
@@ -246,6 +390,22 @@
     }
     for (i = 0; i < n; i++) mg[i] = mg[i] / mmax * 255;
     paintGray("p-sx", sx); paintGray("p-sy", sy); paintGray("p-mag", mg); paintGray("p-canny", r.edges);
+    /* Laplacian of the same blurred image. Displays do not share one scale with Sobel or Canny. */
+    var lap = laplacian(r.blurred, S.w, S.h), zc = zeroCrossings(lap, S.w, S.h, p.lapT), ath = absAtLeast(lap, p.lapT);
+    var lmax = 1, signedL = new Uint8Array(n), absL = new Uint8Array(n), sVal, aVal;
+    for (i = 0; i < n; i++) { aVal = lap[i] < 0 ? -lap[i] : lap[i]; if (aVal > lmax) lmax = aVal; }
+    for (i = 0; i < n; i++) {
+      sVal = Math.round(128 + (lap[i] / lmax) * 127);
+      signedL[i] = sVal < 0 ? 0 : sVal > 255 ? 255 : sVal;
+      aVal = Math.round((lap[i] < 0 ? -lap[i] : lap[i]) / lmax * 255);
+      absL[i] = aVal > 255 ? 255 : aVal;
+    }
+    paintGray("lap-signed", signedL); paintGray("lap-abs", absL); paintGray("lap-thr", ath); paintGray("lap-zero", zc);
+    paintGray("cmp-sobel", mg); paintGray("cmp-canny", r.edges); paintGray("cmp-lap", zc);
+    paintGray("pair-sobel", r.edges);
+    var dog = dogGradients(S.gray, S.w, S.h, p.ksize, p.sigma);
+    var dogC = cannyFromGradients(dog.gx, dog.gy, S.w, S.h, p.low, p.high, p.l2);
+    paintGray("pair-dog", dogC.edges);
     if (S.steps) {
       var thin = new Uint8Array(n), thr = new Uint8Array(n);
       for (i = 0; i < n; i++) {
@@ -261,83 +421,90 @@
     $("st-weak").textContent = weak.toLocaleString("en-US");
     $("st-edges").textContent = kept.toLocaleString("en-US") + " (" + (kept / n * 100).toFixed(1) + " %)";
     $("st-time").textContent = r.ms.toFixed(1) + " ms";
-    $("l2-note").textContent = p.l2 ? "Strength = √(Gx² + Gy²)." : "Strength = |Gx| + |Gy| (OpenCV default).";
+    $("l2-note").textContent = p.l2 ? "Both Canny pictures compare Gx² + Gy² with the squared thresholds." : "Both Canny pictures use strength |Gx| + |Gy| (OpenCV’s default for the Sobel path).";
   }
-  var raf = 0;
-  function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; render(); }); }
 
-  /* ----- controls ----- */
+  /* ----- controls -----
+     Widgets show the selected values immediately. Pictures stay on the last Play
+     until the user presses Play demo again. Play never writes the widgets. */
+  function appliedSelection() {
+    return { ksize: S.params.ksize, sigma: S.params.sigma, low: S.params.low, high: S.params.high, l2: S.params.l2, lapT: S.params.lapT, signed: S.signed, steps: S.steps };
+  }
+  function selection() {
+    return {
+      ksize: Number($("ksize").value), sigma: Number($("sigma").value),
+      low: Number($("low").value), high: Number($("high").value),
+      l2: $("l2").checked, lapT: Number($("lap-t").value),
+      signed: $("signed").checked, steps: $("steps").checked
+    };
+  }
+  function refreshStale() {
+    var stale = settingsStale(appliedSelection(), selection());
+    var note = $("stale-note"), btn = $("btn-play");
+    if (note) note.hidden = !stale;
+    if (btn) {
+      btn.classList.toggle("primary", stale);
+      btn.classList.toggle("secondary", !stale);
+    }
+    return stale;
+  }
+  function showSelected(which) {
+    var v = Number($(which).value);
+    if (which === "ksize") $("ksize-out").textContent = v + " × " + v;
+    if (which === "sigma") $("sigma-out").textContent = v.toFixed(1);
+    if (which === "low") $("low-out").textContent = String(Math.round(v));
+    if (which === "high") $("high-out").textContent = String(Math.round(v));
+    if (which === "lap-t") $("lap-t-out").textContent = String(Math.round(v));
+    refreshStale();
+  }
   function syncControls() {
     var p = S.params;
-    $("ksize").value = p.ksize; $("ksize-out").textContent = p.ksize + " × " + p.ksize;
-    $("sigma").value = p.sigma; $("sigma-out").textContent = p.sigma.toFixed(1);
-    $("low").value = p.low; $("low-out").textContent = String(Math.round(p.low));
-    $("high").value = p.high; $("high-out").textContent = String(Math.round(p.high));
-    $("l2").checked = p.l2;
+    $("ksize").value = p.ksize; $("sigma").value = p.sigma; $("low").value = p.low; $("high").value = p.high;
+    $("l2").checked = p.l2; $("lap-t").value = p.lapT;
+    $("signed").checked = S.signed; $("steps").checked = S.steps;
+    $("steps-wrap").hidden = !S.steps;
+    ["ksize", "sigma", "low", "high", "lap-t"].forEach(showSelected);
   }
-  function onSlider(which) {
-    stopTour();
-    var p = S.params;
-    if (which === "ksize") p.ksize = Number($("ksize").value);
-    if (which === "sigma") p.sigma = Number($("sigma").value);
-    if (which === "low") { p.low = Number($("low").value); if (p.low > p.high) p.high = p.low; }
-    if (which === "high") { p.high = Number($("high").value); if (p.high < p.low) p.low = p.high; }
-    syncControls(); schedule();
+  function applySelection() {
+    var before = selection();
+    var s = settingFields(before);
+    S.params.ksize = s.ksize; S.params.sigma = s.sigma; S.params.low = s.low; S.params.high = s.high;
+    S.params.l2 = s.l2; S.params.lapT = s.lapT; S.signed = s.signed; S.steps = s.steps;
+    $("steps-wrap").hidden = !S.steps;
+    if (S.steps) layoutPanels();
+    render();
+    refreshStale();
+    say("Pictures updated for the selected settings.");
+    return { before: before, after: selection() };
   }
-  ["ksize", "sigma", "low", "high"].forEach(function (id) { $(id).addEventListener("input", function () { onSlider(id); }); });
-  $("l2").addEventListener("change", function () { stopTour(); S.params.l2 = $("l2").checked; syncControls(); schedule(); });
-  $("signed").addEventListener("change", function () { S.signed = $("signed").checked; schedule(); });
-  $("steps").addEventListener("change", function () {
-    S.steps = $("steps").checked; $("steps-wrap").hidden = !S.steps;
-    if (S.steps) { layoutPanels(); } schedule();
+  ["ksize", "sigma", "low", "high", "lap-t"].forEach(function (id) {
+    $(id).addEventListener("input", function () { showSelected(id); });
   });
-  $("btn-defaults").addEventListener("click", function () { stopTour(); Object.assign(S.params, DEFAULTS); syncControls(); schedule(); say("Settings reset to the defaults."); });
-
-
-  /* ----- autoplay tour: sweep blur, then thresholds, then return to defaults ----- */
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function ease(t) { return t * t * (3 - 2 * t); }
-  function startTour() {
-    if (S.tour) return;
-    Object.assign(S.params, DEFAULTS, { ksize: 9, sigma: 0.5 });
-    S.tour = { t0: performance.now(), raf: 0 };
-    $("btn-tour").textContent = "■ Stop demo"; $("tour-note").hidden = false;
-    (function step(now) {
-      if (!S.tour) return;
-      var t = (now - S.tour.t0) / 1000, p = S.params, u;
-      if (t < 3.2) { u = ease(t / 3.2); p.sigma = lerp(0.5, 3.4, u); p.low = 50; p.high = 150; p.ksize = 9; }
-      else if (t < 6.4) { u = ease((t - 3.2) / 3.2); p.sigma = 1.4; p.ksize = 5; p.low = lerp(190, 15, u); p.high = lerp(300, 45, u); }
-      else if (t < 8) { u = ease((t - 6.4) / 1.6); p.sigma = 1.4; p.ksize = 5; p.low = lerp(15, 50, u); p.high = lerp(45, 150, u); }
-      else { stopTour(); Object.assign(p, DEFAULTS); syncControls(); render(); return; }
-      p.sigma = Math.round(p.sigma * 10) / 10; p.low = Math.round(p.low); p.high = Math.round(p.high);
-      syncControls(); render();
-      S.tour.raf = requestAnimationFrame(step);
-    })(performance.now());
-  }
-  function stopTour() {
-    if (!S.tour) return;
-    cancelAnimationFrame(S.tour.raf); S.tour = null;
-    $("btn-tour").textContent = "▶ Play demo"; $("tour-note").hidden = true;
-  }
-  $("btn-tour").addEventListener("click", function () { if (S.tour) { stopTour(); Object.assign(S.params, DEFAULTS); syncControls(); schedule(); } else { startTour(); } });
+  ["l2", "signed", "steps"].forEach(function (id) {
+    $(id).addEventListener("change", function () { refreshStale(); });
+  });
+  $("btn-defaults").addEventListener("click", function () {
+    $("ksize").value = DEFAULTS.ksize; $("sigma").value = DEFAULTS.sigma;
+    $("low").value = DEFAULTS.low; $("high").value = DEFAULTS.high;
+    $("l2").checked = DEFAULTS.l2; $("lap-t").value = DEFAULTS.lapT;
+    $("signed").checked = DEFAULTS.signed; $("steps").checked = DEFAULTS.steps;
+    ["ksize", "sigma", "low", "high", "lap-t"].forEach(showSelected);
+    say(refreshStale() ? "Selected values are the defaults. Press Play demo to update the pictures." : "The pictures already show the defaults.");
+  });
+  $("btn-play").addEventListener("click", function () { applySelection(); });
 
   /* ----- init ----- */
   function init() {
     var q = new URLSearchParams(location.search);
     if (q.get("steps") === "1") { $("steps").checked = true; S.steps = true; $("steps-wrap").hidden = false; }
     if (q.get("l2") === "1") S.params.l2 = true;
+    if (q.get("lap") != null && !isNaN(Number(q.get("lap")))) S.params.lapT = Number(q.get("lap"));
     ["ksize", "sigma", "low", "high"].forEach(function (k) { if (q.get(k) != null && !isNaN(Number(q.get(k)))) S.params[k] = Number(q.get(k)); });
     syncControls();
+    refreshStale();
     S.w = 400; S.h = 400; layoutPanels();
     loadPortrait();
-    root.__edge = { state: S, core: core, render: render };
-    var started = false;
-    var waitStart = setInterval(function () {
-      if (S.gray && !started) {
-        started = true; clearInterval(waitStart);
-        if (!reduced && q.get("tour") !== "0" && !q.get("ksize")) startTour();
-      }
-    }, 100);
+    root.__edge = { state: S, core: core, render: render, applySelection: applySelection, selection: selection };
   }
   init();
 })(typeof window !== "undefined" ? window : globalThis);
