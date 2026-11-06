@@ -95,19 +95,20 @@ def style_ax(ax, Z, kind):
     zmin, zmax = float(np.min(Z)), float(np.max(Z))
     pad = 0.08 * (zmax - zmin if zmax > zmin else 1)
     ax.set_zlim(zmin - pad, zmax + pad)
-    ax.set_xlabel("x", labelpad=2)
-    ax.set_ylabel("y", labelpad=2)
-    ax.set_zlabel(ZLABEL[kind], labelpad=2)
-    ax.set_title(TITLES[kind], pad=2)
-    ax.view_init(elev=24, azim=-58)
-    # Own vertical extent: the z box is tall enough to show the shape.
-    ax.set_box_aspect((1.15, 1.15, 0.95))
+    ax.set_xlabel("x", labelpad=6)
+    ax.set_ylabel("y", labelpad=6)
+    ax.set_zlabel(ZLABEL[kind], labelpad=6)
+    ax.set_title(TITLES[kind], pad=8)
+    ax.set_proj_type("ortho")
+    ax.view_init(elev=30, azim=-135)
+    # Equal floor, moderate height. Tick limits stay the true range of this surface.
+    ax.set_box_aspect((1, 1, 0.68), zoom=0.86)
     for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
         axis.pane.fill = False
         axis.pane.set_edgecolor("#d0d0d0")
         axis.set_major_locator(MaxNLocator(nbins=4))
     ax.grid(False)
-    ax.tick_params(labelsize=11, pad=0)
+    ax.tick_params(labelsize=11, pad=2)
 
 
 def draw(ax, X, Y, Z, kind):
@@ -120,7 +121,7 @@ def figure_of(X, Y, Z, kind):
     ax = fig.add_subplot(111, projection="3d")
     ax.set_facecolor("white")
     draw(ax, X, Y, Z, kind)
-    fig.subplots_adjust(left=0.02, right=0.96, bottom=0.02, top=0.90)
+    fig.subplots_adjust(left=0.08, right=0.92, bottom=0.06, top=0.86)
     return fig
 
 
@@ -143,7 +144,7 @@ def svg_for(X, Y, Z, kind) -> str:
 
 
 def preview(X, Y, Zs, path: pathlib.Path):
-    fig = plt.figure(figsize=(9.2, 7.6), facecolor="white")
+    fig = plt.figure(figsize=(10.2, 8.6), facecolor="white")
     order = ["gaussian", "dgdx", "dgdy", "log"]
     for i, kind in enumerate(order, start=1):
         ax = fig.add_subplot(2, 2, i, projection="3d")
@@ -153,7 +154,7 @@ def preview(X, Y, Zs, path: pathlib.Path):
         "σ = 1. Each vertical axis is that surface only; tick numbers are the true values.",
         fontsize=12,
     )
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.subplots_adjust(left=0.04, right=0.96, bottom=0.04, top=0.90, wspace=0.12, hspace=0.22)
     fig.savefig(path, dpi=130)
     plt.close(fig)
     print("preview", path)
