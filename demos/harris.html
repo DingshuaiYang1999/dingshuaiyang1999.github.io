@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Harris corner detector · Dingshuai Yang</title>
+    <meta name="description" content="Harris corner detector on one portrait: structure tensor, response R, and corners chosen by a threshold and non-maximum suppression." />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/harris.html" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
+    <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
+    <link rel="stylesheet" href="harris.css?v=1" />
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js?v=98f308e2" defer></script>
+    <script src="harris.js?v=1" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+      <div class="header-inner">
+        <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+          <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+          <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+          <span class="brand-name">Dingshuai Yang</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href="../#about">About</a></li>
+            <li><a href="../#education">Education</a></li>
+            <li><a href="../#projects">Projects</a></li>
+            <li><a href="../blog/">Blog</a></li>
+            <li><a href="../contact/">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-tools">
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/></svg>
+          </button>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="page planner-page cv-page harris-page" tabindex="-1">
+      <p class="section-label"><a href="../#projects-cv">← Projects</a></p>
+      <h1>Harris corner detector</h1>
+      <div class="explain-block">
+        <p class="lead-plain">A corner is a place where the brightness changes strongly in two different directions. An edge changes in only one direction, and a flat region changes in neither. This page computes the Harris response on one portrait and marks the corners you ask for.</p>
+        <div class="try-box">
+          <h2>Try this</h2>
+          <ul>
+            <li>Look at the red circles. They are the corners for the default settings.</li>
+            <li>Raise the <strong>response threshold</strong>, then press <strong>Run</strong>. Fewer, stronger corners remain.</li>
+            <li>Raise the <strong>integration</strong> sigma. The corners move apart and some weak ones disappear.</li>
+            <li>Open <strong>How it works</strong> for the structure tensor, and <strong>Intermediate pictures</strong> for <var>I</var><sub>x</sub><var>I</var><sub>y</sub>, which is signed.</li>
+          </ul>
+        </div>
+        <details class="how-it-works" id="how">
+          <summary>How it works (technical details)</summary>
+          <div class="how-body">
+            <p><var>I</var> is grayscale brightness, with the same weights as on the edge-detection page: 0.299 red + 0.587 green + 0.114 blue. <var>x</var> increases to the right and <var>y</var> increases downward. <var>I</var><sub>x</sub> is positive when the image grows brighter toward the right. <var>I</var><sub>y</sub> is positive when it grows brighter downward. These derivatives are the 3 × 3 Sobel correlation used on that page, with the edge pixel repeated at the border.</p>
+            <p>An optional Gaussian of standard deviation <var>σ</var><sub>d</sub> and odd width <var>k</var><sub>d</sub> smooths <var>I</var> before those derivatives. That is the derivative scale. If <var>k</var><sub>d</sub> is 1, there is no pre-smoothing. The products <var>I</var><sub>x</sub><sup>2</sup>, <var>I</var><sub>y</sub><sup>2</sup> and <var>I</var><sub>x</sub><var>I</var><sub>y</sub> are then smoothed by a second Gaussian, standard deviation <var>σ</var><sub>i</sub> and width <var>k</var><sub>i</sub>. That is the integration scale. The two scales are not the same control. Both Gaussians are normalised to sum to one and use mirrored borders (reflect-101). They are not rounded to integers.</p>
+            <figure class="formula-card">
+              <figcaption>Structure tensor and Harris response</figcaption>
+              <div class="math-scroll">
+                <math aria-label="M equals the matrix A, C; C, B. R equals A B minus C squared minus alpha times (A plus B) squared.">
+                  <mrow>
+                    <mi>M</mi><mo>=</mo>
+                    <mo fence="true" stretchy="true">[</mo>
+                    <mtable>
+                      <mtr><mtd><mi>A</mi></mtd><mtd><mi>C</mi></mtd></mtr>
+                      <mtr><mtd><mi>C</mi></mtd><mtd><mi>B</mi></mtd></mtr>
+                    </mtable>
+                    <mo fence="true" stretchy="true">]</mo>
+                    <mo>,</mo>
+                    <mi>R</mi><mo>=</mo><mi>A</mi><mi>B</mi><mo>−</mo><msup><mi>C</mi><mn>2</mn></msup><mo>−</mo><mi>α</mi><msup><mrow><mo>(</mo><mi>A</mi><mo>+</mo><mi>B</mi><mo>)</mo></mrow><mn>2</mn></msup>
+                  </mrow>
+                </math>
+              </div>
+            </figure>
+            <p><var>A</var>, <var>B</var> and <var>C</var> are the integrated products <var>g</var><sub>i</sub> ∗ <var>I</var><sub>x</sub><sup>2</sup>, <var>g</var><sub>i</sub> ∗ <var>I</var><sub>y</sub><sup>2</sup> and <var>g</var><sub>i</sub> ∗ <var>I</var><sub>x</sub><var>I</var><sub>y</sub>. <var>C</var> is signed. <var>R</var> equals det <var>M</var> − <var>α</var> (trace <var>M</var>)<sup>2</sup>. The eigenvalues <var>λ</var><sub>1</sub> and <var>λ</var><sub>2</sub> of <var>M</var> say which kind of place this is: both small means flat, one large and one small means an edge, and both large means a corner. <var>R</var> is large and positive when both eigenvalues are large. It is negative on a clean edge and near zero on a flat region. It is not a probability.</p>
+            <p>A pixel is kept only when <var>R</var> is strictly greater than <var>t</var> times the largest positive response in this image, and it is a spatial maximum in the chosen odd neighbourhood. The threshold is therefore relative to this picture. Changing the derivative scale changes the size of <var>R</var>, so the same fraction is not an absolute unit. Neighbours that would lie outside the image are not compared. If several pixels tie for the maximum, the one with the smallest row-major index is kept. Display maps are scaled to their own extreme for viewing. That scaling is not the test above.</p>
+            <p>Limitations. The derivatives are a fixed 3 × 3 Sobel, not a derivative of a Gaussian at scale <var>σ</var><sub>d</sub>. <var>α</var> is a set constant, usually near 0.04 to 0.06; it is not estimated from the image. There is no sub-pixel refinement. Discrete sampling means the detector is only approximately unchanged by rotation. Reference: Harris, C. and Stephens, M. (1988). A combined corner and edge detector. <cite>Proceedings of the Alvey Vision Conference</cite>, pp. 147–151.</p>
+          </div>
+        </details>
+      </div>
+
+      <section class="stage" aria-label="Harris corner detector">
+        <div class="runbar" role="group" aria-label="Apply settings">
+          <button type="button" class="button secondary small" id="btn-play">Run</button>
+          <button type="button" class="button secondary small" id="btn-defaults">Reset settings</button>
+          <p class="h-stale" id="stale-note" hidden role="status">The pictures still show the previous settings. Press Run to apply the values now selected.</p>
+        </div>
+        <p class="status" id="status" role="status">Loading…</p>
+        <section class="ed-controls" aria-labelledby="opts-title">
+          <h2 id="opts-title">Settings</h2>
+          <p class="h-live" id="live-note">Choose the settings first. The numbers update as you move a control. The pictures change only when you press Run.</p>
+          <div class="ed-ctl-grid">
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="sigmaD">Derivative pre-smoothing σ<sub>d</sub></label><output id="sigmaD-out" for="sigmaD">1.0</output></div>
+              <input type="range" id="sigmaD" min="0.3" max="3" step="0.1" value="1" />
+              <p class="pl-hint">Smooths the image before Sobel. Ignored when the derivative window is off.</p>
+            </div>
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="ksizeD">Derivative window k<sub>d</sub></label><output id="ksizeD-out" for="ksizeD">3 × 3</output></div>
+              <input type="range" id="ksizeD" min="1" max="9" step="2" value="3" />
+              <p class="pl-hint">Odd width of that pre-smoothing. 1 means no pre-smoothing.</p>
+            </div>
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="sigmaI">Integration σ<sub>i</sub></label><output id="sigmaI-out" for="sigmaI">1.5</output></div>
+              <input type="range" id="sigmaI" min="0.4" max="4" step="0.1" value="1.5" />
+              <p class="pl-hint">Smooths Ix², Iy² and IxIy. This is not the derivative scale.</p>
+            </div>
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="ksizeI">Integration window k<sub>i</sub></label><output id="ksizeI-out" for="ksizeI">5 × 5</output></div>
+              <input type="range" id="ksizeI" min="3" max="15" step="2" value="5" />
+              <p class="pl-hint">Odd width of the integration Gaussian. A short window cuts the tails.</p>
+            </div>
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="alpha">Harris α</label><output id="alpha-out" for="alpha">0.04</output></div>
+              <input type="range" id="alpha" min="0.01" max="0.2" step="0.01" value="0.04" />
+              <p class="pl-hint">Larger α makes edges more negative and keeps fewer corners.</p>
+            </div>
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="rel">Response threshold t</label><output id="rel-out" for="rel">0.08</output></div>
+              <input type="range" id="rel" min="0" max="0.5" step="0.01" value="0.08" />
+              <p class="pl-hint">Keep R greater than t times the largest positive R in this image.</p>
+            </div>
+            <div class="pl-param">
+              <div class="pl-param-head"><label for="nms">Maximum neighbourhood</label><output id="nms-out" for="nms">5 × 5</output></div>
+              <input type="range" id="nms" min="3" max="9" step="2" value="5" />
+              <p class="pl-hint">A corner must be the maximum of R inside this odd window.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="harris-grid">
+          <figure class="h-panel">
+            <canvas id="p-overlay" width="400" height="400" role="img" aria-label="Portrait with Harris corners drawn as red circles"></canvas>
+            <figcaption><strong>Corners</strong><span>Red circles are pixels kept by the threshold and the neighbourhood maximum. They are not a probability.</span></figcaption>
+          </figure>
+          <figure class="h-panel">
+            <canvas id="p-r" width="400" height="400" role="img" aria-label="Harris response. Mid-gray is zero. Bright is positive. Dark is negative. Scaled for display only."></canvas>
+            <figcaption><strong>Response R</strong><span>Mid-gray is zero. Bright is positive. Dark is negative. Scaled to the extreme of this map for display only.</span></figcaption>
+          </figure>
+        </div>
+        <dl class="h-stats" aria-label="Harris summary">
+          <div><dt>Corners kept</dt><dd id="st-count">—</dd></div>
+          <div><dt>Largest positive R</dt><dd id="st-max">—</dd></div>
+          <div><dt>Threshold value</dt><dd id="st-thr">—</dd></div>
+          <div><dt>Compute time</dt><dd id="st-time">—</dd></div>
+        </dl>
+
+        <details class="how-it-works" id="stages">
+          <summary>Intermediate pictures</summary>
+          <div class="how-body">
+            <p class="h-note">Signed pictures use mid-gray for zero. Non-negative pictures use black for zero and white for their own maximum. These scales are for viewing. <var>I</var><sub>x</sub><var>I</var><sub>y</sub> and <var>C</var> are signed and can be dark where the product is negative.</p>
+            <div class="harris-grid harris-grid3">
+              <figure class="h-panel"><canvas id="s-ix" width="400" height="400" role="img" aria-label="Signed Ix. Mid-gray is zero."></canvas><figcaption><strong>I<sub>x</sub></strong><span>Signed derivative, rightward positive.</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-iy" width="400" height="400" role="img" aria-label="Signed Iy. Mid-gray is zero."></canvas><figcaption><strong>I<sub>y</sub></strong><span>Signed derivative, downward positive.</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-ixy" width="400" height="400" role="img" aria-label="Signed product Ix times Iy. Mid-gray is zero."></canvas><figcaption><strong>I<sub>x</sub>I<sub>y</sub></strong><span>Signed product. Dark is negative.</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-ixx" width="400" height="400" role="img" aria-label="Ix squared, non-negative."></canvas><figcaption><strong>I<sub>x</sub>²</strong><span>Non-negative, before integration.</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-iyy" width="400" height="400" role="img" aria-label="Iy squared, non-negative."></canvas><figcaption><strong>I<sub>y</sub>²</strong><span>Non-negative, before integration.</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-a" width="400" height="400" role="img" aria-label="Integrated A, Gaussian of Ix squared."></canvas><figcaption><strong>A</strong><span>Gaussian of I<sub>x</sub>².</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-b" width="400" height="400" role="img" aria-label="Integrated B, Gaussian of Iy squared."></canvas><figcaption><strong>B</strong><span>Gaussian of I<sub>y</sub>².</span></figcaption></figure>
+              <figure class="h-panel"><canvas id="s-c" width="400" height="400" role="img" aria-label="Integrated C, signed Gaussian of Ix Iy."></canvas><figcaption><strong>C</strong><span>Gaussian of I<sub>x</sub>I<sub>y</sub>. Signed.</span></figcaption></figure>
+            </div>
+          </div>
+        </details>
+
+        <section class="panel" aria-labelledby="pic-title">
+          <h2 id="pic-title">Picture and privacy</h2>
+          <p>The only picture is the portrait already used on the home page. Nothing is uploaded, there is no camera, and the calculation stays in the browser.</p>
+        </section>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>
