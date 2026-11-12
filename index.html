@@ -447,14 +447,14 @@
             </div>
           </li>
           <li class="project">
-            <a class="project-thumb" href="demos/camera-projection.html"><picture><source srcset="assets/thumbs/camera-projection.webp" type="image/webp" /><img src="assets/thumbs/camera-projection.jpg" alt="Pinhole photograph of a Christmas tree at the demo’s reset intrinsics and extrinsics" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
+            <a class="project-thumb" href="demos/camera-projection.html"><picture><source srcset="assets/thumbs/camera-projection.webp" type="image/webp" /><img src="assets/thumbs/camera-projection.jpg" alt="Shaded photograph of a Christmas tree, with gifts in front and a house behind, at the demo’s reset lens and pose" width="960" height="540" loading="lazy" decoding="async" /></picture></a>
             <div class="project-body">
               <h4 class="project-title"><a href="demos/camera-projection.html">Pinhole camera projection</a></h4>
               <p class="project-meta">Interactive demo · 2026</p>
               <dl class="pa">
                 <div><dt>Problem</dt><dd>Show how the five intrinsic entries of K and the six extrinsic entries of [R | t] change the picture of one 3D object.</dd></div>
-                <div><dt>Approach</dt><dd>Browser JavaScript. A slim Christmas tree is projected by w[u, v, 1]<sup>T</sup> = K[R | t][x, y, z, 1]<sup>T</sup>. Sliders update the photograph immediately. Lens distortion is not modelled.</dd></div>
-                <div><dt>Result</dt><dd>A standalone page on this website: an orbitable world view, the pixel image with the reset pose drawn faintly behind the current one, and the projection of the tree tip written out.</dd></div>
+                <div><dt>Approach</dt><dd>Browser JavaScript. A shaded Christmas tree, gifts and a house are projected by w[u, v, 1]<sup>T</sup> = K[R | t][x, y, z, 1]<sup>T</sup>. Focal length and sensor size set f<sub>x</sub> and f<sub>y</sub>. Aperture blur is not one of those eleven parameters. Lens distortion is not modelled.</dd></div>
+                <div><dt>Result</dt><dd>A standalone page on this website: an orbitable world view with the camera drawn in, a filled photograph, and the projection of the tree tip written out.</dd></div>
                 <div><dt>What I did</dt><dd>Wrote this browser demo and numerical checks that the pixel formula matches K, R and t.</dd></div>
               </dl>
               <p class="project-actions"><a class="button primary" href="demos/camera-projection.html">▶ Try it live<span class="visually-hidden"> (pinhole camera interactive demo)</span></a></p>

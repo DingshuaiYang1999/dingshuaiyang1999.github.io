@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Pinhole camera projection · Dingshuai Yang</title>
-    <meta name="description" content="How five intrinsic and six extrinsic parameters change the picture of a Christmas tree under the pinhole model." />
+    <meta name="description" content="How focal length, a rectangular sensor, and the eleven parameters of K[R|t] change a photograph, with thin-lens blur kept separate." />
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/camera-projection.html" />
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
     <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
-    <link rel="stylesheet" href="camera-projection.css?v=1" />
+    <link rel="stylesheet" href="camera-projection.css?v=4" />
     <script>
       (function () {
         var theme = "light";
@@ -26,7 +26,7 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="camera-projection.js?v=1" defer></script>
+    <script src="camera-projection.js?v=5" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -63,35 +63,34 @@
       <p class="section-label"><a href="../#projects-cv">← Projects</a></p>
       <h1>Pinhole camera: intrinsic and extrinsic parameters</h1>
       <div class="explain-block">
-        <p class="lead-plain">A pinhole camera turns a 3D point into a pixel. Five numbers inside the camera stretch, shear and shift that picture. Six more place and aim the camera in the world. Drag the view on the left to look around. The sliders change the photograph on the right, and they are not moved for you.</p>
+        <p class="lead-plain">A pinhole camera turns a 3D point into a pixel. The focal length and the sensor fix two of the entries of K. Five numbers inside K stretch, shear and shift the picture, and six more aim the camera. Drag the view on the left. The sliders change the photograph on the right, and they are not moved for you.</p>
         <div class="try-box">
           <h2>Try this</h2>
           <ul>
-            <li>Increase only <strong>f<sub>x</sub></strong>. The tree stretches horizontally. The grey lines stay at the reset picture.</li>
+            <li>Lower <strong>f</strong>. The field of view widens and the tree gets smaller. f<sub>x</sub> and f<sub>y</sub> move with it.</li>
+            <li>Change only <strong>H<sub>x</sub></strong>. The horizontal angle and f<sub>x</sub> change. f<sub>y</sub> stays, because the pixels are no longer square.</li>
             <li>Set <strong>s</strong> away from zero. Vertical lines of the tree lean: that is shear.</li>
-            <li>Move <strong>u<sub>0</sub></strong>. The whole picture shifts, and the red principal point moves with it.</li>
-            <li>Change yaw or <strong>t<sub>x</sub></strong>. The tree moves because the camera moved, not because K changed.</li>
+            <li>Open the aperture (a smaller f-number). The tree stays sharp. The gifts in front and the house behind go soft. Move the focus distance onto the house to sharpen the far objects.</li>
           </ul>
         </div>
         <details class="how-it-works">
           <summary>How it works (technical details)</summary>
           <div class="how-body">
             <h3>Principle</h3>
-            <p>A scene point in the world is written as a 4-vector. The camera first expresses that point in its own axes, then applies the intrinsic matrix. Dividing by the third component removes the homogeneous scale and gives the pixel. Points with camera depth z<sub>cam</sub> ≤ 0 are behind the camera and are not drawn. Lens distortion is ignored.</p>
+            <p>A scene point is a 4-vector. The camera writes it in camera axes, multiplies by K, and divides by the third entry. Points with z<sub>cam</sub> ≤ 0 are behind the camera and are not drawn. Lens distortion is ignored.</p>
             <h3>Formulas</h3>
             <div class="math-scroll">
-              <math aria-label="w times the vector u, v, 1 equals K times the matrix R, t, times the vector x, y, z, 1.">
+              <math aria-label="w times u, v, 1 equals K times R, t, times x, y, z, 1.">
                 <mrow>
                   <mi>w</mi>
                   <msup><mrow><mo>[</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>,</mo><mn>1</mn><mo>]</mo></mrow><mi>T</mi></msup>
-                  <mo>=</mo><mi>K</mi>
-                  <mo>[</mo><mi>R</mi><mo>∣</mo><mi>t</mi><mo>]</mo>
+                  <mo>=</mo><mi>K</mi><mo>[</mo><mi>R</mi><mo>∣</mo><mi>t</mi><mo>]</mo>
                   <msup><mrow><mo>[</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mn>1</mn><mo>]</mo></mrow><mi>T</mi></msup>
                 </mrow>
               </math>
             </div>
             <div class="math-scroll">
-              <math aria-label="K is the matrix f x, s, u 0; 0, f y, v 0; 0, 0, 1.">
+              <math aria-label="K is f x, s, u 0; 0, f y, v 0; 0, 0, 1.">
                 <mrow>
                   <mi>K</mi><mo>=</mo>
                   <mo>[</mo>
@@ -104,52 +103,145 @@
                 </mrow>
               </math>
             </div>
-            <h3>Processing steps</h3>
-            <ol>
-              <li>Build R from yaw, pitch and roll, then X<sub>cam</sub> = R X + t.</li>
-              <li>Apply K to X<sub>cam</sub>. The third entry of the result is w = z<sub>cam</sub>.</li>
-              <li>If z<sub>cam</sub> ≤ 0, discard the point. Otherwise the pixel is (u, v) = (first / w, second / w).</li>
-            </ol>
-            <h3>Reading the picture</h3>
-            <p>The green lines are the tree at the current sliders. The grey lines are the same tree at the reset values of K and of [R | t]. A change in f<sub>x</sub> or f<sub>y</sub> scales the picture. A nonzero s shears it. u<sub>0</sub> and v<sub>0</sub> translate it, and the red cross is the principal point (u<sub>0</sub>, v<sub>0</sub>). Yaw, pitch, roll and t move the camera, so the grey and green drawings separate for a different reason.</p>
+            <h3>Lens and field of view</h3>
+            <p>H<sub>x</sub> and H<sub>y</sub> are the sensor width and height, and f is the focal length. All three are in millimetres. The image is W × N<sub>v</sub> pixels, here 640 × 480. H is the sensor size, not the image height.</p>
+            <div class="math-scroll">
+              <math aria-label="Horizontal and vertical angular fields of view.">
+                <mrow>
+                  <msub><mi>AFOV</mi><mi>x</mi></msub>
+                  <mo>=</mo><mn>2</mn><mi>arctan</mi>
+                  <mo>(</mo><mfrac><msub><mi>H</mi><mi>x</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
+                  <mo>,</mo>
+                  <msub><mi>AFOV</mi><mi>y</mi></msub>
+                  <mo>=</mo><mn>2</mn><mi>arctan</mi>
+                  <mo>(</mo><mfrac><msub><mi>H</mi><mi>y</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
+                </mrow>
+              </math>
+            </div>
+            <p>Pixel pitch is p<sub>x</sub> = H<sub>x</sub> / W and p<sub>y</sub> = H<sub>y</sub> / N<sub>v</sub>. Then f<sub>x</sub> = f / p<sub>x</sub> and f<sub>y</sub> = f / p<sub>y</sub>, so H<sub>x</sub> / (2f) = W / (2 f<sub>x</sub>). The pixel formula 2 arctan(W / (2 f<sub>x</sub>)) is the same ratio. It assumes s = 0 and a principal point at the centre. If the principal point is not centred, the angle about the optical axis is arctan(u<sub>0</sub> / f<sub>x</sub>) + arctan((W − u<sub>0</sub>) / f<sub>x</sub>), and likewise for v and N<sub>v</sub>. Those angles ignore skew.</p>
+            <p>A non-square sensor, H<sub>x</sub> / H<sub>y</sub> different from W / N<sub>v</sub>, changes the aspect of the picture and makes the horizontal and vertical fields of view differ. Non-square pixels, p<sub>x</sub> ≠ p<sub>y</sub>, are what make f<sub>x</sub> ≠ f<sub>y</sub>. Dragging f<sub>x</sub> or f<sub>y</sub> changes the shared f, so the other focal length follows. The full-frame equivalent f × 36 / H<sub>x</sub> is only a label. In the world view the lens-to-sensor gap is drawn 28 times life size so the millimetres can be seen. The angle is the true field of view.</p>
+            <h3>Rotation around the coordinate axes, counter-clockwise</h3>
+            <p>Positive angles are counter-clockwise about the axis. α, β and γ are sometimes called pitch, yaw and roll. The sliders use only R<sub>x</sub>(α), R<sub>y</sub>(β) and R<sub>z</sub>(γ).</p>
+            <div class="math-scroll">
+              <math aria-label="R x of alpha.">
+                <mrow>
+                  <msub><mi>R</mi><mi>x</mi></msub><mo>(</mo><mi>α</mi><mo>)</mo><mo>=</mo>
+                  <mo>[</mo>
+                  <mtable>
+                    <mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><mi>cos</mi><mi>α</mi></mtd><mtd><mo>−</mo><mi>sin</mi><mi>α</mi></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><mi>sin</mi><mi>α</mi></mtd><mtd><mi>cos</mi><mi>α</mi></mtd></mtr>
+                  </mtable>
+                  <mo>]</mo>
+                </mrow>
+              </math>
+            </div>
+            <div class="math-scroll">
+              <math aria-label="R y of beta.">
+                <mrow>
+                  <msub><mi>R</mi><mi>y</mi></msub><mo>(</mo><mi>β</mi><mo>)</mo><mo>=</mo>
+                  <mo>[</mo>
+                  <mtable>
+                    <mtr><mtd><mi>cos</mi><mi>β</mi></mtd><mtd><mn>0</mn></mtd><mtd><mi>sin</mi><mi>β</mi></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr>
+                    <mtr><mtd><mo>−</mo><mi>sin</mi><mi>β</mi></mtd><mtd><mn>0</mn></mtd><mtd><mi>cos</mi><mi>β</mi></mtd></mtr>
+                  </mtable>
+                  <mo>]</mo>
+                </mrow>
+              </math>
+            </div>
+            <div class="math-scroll">
+              <math aria-label="R z of gamma.">
+                <mrow>
+                  <msub><mi>R</mi><mi>z</mi></msub><mo>(</mo><mi>γ</mi><mo>)</mo><mo>=</mo>
+                  <mo>[</mo>
+                  <mtable>
+                    <mtr><mtd><mi>cos</mi><mi>γ</mi></mtd><mtd><mo>−</mo><mi>sin</mi><mi>γ</mi></mtd><mtd><mn>0</mn></mtd></mtr>
+                    <mtr><mtd><mi>sin</mi><mi>γ</mi></mtd><mtd><mi>cos</mi><mi>γ</mi></mtd><mtd><mn>0</mn></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                  </mtable>
+                  <mo>]</mo>
+                </mrow>
+              </math>
+            </div>
+            <p>The widget below uses R = R<sub>z</sub>(γ) R<sub>x</sub>(α) R<sub>y</sub>(β) and p′ = R p + t. The photograph uses that same product on the right by R<sub>0</sub> = diag(1, −1, −1), so X<sub>cam</sub> = R R<sub>0</sub> X + t. That sends world y up to camera y down and world z toward the viewer to camera z forward. The matrices match the counter-clockwise rotations in Silvio Savarese’s lecture, as used at FAU.</p>
+            <div class="rig" aria-label="Rotation and translation visualizer">
+              <div class="rig-top">
+                <canvas id="rig-view" width="360" height="240" aria-label="Axes, a point p, its rotate-then-translate image, and an arc for each angle"></canvas>
+                <div class="rig-controls">
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-alpha">R<sub>x</sub>(α)</label><output id="rig-alpha-out" for="rig-alpha">0°</output></div><input id="rig-alpha" type="range" min="-180" max="180" step="1" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-beta">R<sub>y</sub>(β)</label><output id="rig-beta-out" for="rig-beta">0°</output></div><input id="rig-beta" type="range" min="-180" max="180" step="1" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-gamma">R<sub>z</sub>(γ)</label><output id="rig-gamma-out" for="rig-gamma">0°</output></div><input id="rig-gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-tx">t<sub>x</sub></label><output id="rig-tx-out" for="rig-tx">0.00</output></div><input id="rig-tx" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-ty">t<sub>y</sub></label><output id="rig-ty-out" for="rig-ty">0.00</output></div><input id="rig-ty" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-tz">t<sub>z</sub></label><output id="rig-tz-out" for="rig-tz">0.00</output></div><input id="rig-tz" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
+                </div>
+              </div>
+              <p id="rig-text">rotated alpha=0° about x, beta=0° about y, gamma=0° about z</p>
+              <div id="rig-math"></div>
+            </div>
+            <h3>Aperture, beyond the pinhole model</h3>
+            <p>The f-number and the focus distance are not among the eleven parameters of K[R | t]. They do not move the centre of a point’s image. Blur uses the thin-lens circle of confusion, with A = f / N the aperture diameter, d = z<sub>cam</sub> and d<sub>f</sub> the focus distance, f, d and d<sub>f</sub> in the same unit:</p>
+            <div class="math-scroll">
+              <math aria-label="Circle of confusion c equals A f times the absolute difference of d and d f, divided by d times d f minus f.">
+                <mrow>
+                  <mi>c</mi><mo>=</mo>
+                  <mfrac>
+                    <mrow><mi>A</mi><mi>f</mi><mo>|</mo><mi>d</mi><mo>−</mo><msub><mi>d</mi><mi>f</mi></msub><mo>|</mo></mrow>
+                    <mrow><mi>d</mi><mo>(</mo><msub><mi>d</mi><mi>f</mi></msub><mo>−</mo><mi>f</mi><mo>)</mo></mrow>
+                  </mfrac>
+                </mrow>
+              </math>
+            </div>
+            <p>The photograph turns c into pixels with the horizontal pitch, c / p<sub>x</sub>, and blurs each depth band with a Gaussian whose radius is about half that diameter, capped at 16 px. Brightness is not scaled by aperture area: a factor A² would make the picture black as A → 0, so the closed aperture would not match the pinhole colours. With that choice, A → 0 reproduces the K[R | t] image exactly. Approximations: one depth per face, a few depth bands, a Gaussian rather than a uniform disc, no distortion, and d taken as z<sub>cam</sub>.</p>
             <h3>Symbols and degrees of freedom</h3>
-            <p>f<sub>x</sub> and f<sub>y</sub> are focal lengths in pixels. s is the skew. (u<sub>0</sub>, v<sub>0</sub>) is the principal point. Those five numbers are the intrinsic degrees of freedom. Yaw, pitch and roll, together with the three entries of t, are the six extrinsic degrees of freedom. The image here is 640 × 480 pixels. Dragging the left view does not change any of these eleven numbers.</p>
-            <h3>Frames and the rotation used here</h3>
-            <p>World axes: x to the right, y up, z toward the default viewer. Camera axes: x to the right, y down, z forward along the optical axis. R = R<sub>z</sub>(roll) R<sub>x</sub>(pitch) R<sub>y</sub>(yaw) R<sub>0</sub>, with R<sub>0</sub> = diag(1, −1, −1). At zero angles, camera x equals world x, camera y equals −world y, and camera z equals −world z, so the camera looks from positive world z toward the origin. t is the world origin written in the camera frame, not a position you add in world coordinates. The worked example uses the tip of the tree.</p>
-            <p>The count of eleven degrees of freedom, and the split into five intrinsic and six extrinsic, follows the lecture “Degrees of freedom” by James Hays, as used in the FAU course.</p>
+            <p>f<sub>x</sub>, f<sub>y</sub>, s, u<sub>0</sub> and v<sub>0</sub> are the five intrinsic degrees of freedom. R<sub>x</sub>(α), R<sub>y</sub>(β), R<sub>z</sub>(γ) and the three entries of t are the six extrinsic degrees of freedom. Dragging the left view changes none of them. The count of eleven, and the split into five plus six, follows the lecture “Degrees of freedom” by James Hays, as used in the FAU course. The worked example is the tip of the main tree.</p>
           </div>
         </details>
       </div>
 
       <div class="cam-groups" aria-label="Camera parameters">
+        <section class="cam-group" aria-labelledby="lens-title">
+          <h2 id="lens-title">Lens</h2>
+          <div class="pl-param"><div class="pl-param-head"><label for="fmm">f (mm)</label><output id="fmm-out" for="fmm">50.0</output></div><input id="fmm" type="range" min="14" max="200" step="0.5" value="50" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="hx">H<sub>x</sub> (mm)</label><output id="hx-out" for="hx">36.0</output></div><input id="hx" type="range" min="12" max="60" step="0.5" value="36" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="hy">H<sub>y</sub> (mm)</label><output id="hy-out" for="hy">24.0</output></div><input id="hy" type="range" min="8" max="45" step="0.5" value="24" /></div>
+          <p id="fov-read" class="cam-note">AFOV<sub>x</sub> = 39.6° · AFOV<sub>y</sub> = 27.0°</p>
+        </section>
         <section class="cam-group" aria-labelledby="k-title">
           <h2 id="k-title">Intrinsic K (5 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub></label><output id="fx-out" for="fx">520</output></div><input id="fx" type="range" min="200" max="900" step="1" value="520" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub></label><output id="fy-out" for="fy">520</output></div><input id="fy" type="range" min="200" max="900" step="1" value="520" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub></label><output id="fx-out" for="fx">888.9</output></div><input id="fx" type="range" min="200" max="2200" step="0.1" value="888.9" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub></label><output id="fy-out" for="fy">1000</output></div><input id="fy" type="range" min="200" max="2200" step="0.1" value="1000" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="s">s (skew)</label><output id="s-out" for="s">0</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub></label><output id="u0-out" for="u0">320</output></div><input id="u0" type="range" min="0" max="640" step="1" value="320" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub></label><output id="v0-out" for="v0">240</output></div><input id="v0" type="range" min="0" max="480" step="1" value="240" /></div>
         </section>
         <section class="cam-group" aria-labelledby="rt-title">
           <h2 id="rt-title">Extrinsic [R | t] (6 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="yaw">Yaw</label><output id="yaw-out" for="yaw">0°</output></div><input id="yaw" type="range" min="-180" max="180" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="pitch">Pitch</label><output id="pitch-out" for="pitch">0°</output></div><input id="pitch" type="range" min="-75" max="75" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="roll">Roll</label><output id="roll-out" for="roll">0°</output></div><input id="roll" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α)</label><output id="alpha-out" for="alpha">4°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="4" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="beta">R<sub>y</sub>(β)</label><output id="beta-out" for="beta">0°</output></div><input id="beta" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="gamma">R<sub>z</sub>(γ)</label><output id="gamma-out" for="gamma">0°</output></div><input id="gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub></label><output id="tx-out" for="tx">0.00</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub></label><output id="ty-out" for="ty">1.35</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="1.35" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub></label><output id="tz-out" for="tz">4.20</output></div><input id="tz" type="range" min="0.8" max="8" step="0.05" value="4.2" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub></label><output id="ty-out" for="ty">1.45</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="1.45" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub></label><output id="tz-out" for="tz">6.40</output></div><input id="tz" type="range" min="0.8" max="12" step="0.05" value="6.4" /></div>
+        </section>
+        <section class="cam-group" aria-labelledby="ap-title">
+          <h2 id="ap-title">Aperture (beyond the pinhole model)</h2>
+          <div class="pl-param"><div class="pl-param-head"><label for="fn">f-number N</label><output id="fn-out" for="fn">f/1.8</output></div><input id="fn" type="range" min="1.4" max="22" step="0.1" value="1.8" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="focus">Focus d<sub>f</sub> (m)</label><output id="focus-out" for="focus">6.32 m</output></div><input id="focus" type="range" min="0.5" max="40" step="0.05" value="6.3" /></div>
+          <p id="coc-read" class="cam-note">Circle of confusion</p>
         </section>
       </div>
       <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>
 
       <div class="cam-views">
         <figure>
-          <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the tree, the ground, and the camera frustum"></canvas>
-          <figcaption><strong>World</strong><span>Drag to orbit this view. The blue rectangle is the image plane in front of the camera; the tree is drawn on it, and a few faint rays run from the tree through that plane to the camera centre. Red, green and blue segments are the world x, y and z axes.</span></figcaption>
+          <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the shaded tree, ground, house, and the camera"></canvas>
+          <figcaption><strong>World</strong><span>Drag to orbit. The box and cylinder are the camera. The rectangle is the sensor, drawn 28 times life size at distance f in front of the lens; the amber arc is the field of view. A few rays run from the scene through that plane to the lens. Red, green and blue are the world x, y and z axes.</span></figcaption>
         </figure>
         <figure>
-          <canvas id="view-photo" width="640" height="480" aria-label="Projected photograph of the tree. Grey is the reset pose. Green is the current pose."></canvas>
-          <figcaption><strong>Photograph in pixels (u, v)</strong><span>Grey: reset K and reset [R | t]. Green: the sliders as they are now. The red cross is the principal point.</span></figcaption>
+          <canvas id="view-photo" width="640" height="480" aria-label="Shaded photograph. Grey outlines are the reset pose. The red cross is the principal point."></canvas>
+          <figcaption><strong>Photograph in pixels (u, v)</strong><span>Filled and lit. Grey lines are the reset K and reset [R | t]. Blur follows the circle of confusion and does not move a point’s centre. The red cross is the principal point.</span></figcaption>
         </figure>
       </div>
 
