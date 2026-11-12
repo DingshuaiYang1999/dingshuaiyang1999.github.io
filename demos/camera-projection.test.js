@@ -141,6 +141,16 @@ function so3(R) {
   near(C.asymAngle(C.IMG_W / 2, C.IMG_W, fx), 2 * Math.atan(C.IMG_W / (2 * fx)));
   near(C.asymAngle(100, C.IMG_W, 400), Math.atan(100 / 400) + Math.atan((C.IMG_W - 100) / 400));
   near(C.asymAngle(80, C.IMG_H, fy), Math.atan(80 / fy) + Math.atan((C.IMG_H - 80) / fy));
+  const sample = [0.35, 1.1, -0.4];
+  const hit = C.project(sample, C.DEFAULTS);
+  const ndc = C.ndcOf(sample, C.DEFAULTS);
+  near(ndc.x, 2 * hit.u / C.DEFAULTS.W - 1, 1e-6);
+  near(ndc.y, 1 - 2 * hit.v / C.DEFAULTS.H, 1e-6);
+  const skewed = Object.assign({}, C.DEFAULTS, { s: 35, u0: 200, v0: 140 });
+  const hitS = C.project(sample, skewed);
+  const ndcS = C.ndcOf(sample, skewed);
+  near(ndcS.x, 2 * hitS.u / skewed.W - 1, 1e-6);
+  near(ndcS.y, 1 - 2 * hitS.v / skewed.H, 1e-6);
 }
 
 {
