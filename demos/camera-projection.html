@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
     <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
-    <link rel="stylesheet" href="camera-projection.css?v=7" />
+    <link rel="stylesheet" href="camera-projection.css?v=9" />
     <script>
       (function () {
         var theme = "light";
@@ -26,11 +26,11 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="camera-projection.js?v=12" defer></script>
+    <script src="camera-projection.js?v=13" defer></script>
     <script type="importmap">
       { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
     </script>
-    <script type="module" src="camera-projection-view.js?v=7"></script>
+    <script type="module" src="camera-projection-view.js?v=9"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -214,7 +214,7 @@
             <p>The photograph turns c into pixels with the horizontal pitch, c / p<sub>x</sub>, and blurs each depth band with a Gaussian whose radius is about half that diameter, capped at 16 px. Brightness is not scaled by aperture area: a factor A² would make the picture black as A → 0, so the closed aperture would not match the pinhole colours. With that choice, A → 0 reproduces the K[R | t] image exactly. Approximations: one depth per face, a few depth bands, a Gaussian rather than a uniform disc, no distortion, and d taken as z<sub>cam</sub>.</p>
             <p id="coc-read">At the current aperture and focus, the circle of confusion is listed here for the tree, the near gifts, and the house.</p>
             <h3>Reading the two views</h3>
-            <p>Drag the world view to orbit it. The camera on the left is a real-scale body; a small inset shows it up close. The rectangle in front of the lens is an empty image plane: it shows where the sensor plane sits and how large the field is, and it carries no picture. The picture is only the photograph on the right, rendered from the same K and [R | t], including skew. Red, green and blue are the world axes.</p>
+            <p>Drag the world view to orbit it. The camera on the left is a real-scale body on a tripod. Three legs stay on the ground, the centre column lengthens or shortens with the camera height, and the head follows R. A small inset shows the head up close. The tripod is not in the photograph. The rectangle in front of the lens is an empty image plane: it shows where the sensor plane sits and how large the field is, and it carries no picture. The picture is only the photograph on the right, rendered from the same K and [R | t], including skew. Red, green and blue are the world axes. The centre C = −R<sup>T</sup> t stays at least 0.3 m above the ground and outside the tree, house, figures, gifts, fence and lamp; a slider that would cross that boundary stops there.</p>
             <p>The photograph is filled and lit in pixel coordinates (u, v). Grey lines, drawn when the pose or K differs from the reset, are the reset K and the reset [R | t]. Blur follows the circle of confusion and does not move a point’s centre. The red cross is the principal point. The near gifts sit to the side of the tree so the trunk stays visible while they are still close enough to blur at f/1.8.</p>
             <p>Snowflakes are points in the world, a centimetre or two across, drifting downward. Both views draw those same points. The photograph projects each flake with K[R | t] and widens it by its circle of confusion, so near flakes blur and the flakes at the focus distance stay small. The sliders never move on their own. If the browser asks for reduced motion, the flakes stay where they are.</p>
             <h3>Symbols and degrees of freedom</h3>
@@ -223,40 +223,7 @@
         </details>
       </div>
 
-      <div class="cam-groups" aria-label="Camera parameters">
-        <section class="cam-group" aria-labelledby="lens-title">
-          <h2 id="lens-title">Lens</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fmm">f (mm)</label><output id="fmm-out" for="fmm">50.0 mm</output></div><input id="fmm" type="range" min="14" max="200" step="0.5" value="50" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="sw">S<sub>w</sub> (mm)</label><output id="sw-out" for="sw">36.0 mm</output></div><input id="sw" type="range" min="12" max="60" step="0.5" value="36" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="sh">S<sub>h</sub> (mm)</label><output id="sh-out" for="sh">24.0 mm</output></div><input id="sh" type="range" min="8" max="45" step="0.5" value="24" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="imgw">W (px)</label><output id="imgw-out" for="imgw">720 px</output></div><input id="imgw" type="range" min="240" max="1920" step="10" value="720" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="imgh">H (px)</label><output id="imgh-out" for="imgh">480 px</output></div><input id="imgh" type="range" min="160" max="1280" step="10" value="480" /></div>
-        </section>
-        <section class="cam-group" aria-labelledby="k-title">
-          <h2 id="k-title">Intrinsic K (5 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub> (px)</label><output id="fx-out" for="fx">1000.0 px</output></div><input id="fx" type="range" min="200" max="8000" step="0.1" value="1000" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub> (px)</label><output id="fy-out" for="fy">1000.0 px</output></div><input id="fy" type="range" min="200" max="8000" step="0.1" value="1000" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="s">s (px)</label><output id="s-out" for="s">0 px</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub> (px)</label><output id="u0-out" for="u0">360 px</output></div><input id="u0" type="range" min="0" max="1920" step="1" value="360" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub> (px)</label><output id="v0-out" for="v0">240 px</output></div><input id="v0" type="range" min="0" max="1280" step="1" value="240" /></div>
-        </section>
-        <section class="cam-group" aria-labelledby="rt-title">
-          <h2 id="rt-title">Extrinsic [R | t] (6 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α) (°)</label><output id="alpha-out" for="alpha">5°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="5" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="beta">R<sub>y</sub>(β) (°)</label><output id="beta-out" for="beta">0°</output></div><input id="beta" type="range" min="-180" max="180" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="gamma">R<sub>z</sub>(γ) (°)</label><output id="gamma-out" for="gamma">0°</output></div><input id="gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub> (m)</label><output id="tx-out" for="tx">0.00 m</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub> (m)</label><output id="ty-out" for="ty">0.65 m</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="0.65" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub> (m)</label><output id="tz-out" for="tz">10.60 m</output></div><input id="tz" type="range" min="0.8" max="14" step="0.05" value="10.6" /></div>
-        </section>
-        <section class="cam-group" aria-labelledby="ap-title">
-          <h2 id="ap-title">Aperture (beyond the pinhole model)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fn">N</label><output id="fn-out" for="fn">f/1.8</output></div><input id="fn" type="range" min="1.4" max="22" step="0.1" value="1.8" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="focus">d<sub>f</sub> (m)</label><output id="focus-out" for="focus">6.32 m</output></div><input id="focus" type="range" min="0.5" max="40" step="0.05" value="6.3" /></div>
-        </section>
-      </div>
-      <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>
-
+      <div class="cam-workspace">
       <div class="cam-views">
         <figure>
           <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the shaded tree, ground, house, and the camera"></canvas>
@@ -264,6 +231,44 @@
         <figure>
           <canvas id="view-photo" width="720" height="480" aria-label="Shaded 3:2 photograph. The red cross is the principal point."></canvas>
         </figure>
+      </div>
+      <div class="cam-controls">
+      <div class="cam-tabs">
+        <input class="cam-tab-input" type="radio" name="cam-tab" id="tab-rt" checked />
+        <input class="cam-tab-input" type="radio" name="cam-tab" id="tab-k" />
+        <input class="cam-tab-input" type="radio" name="cam-tab" id="tab-ap" />
+        <div class="cam-tabbar" role="tablist" aria-label="Camera parameters">
+          <label for="tab-rt">Extrinsic [R|t]</label>
+          <label for="tab-k">Intrinsic K</label>
+          <label for="tab-ap">Aperture</label>
+        </div>
+        <div class="cam-tabpanel panel-rt">
+          <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub> (m)</label><output id="tx-out" for="tx">0.00 m</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub> (m)</label><output id="ty-out" for="ty">0.65 m</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="0.65" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub> (m)</label><output id="tz-out" for="tz">10.60 m</output></div><input id="tz" type="range" min="0.8" max="14" step="0.05" value="10.6" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α) (°)</label><output id="alpha-out" for="alpha">5°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="5" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="beta">R<sub>y</sub>(β) (°)</label><output id="beta-out" for="beta">0°</output></div><input id="beta" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="gamma">R<sub>z</sub>(γ) (°)</label><output id="gamma-out" for="gamma">0°</output></div><input id="gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
+        </div>
+        <div class="cam-tabpanel panel-k">
+          <div class="pl-param"><div class="pl-param-head"><label for="fmm">f (mm)</label><output id="fmm-out" for="fmm">50.0 mm</output></div><input id="fmm" type="range" min="14" max="200" step="0.5" value="50" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="sw">S<sub>w</sub> (mm)</label><output id="sw-out" for="sw">36.0 mm</output></div><input id="sw" type="range" min="12" max="60" step="0.5" value="36" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="sh">S<sub>h</sub> (mm)</label><output id="sh-out" for="sh">24.0 mm</output></div><input id="sh" type="range" min="8" max="45" step="0.5" value="24" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="imgw">W (px)</label><output id="imgw-out" for="imgw">720 px</output></div><input id="imgw" type="range" min="240" max="1920" step="10" value="720" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="imgh">H (px)</label><output id="imgh-out" for="imgh">480 px</output></div><input id="imgh" type="range" min="160" max="1280" step="10" value="480" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub> (px)</label><output id="fx-out" for="fx">1000.0 px</output></div><input id="fx" type="range" min="200" max="8000" step="0.1" value="1000" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub> (px)</label><output id="fy-out" for="fy">1000.0 px</output></div><input id="fy" type="range" min="200" max="8000" step="0.1" value="1000" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub> (px)</label><output id="u0-out" for="u0">360 px</output></div><input id="u0" type="range" min="0" max="1920" step="1" value="360" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub> (px)</label><output id="v0-out" for="v0">240 px</output></div><input id="v0" type="range" min="0" max="1280" step="1" value="240" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="s">s (px)</label><output id="s-out" for="s">0 px</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
+        </div>
+        <div class="cam-tabpanel panel-ap">
+          <div class="pl-param"><div class="pl-param-head"><label for="fn">N</label><output id="fn-out" for="fn">f/1.8</output></div><input id="fn" type="range" min="1.4" max="22" step="0.1" value="1.8" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="focus">d<sub>f</sub> (m)</label><output id="focus-out" for="focus">6.32 m</output></div><input id="focus" type="range" min="0.5" max="40" step="0.05" value="6.3" /></div>
+        </div>
+      </div>
+      <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>
+      </div>
       </div>
 
       <div class="cam-readout" aria-label="Live matrices">

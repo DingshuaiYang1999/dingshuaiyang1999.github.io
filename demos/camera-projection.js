@@ -145,6 +145,75 @@
     return { x: clip[0] / clip[3], y: clip[1] / clip[3], z: clip[2] / clip[3], eye: eye };
   }
 
+  var MIN_CAM_Y = 0.3;
+  var COLLIDERS = [
+    { name: "tree", type: "cyl", x: 0, z: 0, r: 1.15, y0: 0, y1: 2.7 },
+    { name: "tree-r", type: "cyl", x: 2.8, z: -9, r: 0.7, y0: 0, y1: 1.6 },
+    { name: "tree-l", type: "cyl", x: -5.2, z: -12, r: 0.58, y0: 0, y1: 1.35 },
+    { name: "tree-far", type: "cyl", x: 5.2, z: -16, r: 0.5, y0: 0, y1: 1.15 },
+    { name: "house", type: "box", x0: -13.1, x1: -4.9, y0: 0, y1: 6.45, z0: -35.1, z1: -28.7 },
+    { name: "santa", type: "cyl", x: -2.3, z: 0.45, r: 0.48, y0: 0, y1: 2.05 },
+    { name: "reindeer", type: "cyl", x: 2.8, z: -2.6, r: 0.9, y0: 0, y1: 1.65 },
+    { name: "dog", type: "cyl", x: 0.9, z: 7, r: 0.42, y0: 0, y1: 0.62 },
+    { name: "snowman", type: "cyl", x: -4.8, z: -3.4, r: 0.58, y0: 0, y1: 2.05 },
+    { name: "gift-a", type: "cyl", x: 1.55, z: 1.25, r: 0.3, y0: 0, y1: 0.42 },
+    { name: "gift-b", type: "cyl", x: -1.45, z: 1.5, r: 0.24, y0: 0, y1: 0.36 },
+    { name: "fence-w", type: "box", x0: -11.25, x1: -10.05, y0: 0, y1: 1.05, z0: -28.72, z1: -28.28 },
+    { name: "fence-e", type: "box", x0: -7.9, x1: -4.25, y0: 0, y1: 1.05, z0: -28.72, z1: -28.28 },
+    { name: "lamp", type: "cyl", x: -5, z: -26, r: 0.22, y0: 0, y1: 3.7 }
+  ];
+  function cameraCenter(p) {
+    var ang = angles(p);
+    var R = rotation(ang.beta, ang.alpha, ang.gamma);
+    var t = [p.tx, p.ty, p.tz];
+    return [
+      -(R[0][0] * t[0] + R[1][0] * t[1] + R[2][0] * t[2]),
+      -(R[0][1] * t[0] + R[1][1] * t[1] + R[2][1] * t[2]),
+      -(R[0][2] * t[0] + R[1][2] * t[1] + R[2][2] * t[2])
+    ];
+  }
+  function poseBlocked(p) {
+    var c = cameraCenter(p);
+    if (!(c[1] >= MIN_CAM_Y)) return "ground";
+    var i, o, dx, dz;
+    for (i = 0; i < COLLIDERS.length; i++) {
+      o = COLLIDERS[i];
+      if (c[1] < o.y0 || c[1] > o.y1) continue;
+      if (o.type === "box") {
+        if (c[0] >= o.x0 && c[0] <= o.x1 && c[2] >= o.z0 && c[2] <= o.z1) return o.name;
+      } else {
+        dx = c[0] - o.x;
+        dz = c[2] - o.z;
+        if (dx * dx + dz * dz < o.r * o.r) return o.name;
+      }
+    }
+    return "";
+  }
+  function poseClear(p) { return !poseBlocked(p); }
+  function clonePose(p) {
+    return {
+      f: p.f, Sw: p.Sw, Sh: p.Sh, W: p.W, H: p.H,
+      fx: p.fx, fy: p.fy, s: p.s, u0: p.u0, v0: p.v0,
+      alpha: p.alpha, beta: p.beta, gamma: p.gamma,
+      tx: p.tx, ty: p.ty, tz: p.tz, fn: p.fn, focus: p.focus
+    };
+  }
+  function clampExtrinsic(base, proposed, key) {
+    if (poseClear(proposed)) return proposed[key];
+    if (!poseClear(base)) return base[key];
+    var valid = base[key];
+    var invalid = proposed[key];
+    var i, mid, trial;
+    for (i = 0; i < 20; i++) {
+      mid = (valid + invalid) / 2;
+      trial = clonePose(base);
+      trial[key] = mid;
+      if (poseClear(trial)) valid = mid;
+      else invalid = mid;
+    }
+    return valid;
+  }
+
   DEFAULTS.focus = 0;
   var core = {
     IMG_W: IMG_W, IMG_H: IMG_H, DEFAULTS: DEFAULTS, TIP: TIP, ANCHORS: ANCHORS, R0: R0,
@@ -152,7 +221,10 @@
     Kof: Kof, project: project, mul: mul, mulV: mulV, angles: angles, imageSize: imageSize,
     circleOfConfusion: circleOfConfusion, cocPixels: cocPixels,
     afov: afov, asymAngle: asymAngle, fxFromLens: fxFromLens, fyFromLens: fyFromLens, focalMm: focalMm,
-    viewProjection: viewProjection, ndcOf: ndcOf
+    viewProjection: viewProjection, ndcOf: ndcOf,
+    MIN_CAM_Y: MIN_CAM_Y, COLLIDERS: COLLIDERS,
+    cameraCenter: cameraCenter, poseBlocked: poseBlocked, poseClear: poseClear,
+    clampExtrinsic: clampExtrinsic
   };
   DEFAULTS.focus = project(ANCHORS.tree, DEFAULTS).Xc[2];
   if (typeof module !== "undefined" && module.exports) module.exports = core;

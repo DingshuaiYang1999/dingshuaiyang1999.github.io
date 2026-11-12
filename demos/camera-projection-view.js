@@ -437,30 +437,212 @@ function makeCameraModel() {
   const dial = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.006, 16), metal);
   dial.position.set(-0.03, 0.058, 0.04);
   g.add(dial);
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.012, 0.04), std(0x22262b, 0.45, 0.3));
+  plate.position.set(0, -0.045, 0.05);
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(0.018, 10, 8), metal);
+  ball.position.set(0, -0.056, 0.05);
+  g.add(plate, ball);
   return g;
 }
-function makePhotographer() {
+function pathCurve() {
+  return new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-9, 0, -29.15),
+    new THREE.Vector3(-7.7, 0, -20.2),
+    new THREE.Vector3(-4.3, 0, -11.2),
+    new THREE.Vector3(-1.15, 0, -2.4)
+  ]);
+}
+function distToPath(x, z, samples) {
+  let best = Infinity;
+  for (let i = 0; i < samples.length; i++) {
+    const dx = x - samples[i].x, dz = z - samples[i].z;
+    const d = dx * dx + dz * dz;
+    if (d < best) best = d;
+  }
+  return Math.sqrt(best);
+}
+function ribbonGeometry(samples, width, y) {
+  const n = samples.length;
+  const pos = new Float32Array(n * 2 * 3);
+  const uv = new Float32Array(n * 2 * 2);
+  const idx = [];
+  let travelled = 0;
+  for (let i = 0; i < n; i++) {
+    const p = samples[i];
+    const prev = samples[Math.max(0, i - 1)];
+    const next = samples[Math.min(n - 1, i + 1)];
+    let tx = next.x - prev.x, tz = next.z - prev.z;
+    const tl = Math.hypot(tx, tz) || 1;
+    tx /= tl; tz /= tl;
+    const nx = -tz, nz = tx;
+    if (i > 0) travelled += Math.hypot(p.x - samples[i - 1].x, p.z - samples[i - 1].z);
+    pos.set([p.x + nx * width, y, p.z + nz * width, p.x - nx * width, y, p.z - nz * width], i * 6);
+    uv.set([travelled / 1.15, 0, travelled / 1.15, 1], i * 4);
+    if (i > 0) {
+      const a = (i - 1) * 2;
+      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return g;
+}
+function stoneTexture() {
+  const c = document.createElement("canvas");
+  c.width = 256; c.height = 256;
+  const g = c.getContext("2d");
+  g.fillStyle = "#8d8680";
+  g.fillRect(0, 0, 256, 256);
+  for (let y = 0; y < 256; y += 32) {
+    const shift = (y / 32) % 2 ? 20 : 0;
+    for (let x = -40; x < 256; x += 52) {
+      const shade = 150 + ((x * 3 + y * 5) % 40);
+      g.fillStyle = "rgb(" + shade + "," + (shade - 6) + "," + (shade - 12) + ")";
+      g.fillRect(x + shift + 2, y + 2, 46, 26);
+    }
+  }
+  g.fillStyle = "rgba(246,249,252,0.85)";
+  [[30, 40, 18, 10], [140, 90, 28, 12], [70, 180, 22, 8], [190, 200, 16, 14], [110, 20, 12, 7]].forEach(([x, y, w, h]) => {
+    g.beginPath();
+    g.ellipse(x, y, w, h, 0.4, 0, Math.PI * 2);
+    g.fill();
+  });
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
+}
+function grassTexture() {
+  const c = document.createElement("canvas");
+  c.width = 256; c.height = 256;
+  const g = c.getContext("2d");
+  g.fillStyle = "#6f8f58";
+  g.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 700; i++) {
+    const x = (i * 47) % 256, y = (i * 91) % 256;
+    const shade = 70 + (i % 50);
+    g.strokeStyle = "rgb(" + (shade - 20) + "," + (shade + 40) + "," + (shade - 30) + ")";
+    g.beginPath();
+    g.moveTo(x, y);
+    g.lineTo(x + ((i % 5) - 2), y - 4 - (i % 4));
+    g.stroke();
+  }
+  g.fillStyle = "rgba(244,248,252,0.92)";
+  [[40, 50, 22, 14], [180, 70, 16, 10], [90, 190, 26, 12], [200, 210, 18, 11]].forEach(([x, y, w, h]) => {
+    g.beginPath();
+    g.ellipse(x, y, w, h, 0.2, 0, Math.PI * 2);
+    g.fill();
+  });
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(18, 18);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
+}
+function tuftGeometry() {
+  const positions = [];
+  const normals = [];
+  for (let i = 0; i < 3; i++) {
+    const a = i * Math.PI / 3;
+    const ca = Math.cos(a), sa = Math.sin(a);
+    const w = 0.011, h = 0.12, lean = 0.018;
+    const pts = [[-w, 0, 0], [w, 0, 0], [w * 0.35, h, lean], [-w * 0.35, h, lean]];
+    const rot = (p) => [p[0] * ca - p[2] * sa, p[1], p[0] * sa + p[2] * ca];
+    const q = pts.map(rot);
+    const push = (p) => { positions.push(p[0], p[1], p[2]); normals.push(ca, 0.2, sa); };
+    push(q[0]); push(q[1]); push(q[2]);
+    push(q[0]); push(q[2]); push(q[3]);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  return g;
+}
+function makeGroundCover() {
+  const group = new THREE.Group();
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(40, 48), new THREE.MeshStandardMaterial({ map: grassTexture(), color: 0xffffff, roughness: 0.96 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  group.add(ground);
+  const curve = pathCurve();
+  const samples = curve.getPoints(72);
+  const edgeMat = std(0x4a4540, 0.9);
+  edgeMat.side = THREE.DoubleSide;
+  const edge = new THREE.Mesh(ribbonGeometry(samples, 0.72, 0.012), edgeMat);
+  edge.receiveShadow = true;
+  const stone = new THREE.MeshStandardMaterial({ map: stoneTexture(), roughness: 0.82, color: 0xffffff, side: THREE.DoubleSide });
+  const paving = new THREE.Mesh(ribbonGeometry(samples, 0.58, 0.026), stone);
+  paving.receiveShadow = true;
+  group.add(edge, paving);
+  const snowMat = std(0xf7fbff, 0.95);
+  [[3.4, 2.2, 1.5, 0.9], [-3.6, 4.2, 1.2, 0.8], [6.2, -3.5, 1.7, 1.1], [-7.4, -8.5, 1.4, 1.0], [1.8, -15, 1.6, 0.9], [-2.4, -18.5, 1.3, 0.85], [4.5, -7.5, 1.1, 0.7], [-6.2, 5.5, 1.0, 0.75]].forEach(([x, z, rx, rz]) => {
+    const patch = new THREE.Mesh(new THREE.CircleGeometry(1, 18), snowMat);
+    patch.rotation.x = -Math.PI / 2;
+    patch.position.set(x, 0.008, z);
+    patch.scale.set(rx, rz, 1);
+    patch.receiveShadow = true;
+    group.add(patch);
+  });
+  const snowDiscs = [[3.4, 2.2, 1.6], [-3.6, 4.2, 1.3], [6.2, -3.5, 1.9], [-7.4, -8.5, 1.5], [1.8, -15, 1.7], [-2.4, -18.5, 1.4], [4.5, -7.5, 1.2], [-6.2, 5.5, 1.1]];
+  const count = 1500;
+  const tufts = new THREE.InstancedMesh(tuftGeometry(), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.82, side: THREE.DoubleSide }), count);
+  const dummy = new THREE.Object3D();
+  const color = new THREE.Color();
+  let n = 0;
+  for (let i = 0; i < count && n < count; i++) {
+    const x = ((i * 73) % 2800) / 100 - 14;
+    const z = ((i * 131) % 4200) / 100 - 32;
+    if (x > -13.2 && x < -4.8 && z > -35.2 && z < -28.6) continue;
+    if (distToPath(x, z, samples) < 0.78) continue;
+    if (x * x + z * z < 0.35) continue;
+    let snowed = false;
+    for (let s = 0; s < snowDiscs.length; s++) {
+      const dx = (x - snowDiscs[s][0]) / snowDiscs[s][2];
+      const dz = (z - snowDiscs[s][1]) / snowDiscs[s][2];
+      if (dx * dx + dz * dz < 1) { snowed = true; break; }
+    }
+    if (snowed) continue;
+    const h = 0.65 + ((i * 17) % 70) / 100;
+    dummy.position.set(x, 0, z);
+    dummy.rotation.set(0, (i % 18) * 0.35, 0);
+    dummy.scale.set(1, h, 1);
+    dummy.updateMatrix();
+    tufts.setMatrixAt(n, dummy.matrix);
+    color.setHex((i % 3 === 0) ? 0x3f7a3a : (i % 3 === 1) ? 0x4e8c45 : 0x2f6a34);
+    tufts.setColorAt(n, color);
+    n++;
+  }
+  tufts.count = n;
+  tufts.instanceMatrix.needsUpdate = true;
+  if (tufts.instanceColor) tufts.instanceColor.needsUpdate = true;
+  group.add(tufts);
+  return group;
+}
+function makeTripod() {
   const g = new THREE.Group();
-  const cloth = std(0x4a627c, 0.62);
-  const skin = std(0xe0b090, 0.55);
-  const legL = capsule(0.07, 0.7, std(0x3a4250, 0.75));
-  legL.position.set(-0.09, 0.5, 0);
-  const legR = legL.clone(); legR.position.x = 0.09;
-  g.add(legL, legR);
-  const torso = capsule(0.14, 0.42, cloth);
-  torso.position.y = 1.15;
-  g.add(torso);
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.11, 18, 14), skin);
-  head.position.y = 1.55;
-  g.add(head);
-  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.115, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2), std(0x3a2a22, 0.7));
-  hair.position.y = 1.57;
-  g.add(hair);
-  g.userData.armL = capsule(0.045, 0.34, cloth);
-  g.userData.armR = capsule(0.045, 0.34, cloth);
-  g.userData.handL = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 10), skin);
-  g.userData.handR = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 10), skin);
-  g.add(g.userData.armL, g.userData.armR, g.userData.handL, g.userData.handR);
+  const legMat = std(0x2a3036, 0.45, 0.35);
+  const footMat = std(0x1a1e22, 0.7);
+  const metal = std(0x8d949c, 0.35, 0.55);
+  g.userData.legs = [0, 1, 2].map(() => {
+    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.016, 1, 8), legMat);
+    g.add(leg);
+    return leg;
+  });
+  g.userData.feet = [0, 1, 2].map(() => {
+    const foot = new THREE.Mesh(new THREE.SphereGeometry(0.028, 8, 6), footMat);
+    g.add(foot);
+    return foot;
+  });
+  const column = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.018, 1, 10), metal);
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.045, 0.05, 10), std(0x3a4148, 0.4, 0.4));
+  g.add(column, hub);
+  g.userData.column = column;
+  g.userData.hub = hub;
   return g;
 }
 
@@ -502,10 +684,7 @@ fill.position.set(-4, 6, 14);
 worldScene.add(fill);
 
 const content = new THREE.Group();
-const ground = new THREE.Mesh(new THREE.CircleGeometry(40, 48), std(0xffffff, 0.92));
-ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
-content.add(ground);
+content.add(makeGroundCover());
 content.add(makeTree());
 [[2.8, 0, -9, 0.55], [-5.2, 0, -12, 0.45], [5.2, 0, -16, 0.38]].forEach(([x, y, z, s]) => {
   const t = makeTree();
@@ -525,14 +704,18 @@ giftB.position.set(-1.45, 0, 1.5);
 content.add(giftA, giftB);
 const fenceMat = std(0x8a6a42, 0.7);
 for (let i = 0; i < 6; i++) {
+  const x = -11 + i * 1.3;
+  if (x > -10.15 && x < -7.85) continue;
   const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1, 8), fenceMat);
-  post.position.set(-11 + i * 1.3, 0.5, -28.5);
+  post.position.set(x, 0.5, -28.5);
   post.castShadow = true;
   content.add(post);
 }
-const rail = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.06, 0.06), std(0xa68455, 0.65));
-rail.position.set(-7.7, 0.72, -28.5);
-content.add(rail);
+[[-10.65, 1.15], [-6.05, 3.7]].forEach(([x, w]) => {
+  const rail = new THREE.Mesh(new THREE.BoxGeometry(w, 0.06, 0.06), std(0xa68455, 0.65));
+  rail.position.set(x, 0.72, -28.5);
+  content.add(rail);
+});
 const lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 3.5, 10), std(0x3a4148, 0.5, 0.3));
 lamp.position.set(-5, 1.75, -26);
 content.add(lamp);
@@ -563,10 +746,10 @@ const planeLines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.
 const frustumLines = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0x245ea8 }));
 rig.add(plane, planeLines, frustumLines);
 worldScene.add(rig);
-const person = makePhotographer();
-worldScene.add(person);
+const tripod = makeTripod();
+worldScene.add(tripod);
 rig.traverse((obj) => obj.layers.set(1));
-person.traverse((obj) => obj.layers.set(1));
+tripod.traverse((obj) => obj.layers.set(1));
 
 const orbit = { az: 0.75, el: 0.18, dist: 13.2, target: new THREE.Vector3(0.2, 1.2, 6) };
 const orbitCam = new THREE.PerspectiveCamera(44, 1, 0.08, 140);
@@ -720,36 +903,42 @@ function poseRig(p) {
     rv.set([0, 0, 0, a.x, a.y, a.z], i * 6);
   }
   frustumLines.geometry.getAttribute("position").needsUpdate = true;
+  rig.updateMatrixWorld(true);
+  const mount = rig.localToWorld(new THREE.Vector3(0, -0.056, 0.05));
+  const columnLen = Math.min(1.05, Math.max(0.05, mount.y * 0.42));
+  let hubY = mount.y - columnLen;
+  if (hubY < 0.1) hubY = Math.min(0.1, Math.max(0.06, mount.y - 0.04));
+  const hub = new THREE.Vector3(mount.x, hubY, mount.z);
   const horiz = new THREE.Vector3(fwd.x, 0, fwd.z);
   if (horiz.lengthSq() < 1e-8) horiz.set(0, 0, -1);
   horiz.normalize();
-  const feet = new THREE.Vector3(C.x - horiz.x * 0.42, 0, C.z - horiz.z * 0.42);
-  person.position.copy(feet);
-  person.lookAt(feet.x + horiz.x, 0, feet.z + horiz.z);
-  rig.updateMatrixWorld(true);
-  person.updateMatrixWorld(true);
-  const grip = rig.localToWorld(new THREE.Vector3(0.06, 0.0, 0.08));
-  const under = rig.localToWorld(new THREE.Vector3(-0.02, -0.01, 0.02));
-  aimLimb(person.userData.armR, person.localToWorld(new THREE.Vector3(0.16, 1.25, 0)), grip);
-  aimLimb(person.userData.armL, person.localToWorld(new THREE.Vector3(-0.16, 1.25, 0)), under);
-  person.userData.handR.position.copy(person.worldToLocal(grip.clone()));
-  person.userData.handL.position.copy(person.worldToLocal(under.clone()));
-  insetCam.position.copy(C).addScaledVector(rightVec(R), 1.15).add(new THREE.Vector3(0, 0.28, 0)).addScaledVector(fwd, 0.9);
+  const side = new THREE.Vector3(-horiz.z, 0, horiz.x);
+  const splay = hubY < 0.55 ? 0.62 : Math.min(1.45, 0.36 + hubY * 0.32);
+  const feet = [
+    horiz.clone().multiplyScalar(splay),
+    horiz.clone().multiplyScalar(-splay * 0.5).addScaledVector(side, splay * 0.86),
+    horiz.clone().multiplyScalar(-splay * 0.5).addScaledVector(side, -splay * 0.86)
+  ];
+  tripod.userData.column.scale.set(1, Math.max(0.04, mount.y - hub.y), 1);
+  tripod.userData.column.position.set(mount.x, (mount.y + hub.y) / 2, mount.z);
+  tripod.userData.column.quaternion.identity();
+  tripod.userData.hub.position.copy(hub);
+  for (let i = 0; i < 3; i++) {
+    const foot = new THREE.Vector3(hub.x + feet[i].x, 0.02, hub.z + feet[i].z);
+    const dir = foot.clone().sub(hub);
+    const len = dir.length() || 1;
+    dir.multiplyScalar(1 / len);
+    const leg = tripod.userData.legs[i];
+    leg.position.copy(hub).addScaledVector(dir, len * 0.5);
+    leg.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+    leg.scale.set(1, len, 1);
+    tripod.userData.feet[i].position.copy(foot);
+  }
+  insetCam.position.copy(mount).addScaledVector(rightVec(R), 0.7).add(new THREE.Vector3(0, 0.32, 0)).addScaledVector(fwd, 0.45);
   insetCam.up.set(0, 1, 0);
-  insetCam.lookAt(C.x, C.y + 0.04, C.z);
+  insetCam.lookAt(mount);
 }
 function rightVec(R) { return new THREE.Vector3(R[0][0], R[0][1], R[0][2]); }
-function aimLimb(mesh, fromWorld, toWorld) {
-  const parent = mesh.parent;
-  const from = parent.worldToLocal(fromWorld.clone());
-  const to = parent.worldToLocal(toWorld.clone());
-  const dir = to.clone().sub(from);
-  const len = dir.length() || 1;
-  dir.multiplyScalar(1 / len);
-  mesh.position.copy(from).addScaledVector(dir, len * 0.5);
-  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
-  mesh.scale.set(1, len / 0.36, 1);
-}
 function updateOrbit() {
   const d = orbit.dist, a = orbit.az, e = orbit.el, t = orbit.target;
   orbitCam.position.set(
@@ -761,7 +950,7 @@ function updateOrbit() {
 }
 function resizeWorld() {
   const w = Math.max(320, worldEl.clientWidth);
-  const h = Math.max(280, worldEl.clientHeight);
+  const h = Math.max(96, worldEl.clientHeight);
   worldRenderer.setSize(w, h, false);
   orbitCam.aspect = w / h;
   orbitCam.updateProjectionMatrix();
@@ -852,6 +1041,30 @@ function refreshReadouts() {
   }
 }
 
+const extrinsicKey = { alpha: "alpha", beta: "beta", gamma: "gamma", tx: "tx", ty: "ty", tz: "tz" };
+let lastValid = null;
+function rememberPose(p) {
+  lastValid = { alpha: p.alpha, beta: p.beta, gamma: p.gamma, tx: p.tx, ty: p.ty, tz: p.tz };
+}
+function enforcePose(changedId) {
+  const key = extrinsicKey[changedId];
+  if (!key || !lastValid) return;
+  const proposed = params();
+  if (core.poseClear(proposed)) { rememberPose(proposed); return; }
+  const base = Object.assign({}, proposed, lastValid);
+  const el = $(changedId);
+  el.value = String(core.clampExtrinsic(base, proposed, key));
+  if (!core.poseClear(params())) {
+    const step = Number(el.step) || 0;
+    const dir = Math.sign(base[key] - proposed[key]) || 1;
+    let guard = 0;
+    while (step > 0 && !core.poseClear(params()) && guard < 12) {
+      el.value = String(Number(el.value) + dir * step);
+      guard++;
+    }
+  }
+  rememberPose(params());
+}
 ["fmm", "sw", "sh", "imgw", "imgh", "fx", "fy", "s", "u0", "v0", "alpha", "beta", "gamma", "tx", "ty", "tz", "fn", "focus"].forEach((id) => {
   $(id).addEventListener("input", () => {
     if (id === "fmm") syncLens("f");
@@ -861,10 +1074,11 @@ function refreshReadouts() {
     else if (id === "imgh") syncLens("imgh");
     else if (id === "fx") syncLens("fx");
     else if (id === "fy") syncLens("fy");
+    enforcePose(id);
     refreshReadouts();
   });
 });
-$("btn-reset").addEventListener("click", () => { writeControls(core.DEFAULTS); refreshReadouts(); });
+$("btn-reset").addEventListener("click", () => { writeControls(core.DEFAULTS); rememberPose(params()); refreshReadouts(); });
 window.addEventListener("resize", () => { if (reduceMotion) refreshReadouts(); });
 let dragging = false, lx = 0, ly = 0;
 worldEl.addEventListener("pointerdown", (e) => { dragging = true; lx = e.clientX; ly = e.clientY; try { worldEl.setPointerCapture(e.pointerId); } catch (err) {} });
@@ -952,6 +1166,7 @@ const how = document.querySelector(".how-it-works");
 if (how) how.addEventListener("toggle", () => { if (how.open) drawRig(); });
 
 writeControls(core.DEFAULTS);
+rememberPose(params());
 refreshReadouts();
 drawRig();
 if (!reduceMotion) requestAnimationFrame(frame);
