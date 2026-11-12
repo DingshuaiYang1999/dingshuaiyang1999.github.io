@@ -343,12 +343,14 @@ p {
   font-size: 18px;
 }
 
-.hero-title a {
+.hero-title a,
+#about a {
   color: inherit;
   text-decoration: none;
 }
 
-.hero-title a:hover {
+.hero-title a:hover,
+#about a:hover {
   color: inherit;
   text-decoration: underline;
   text-decoration-thickness: 1px;
