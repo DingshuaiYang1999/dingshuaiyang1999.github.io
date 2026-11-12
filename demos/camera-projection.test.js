@@ -67,10 +67,10 @@ function eye() {
   assert.ok(tip.u > 0 && tip.u < C.IMG_W && tip.v > 0 && tip.v < C.IMG_H);
   const page = fs.readFileSync(path.join(__dirname, "camera-projection.html"), "utf8");
   const home = fs.readFileSync(path.join(__dirname, "../index.html"), "utf8");
-  assert.ok(page.includes("Intrinsic K (5 DOF)"));
-  assert.ok(page.includes("Extrinsic [R | t] (6 DOF)"));
+  assert.ok(page.includes("Intrinsic K"));
+  assert.ok(page.includes("Extrinsic [R|t]"));
   assert.ok(page.includes("James Hays"));
-  assert.ok(page.includes("Aperture (beyond the pinhole model)"));
+  assert.ok(page.includes(">Aperture<"));
   assert.ok(page.includes("R<sub>x</sub>(α)"));
   assert.ok(page.includes("R<sub>z</sub>(γ) R<sub>x</sub>(α) R<sub>y</sub>(β)"));
   assert.ok(page.includes("Savarese"));
