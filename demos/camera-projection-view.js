@@ -99,12 +99,27 @@ function showOutputs(p) {
   const blurAt = (hit) => hit.inFront ? core.cocPixels(p, hit.Xc[2]) : 0;
   $("coc-read").textContent = "Circle of confusion: tree " + blurAt(tree).toFixed(1) + " px · near dog " + blurAt(near).toFixed(1) + " px · house " + blurAt(far).toFixed(1) + " px";
 }
+function fmtCompact(x) {
+  if (!isFinite(x)) return "—";
+  const r = Math.round(x * 100) / 100;
+  if (r === 0) return "0";
+  if (Math.abs(r - Math.round(r)) < 1e-9) return String(Math.round(r));
+  return String(r);
+}
+function bracketMatrix(rows) {
+  const cols = rows[0].length;
+  const cells = rows.map((row) => row.map((c) => "<span>" + fmtCompact(c) + "</span>").join("")).join("");
+  return '<span class="mx" style="--mx-cols:' + cols + '"><span class="mx-br" aria-hidden="true"></span><span class="mx-cells">' + cells + "</span><span class=\"mx-br mx-br-r\" aria-hidden=\"true\"></span></span>";
+}
 function updateReadout(p) {
   const ang = core.angles(p);
   const R = core.rotation(ang.beta, ang.alpha, ang.gamma);
-  $("mat-k").innerHTML = mathMatrix(core.Kof(p));
-  $("mat-r").innerHTML = mathMatrix(R);
-  $("mat-t").innerHTML = mathVec("t", [p.tx, p.ty, p.tz]);
+  $("mat-k").innerHTML = bracketMatrix(core.Kof(p));
+  $("mat-r").innerHTML = bracketMatrix([
+    [R[0][0], R[0][1], R[0][2], p.tx],
+    [R[1][0], R[1][1], R[1][2], p.ty],
+    [R[2][0], R[2][1], R[2][2], p.tz]
+  ]);
   const pr = core.project(core.TIP, p);
   let rows = "<p><span>Tree tip in the world</span> " + mathVec("X", [core.TIP[0], core.TIP[1], core.TIP[2], 1]) + "</p>";
   rows += "<p><span>In the camera</span> " + mathVec("Xcam", [pr.Xc[0], pr.Xc[1], pr.Xc[2]]) + "</p>";
