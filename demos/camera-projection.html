@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Pinhole camera projection · Dingshuai Yang</title>
+    <meta name="description" content="How five intrinsic and six extrinsic parameters change the picture of a Christmas tree under the pinhole model." />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="canonical" href="https://dingshuaiyang1999.github.io/demos/camera-projection.html" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111418" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
+    <link rel="stylesheet" href="path-planning.css?v=faff707a" />
+    <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
+    <link rel="stylesheet" href="camera-projection.css?v=1" />
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") theme = saved;
+          else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="../script.js?v=98f308e2" defer></script>
+    <script src="camera-projection.js?v=1" defer></script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+      <div class="header-inner">
+        <a class="brand" href="../" aria-label="Dingshuai Yang — home">
+          <img class="brand-logo brand-logo-light" src="../assets/logo/logo-light.svg" alt="" width="28" height="28" />
+          <img class="brand-logo brand-logo-dark" src="../assets/logo/logo-dark.svg" alt="" width="28" height="28" />
+          <span class="brand-name">Dingshuai Yang</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href="../#about">About</a></li>
+            <li><a href="../#education">Education</a></li>
+            <li><a href="../#projects">Projects</a></li>
+            <li><a href="../blog/">Blog</a></li>
+            <li><a href="../contact/">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-tools">
+          <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <svg class="theme-icon sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            <svg class="theme-icon moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 13.5a8.5 8.5 0 1 1-9.5-10.5 7 7 0 0 0 9.5 10.5z"/></svg>
+          </button>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+            <span class="nav-toggle-bar" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="main" class="page planner-page cv-page cam-page" tabindex="-1">
+      <p class="section-label"><a href="../#projects-cv">← Projects</a></p>
+      <h1>Pinhole camera: intrinsic and extrinsic parameters</h1>
+      <div class="explain-block">
+        <p class="lead-plain">A pinhole camera turns a 3D point into a pixel. Five numbers inside the camera stretch, shear and shift that picture. Six more place and aim the camera in the world. Drag the view on the left to look around. The sliders change the photograph on the right, and they are not moved for you.</p>
+        <div class="try-box">
+          <h2>Try this</h2>
+          <ul>
+            <li>Increase only <strong>f<sub>x</sub></strong>. The tree stretches horizontally. The grey lines stay at the reset picture.</li>
+            <li>Set <strong>s</strong> away from zero. Vertical lines of the tree lean: that is shear.</li>
+            <li>Move <strong>u<sub>0</sub></strong>. The whole picture shifts, and the red principal point moves with it.</li>
+            <li>Change yaw or <strong>t<sub>x</sub></strong>. The tree moves because the camera moved, not because K changed.</li>
+          </ul>
+        </div>
+        <details class="how-it-works">
+          <summary>How it works (technical details)</summary>
+          <div class="how-body">
+            <h3>Principle</h3>
+            <p>A scene point in the world is written as a 4-vector. The camera first expresses that point in its own axes, then applies the intrinsic matrix. Dividing by the third component removes the homogeneous scale and gives the pixel. Points with camera depth z<sub>cam</sub> ≤ 0 are behind the camera and are not drawn. Lens distortion is ignored.</p>
+            <h3>Formulas</h3>
+            <div class="math-scroll">
+              <math aria-label="w times the vector u, v, 1 equals K times the matrix R, t, times the vector x, y, z, 1.">
+                <mrow>
+                  <mi>w</mi>
+                  <msup><mrow><mo>[</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>,</mo><mn>1</mn><mo>]</mo></mrow><mi>T</mi></msup>
+                  <mo>=</mo><mi>K</mi>
+                  <mo>[</mo><mi>R</mi><mo>∣</mo><mi>t</mi><mo>]</mo>
+                  <msup><mrow><mo>[</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mn>1</mn><mo>]</mo></mrow><mi>T</mi></msup>
+                </mrow>
+              </math>
+            </div>
+            <div class="math-scroll">
+              <math aria-label="K is the matrix f x, s, u 0; 0, f y, v 0; 0, 0, 1.">
+                <mrow>
+                  <mi>K</mi><mo>=</mo>
+                  <mo>[</mo>
+                  <mtable>
+                    <mtr><mtd><msub><mi>f</mi><mi>x</mi></msub></mtd><mtd><mi>s</mi></mtd><mtd><msub><mi>u</mi><mn>0</mn></msub></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><msub><mi>f</mi><mi>y</mi></msub></mtd><mtd><msub><mi>v</mi><mn>0</mn></msub></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
+                  </mtable>
+                  <mo>]</mo>
+                </mrow>
+              </math>
+            </div>
+            <h3>Processing steps</h3>
+            <ol>
+              <li>Build R from yaw, pitch and roll, then X<sub>cam</sub> = R X + t.</li>
+              <li>Apply K to X<sub>cam</sub>. The third entry of the result is w = z<sub>cam</sub>.</li>
+              <li>If z<sub>cam</sub> ≤ 0, discard the point. Otherwise the pixel is (u, v) = (first / w, second / w).</li>
+            </ol>
+            <h3>Reading the picture</h3>
+            <p>The green lines are the tree at the current sliders. The grey lines are the same tree at the reset values of K and of [R | t]. A change in f<sub>x</sub> or f<sub>y</sub> scales the picture. A nonzero s shears it. u<sub>0</sub> and v<sub>0</sub> translate it, and the red cross is the principal point (u<sub>0</sub>, v<sub>0</sub>). Yaw, pitch, roll and t move the camera, so the grey and green drawings separate for a different reason.</p>
+            <h3>Symbols and degrees of freedom</h3>
+            <p>f<sub>x</sub> and f<sub>y</sub> are focal lengths in pixels. s is the skew. (u<sub>0</sub>, v<sub>0</sub>) is the principal point. Those five numbers are the intrinsic degrees of freedom. Yaw, pitch and roll, together with the three entries of t, are the six extrinsic degrees of freedom. The image here is 640 × 480 pixels. Dragging the left view does not change any of these eleven numbers.</p>
+            <h3>Frames and the rotation used here</h3>
+            <p>World axes: x to the right, y up, z toward the default viewer. Camera axes: x to the right, y down, z forward along the optical axis. R = R<sub>z</sub>(roll) R<sub>x</sub>(pitch) R<sub>y</sub>(yaw) R<sub>0</sub>, with R<sub>0</sub> = diag(1, −1, −1). At zero angles, camera x equals world x, camera y equals −world y, and camera z equals −world z, so the camera looks from positive world z toward the origin. t is the world origin written in the camera frame, not a position you add in world coordinates. The worked example uses the tip of the tree.</p>
+            <p>The count of eleven degrees of freedom, and the split into five intrinsic and six extrinsic, follows the lecture “Degrees of freedom” by James Hays, as used in the FAU course.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="cam-groups" aria-label="Camera parameters">
+        <section class="cam-group" aria-labelledby="k-title">
+          <h2 id="k-title">Intrinsic K (5 DOF)</h2>
+          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub></label><output id="fx-out" for="fx">520</output></div><input id="fx" type="range" min="200" max="900" step="1" value="520" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub></label><output id="fy-out" for="fy">520</output></div><input id="fy" type="range" min="200" max="900" step="1" value="520" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="s">s (skew)</label><output id="s-out" for="s">0</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub></label><output id="u0-out" for="u0">320</output></div><input id="u0" type="range" min="0" max="640" step="1" value="320" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub></label><output id="v0-out" for="v0">240</output></div><input id="v0" type="range" min="0" max="480" step="1" value="240" /></div>
+        </section>
+        <section class="cam-group" aria-labelledby="rt-title">
+          <h2 id="rt-title">Extrinsic [R | t] (6 DOF)</h2>
+          <div class="pl-param"><div class="pl-param-head"><label for="yaw">Yaw</label><output id="yaw-out" for="yaw">0°</output></div><input id="yaw" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="pitch">Pitch</label><output id="pitch-out" for="pitch">0°</output></div><input id="pitch" type="range" min="-75" max="75" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="roll">Roll</label><output id="roll-out" for="roll">0°</output></div><input id="roll" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub></label><output id="tx-out" for="tx">0.00</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub></label><output id="ty-out" for="ty">1.35</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="1.35" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub></label><output id="tz-out" for="tz">4.20</output></div><input id="tz" type="range" min="0.8" max="8" step="0.05" value="4.2" /></div>
+        </section>
+      </div>
+      <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>
+
+      <div class="cam-views">
+        <figure>
+          <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the tree, the ground, and the camera frustum"></canvas>
+          <figcaption><strong>World</strong><span>Drag to orbit this view. The blue rectangle is the image plane in front of the camera; the tree is drawn on it, and a few faint rays run from the tree through that plane to the camera centre. Red, green and blue segments are the world x, y and z axes.</span></figcaption>
+        </figure>
+        <figure>
+          <canvas id="view-photo" width="640" height="480" aria-label="Projected photograph of the tree. Grey is the reset pose. Green is the current pose."></canvas>
+          <figcaption><strong>Photograph in pixels (u, v)</strong><span>Grey: reset K and reset [R | t]. Green: the sliders as they are now. The red cross is the principal point.</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="cam-readout" aria-label="Live matrices">
+        <figure><figcaption>K</figcaption><div id="mat-k"></div></figure>
+        <figure><figcaption>R</figcaption><div id="mat-r"></div></figure>
+        <figure><figcaption>t</figcaption><div id="mat-t"></div></figure>
+      </div>
+      <section class="cam-work" aria-labelledby="work-title">
+        <h2 id="work-title">One point: the tip of the tree</h2>
+        <div id="worked"></div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
+      <p><a href="#top">Back to top</a></p>
+    </footer>
+  </body>
+</html>
