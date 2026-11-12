@@ -7,7 +7,7 @@
 (function (root) {
   "use strict";
 
-  var IMG_W = 640, N_V = 480, IMG_H = N_V;
+  var IMG_W = 720, N_V = 480, IMG_H = N_V;
   var R0 = [[1, 0, 0], [0, -1, 0], [0, 0, -1]];
   var SENSOR_SCALE = 28;
   var DEFAULTS = {
@@ -21,7 +21,7 @@
   var TIP = [0, 2.55, 0];
   var ANCHORS = {
     tree: [0, 1.2, 0],
-    near: [-0.5, 1.72, 4.35],
+    near: [0.58, 1.62, 4.22],
     far: [-3.2, 1.4, -14]
   };
   var LIGHT = null;
@@ -121,24 +121,30 @@
   function hexToRgb(h) {
     return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
   }
-  function shade(hex, n) {
-    if (!LIGHT) LIGHT = norm([0.32, 0.9, 0.28]);
+  function shade(hex, n, mode) {
+    if (!LIGHT) LIGHT = norm([0.28, 0.92, 0.26]);
     var nd = n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2];
     if (nd < 0) nd = 0;
-    var k = 0.34 + 0.66 * nd;
+    var k = 0.4 + 0.48 * nd + 0.16 * nd * nd;
     var c = hexToRgb(hex);
-    return "rgb(" + (c[0] * k | 0) + "," + (c[1] * k | 0) + "," + (c[2] * k | 0) + ")";
+    if (mode === "emit") k = 0.94 + 0.1 * nd;
+    if (mode === "spec" && nd > 0.62) {
+      var sp = (nd - 0.62) / 0.38;
+      k = Math.min(1.15, k + 0.35 * sp * sp);
+      c = [c[0] + (255 - c[0]) * sp * 0.72, c[1] + (255 - c[1]) * sp * 0.72, c[2] + (255 - c[2]) * sp * 0.72];
+    }
+    return "rgb(" + (Math.max(0, Math.min(255, c[0] * k)) | 0) + "," + (Math.max(0, Math.min(255, c[1] * k)) | 0) + "," + (Math.max(0, Math.min(255, c[2] * k)) | 0) + ")";
   }
   function triNormal(a, b, c) {
     return norm(cross(sub(b, a), sub(c, a)));
   }
-  function addTri(tris, a, b, c, hex, bias) {
+  function addTri(tris, a, b, c, hex, bias, mode) {
     var n = triNormal(a, b, c);
     if (bias && (n[0] * bias[0] + n[1] * bias[1] + n[2] * bias[2]) < 0) {
       var tmp = a; a = b; b = tmp;
       n = [-n[0], -n[1], -n[2]];
     }
-    tris.push({ p: [a, b, c], color: shade(hex, n) });
+    tris.push({ p: [a, b, c], color: shade(hex, n, mode) });
   }
   function addQuad(tris, a, b, c, d, hex) {
     addTri(tris, a, b, c, hex);
@@ -155,98 +161,206 @@
     addQuad(tris, p000, p100, p101, p001, hex);
     if (edges) edges.push([p000, p100], [p100, p110], [p110, p010], [p010, p000], [p001, p101], [p101, p111], [p111, p011], [p011, p001], [p000, p001], [p100, p101], [p110, p111], [p010, p011]);
   }
-  function ringPoint(y, radius, a, origin, scale, phase) {
-    var wobble = 1 + 0.11 * Math.sin(3 * a + phase) + 0.05 * Math.sin(5 * a + 1.3);
+  var GREENS = ["#1c6430", "#2d8744", "#246838", "#3c9a50", "#184f28", "#4aaa56", "#215e34"];
+  function ringPoint(y, radius, a, i, origin, scale, phase) {
+    var jag = (i % 2 === 0) ? 1 : 0.56;
+    var wobble = jag * (1 + 0.09 * Math.sin(3 * a + phase) + 0.05 * Math.sin(7 * a + 0.6));
     return [
       origin[0] + Math.cos(a) * radius * wobble * scale,
       origin[1] + y * scale,
       origin[2] + Math.sin(a) * radius * wobble * scale
     ];
   }
-  function addCone(tris, edges, y0, y1, radius, n, hex, origin, scale, phase) {
+  function addCone(tris, edges, y0, y1, radius, n, origin, scale, phase) {
     var tip = [origin[0], origin[1] + y1 * scale, origin[2]];
-    var i, a0, a1, p0, p1, mid;
+    var i, a0, a1, p0, p1, mid, hex;
     for (i = 0; i < n; i++) {
       a0 = (i / n) * Math.PI * 2;
       a1 = ((i + 1) / n) * Math.PI * 2;
-      p0 = ringPoint(y0, radius, a0, origin, scale, phase);
-      p1 = ringPoint(y0, radius, a1, origin, scale, phase);
+      p0 = ringPoint(y0, radius, a0, i, origin, scale, phase);
+      p1 = ringPoint(y0, radius, a1, i + 1, origin, scale, phase);
       mid = [(p0[0] + p1[0]) / 2 - origin[0], 0, (p0[2] + p1[2]) / 2 - origin[2]];
-      addTri(tris, tip, p1, p0, hex, [mid[0], 0.15, mid[2]]);
-      if (edges && i % 2 === 0) edges.push([tip, p0]);
-      if (edges) edges.push([p0, p1]);
+      hex = GREENS[(i + (phase * 3 | 0)) % GREENS.length];
+      addTri(tris, tip, p1, p0, hex, [mid[0], 0.2, mid[2]]);
+      if (edges && i % 3 === 0) edges.push([tip, p0]);
     }
   }
-  function addTrunk(tris, edges, y0, y1, radius, n, hex, origin, scale) {
-    var i, a0, a1, b0, b1, t0, t1;
+  function addTrunk(tris, edges, y0, y1, radius, n, origin, scale) {
+    var barks = ["#5a381f", "#7a4e2c", "#4a2e18", "#6b4426"];
+    var i, a0, a1, b0, b1, t0, t1, rr0, rr1;
     for (i = 0; i < n; i++) {
       a0 = (i / n) * Math.PI * 2;
       a1 = ((i + 1) / n) * Math.PI * 2;
-      b0 = [origin[0] + Math.cos(a0) * radius * scale, origin[1] + y0 * scale, origin[2] + Math.sin(a0) * radius * scale];
-      b1 = [origin[0] + Math.cos(a1) * radius * scale, origin[1] + y0 * scale, origin[2] + Math.sin(a1) * radius * scale];
-      t0 = [origin[0] + Math.cos(a0) * radius * scale, origin[1] + y1 * scale, origin[2] + Math.sin(a0) * radius * scale];
-      t1 = [origin[0] + Math.cos(a1) * radius * scale, origin[1] + y1 * scale, origin[2] + Math.sin(a1) * radius * scale];
-      addTri(tris, b0, b1, t1, hex, [Math.cos(a0), 0, Math.sin(a0)]);
-      addTri(tris, b0, t1, t0, hex, [Math.cos(a0), 0, Math.sin(a0)]);
+      rr0 = radius * (0.92 + 0.1 * Math.sin(i * 2.2));
+      rr1 = radius * (0.92 + 0.1 * Math.sin((i + 1) * 2.2));
+      b0 = [origin[0] + Math.cos(a0) * rr0 * scale, origin[1] + y0 * scale, origin[2] + Math.sin(a0) * rr0 * scale];
+      b1 = [origin[0] + Math.cos(a1) * rr1 * scale, origin[1] + y0 * scale, origin[2] + Math.sin(a1) * rr1 * scale];
+      t0 = [origin[0] + Math.cos(a0) * rr0 * 0.86 * scale, origin[1] + y1 * scale, origin[2] + Math.sin(a0) * rr0 * 0.86 * scale];
+      t1 = [origin[0] + Math.cos(a1) * rr1 * 0.86 * scale, origin[1] + y1 * scale, origin[2] + Math.sin(a1) * rr1 * 0.86 * scale];
+      addTri(tris, b0, b1, t1, barks[i % 4], [Math.cos(a0), 0, Math.sin(a0)]);
+      addTri(tris, b0, t1, t0, barks[(i + 1) % 4], [Math.cos(a0), 0, Math.sin(a0)]);
       if (edges && i % 2 === 0) edges.push([b0, t0]);
     }
   }
-  function addTree(tris, edges, origin, scale, phase) {
-    addTrunk(tris, edges, 0, 0.48, 0.07, 6, "#6b4423", origin, scale);
-    addCone(tris, edges, 0.30, 1.12, 0.92, 8, "#2f7d40", origin, scale, phase);
-    addCone(tris, edges, 0.82, 1.62, 0.70, 8, "#3d8c4c", origin, scale, phase + 0.6);
-    addCone(tris, edges, 1.28, 2.02, 0.48, 7, "#2c6e39", origin, scale, phase + 1.1);
-    addCone(tris, edges, 1.68, 2.32, 0.28, 7, "#4e9a58", origin, scale, phase + 1.7);
+  function addOcta(tris, c, r, hex, mode) {
+    var px = [c[0] + r, c[1], c[2]], nx = [c[0] - r, c[1], c[2]];
+    var py = [c[0], c[1] + r, c[2]], ny = [c[0], c[1] - r, c[2]];
+    var pz = [c[0], c[1], c[2] + r], nz = [c[0], c[1], c[2] - r];
+    addTri(tris, py, pz, px, hex, null, mode);
+    addTri(tris, py, px, nz, hex, null, mode);
+    addTri(tris, py, nz, nx, hex, null, mode);
+    addTri(tris, py, nx, pz, hex, null, mode);
+    addTri(tris, ny, px, pz, hex, null, mode);
+    addTri(tris, ny, nz, px, hex, null, mode);
+    addTri(tris, ny, nx, nz, hex, null, mode);
+    addTri(tris, ny, pz, nx, hex, null, mode);
+  }
+  function addBauble(tris, c, r, hex) {
+    var t = (1 + Math.sqrt(5)) / 2;
+    var raw = [[-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0], [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t], [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]];
+    var v = raw.map(function (p) { var L = Math.hypot(p[0], p[1], p[2]); return [c[0] + p[0] / L * r, c[1] + p[1] / L * r, c[2] + p[2] / L * r]; });
+    var f = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]];
+    f.forEach(function (ix) { addTri(tris, v[ix[0]], v[ix[1]], v[ix[2]], hex, null, "spec"); });
+  }
+  function addStar(tris, edges, origin, scale) {
     var tip = [origin[0], origin[1] + 2.55 * scale, origin[2]];
     var i, a, outer, inner;
-    for (i = 0; i < 4; i++) {
-      a = i * Math.PI / 2 + 0.4;
-      outer = [origin[0] + Math.cos(a) * 0.14 * scale, origin[1] + 2.40 * scale, origin[2] + Math.sin(a) * 0.14 * scale];
-      inner = [origin[0] + Math.cos(a + Math.PI / 4) * 0.05 * scale, origin[1] + 2.40 * scale, origin[2] + Math.sin(a + Math.PI / 4) * 0.05 * scale];
-      addTri(tris, tip, outer, inner, "#e6b325", [0, 1, 0]);
+    for (i = 0; i < 5; i++) {
+      a = i * Math.PI * 2 / 5 - Math.PI / 2;
+      outer = [origin[0] + Math.cos(a) * 0.16 * scale, origin[1] + 2.38 * scale, origin[2] + Math.sin(a) * 0.16 * scale];
+      inner = [origin[0] + Math.cos(a + Math.PI / 5) * 0.055 * scale, origin[1] + 2.40 * scale, origin[2] + Math.sin(a + Math.PI / 5) * 0.055 * scale];
+      addTri(tris, tip, outer, inner, i % 2 ? "#ffe38a" : "#e6b325", [0, 1, 0], "spec");
       if (edges) edges.push([tip, outer]);
     }
   }
+  function addTree(tris, edges, origin, scale, phase, detail) {
+    var tiers = detail > 1
+      ? [[0.22, 0.78, 1.02], [0.52, 1.05, 0.9], [0.78, 1.28, 0.78], [1.02, 1.5, 0.66], [1.24, 1.7, 0.54], [1.46, 1.9, 0.42], [1.66, 2.08, 0.3], [1.86, 2.28, 0.18]]
+      : detail > 0
+        ? [[0.24, 0.9, 0.9], [0.62, 1.25, 0.72], [0.98, 1.55, 0.54], [1.3, 1.85, 0.36], [1.6, 2.15, 0.22]]
+        : [[0.28, 1.05, 0.85], [0.75, 1.5, 0.58], [1.15, 1.9, 0.36], [1.55, 2.2, 0.2]];
+    var n = detail > 1 ? 14 : detail > 0 ? 10 : 8;
+    var i, h, ang, radAt, colors = ["#c4473a", "#e6b325", "#2a6fbf", "#f2f2f2", "#7a3e8a"];
+    addTrunk(tris, edges, 0, 0.42, 0.075, detail > 0 ? 8 : 6, origin, scale);
+    for (i = 0; i < tiers.length; i++) addCone(tris, edges, tiers[i][0], tiers[i][1], tiers[i][2], n, origin, scale, phase + i * 0.4);
+    addStar(tris, edges, origin, scale);
+    if (detail > 0) {
+      var baubles = detail > 1 ? 6 : 2;
+      for (i = 0; i < baubles; i++) {
+        h = 0.55 + i * (1.5 / baubles);
+        ang = phase + i * 2.2;
+        radAt = (0.72 - h * 0.22) * scale;
+        addBauble(tris, [origin[0] + Math.cos(ang) * radAt, origin[1] + h * scale, origin[2] + Math.sin(ang) * radAt], 0.055 * scale, colors[i % colors.length]);
+      }
+    }
+    var lights = detail > 1 ? 18 : detail > 0 ? 8 : 5;
+    for (i = 0; i < lights; i++) {
+      h = 0.4 + (i / lights) * 1.75;
+      ang = phase + i * 1.15;
+      radAt = (0.78 - h * 0.28) * scale * (i % 2 ? 0.92 : 0.7);
+      addOcta(tris, [origin[0] + Math.cos(ang) * radAt, origin[1] + h * scale, origin[2] + Math.sin(ang) * radAt], 0.03 * scale, i % 3 ? "#ffe7a0" : "#fff6d4", "emit");
+    }
+    if (detail > 1) {
+      addSnow(tris, origin[0] + 0.35, origin[2] + 0.15, 0.55, 0.38);
+      addSnow(tris, origin[0] - 0.45, origin[2] - 0.2, 0.42, 0.5);
+      addSnow(tris, origin[0] + 0.05, origin[2] + 0.55, 0.36, 0.28);
+    }
+  }
+  function addSnow(tris, x, z, rx, rz) {
+    var c = [x, 0.025, z], i, a0, a1;
+    for (i = 0; i < 7; i++) {
+      a0 = (i / 7) * Math.PI * 2;
+      a1 = ((i + 1) / 7) * Math.PI * 2;
+      addTri(tris, c, [x + Math.cos(a0) * rx, 0.025, z + Math.sin(a0) * rz], [x + Math.cos(a1) * rx, 0.025, z + Math.sin(a1) * rz], "#f3f7fb", [0, 1, 0]);
+    }
+  }
+  function addEmitQuad(tris, a, b, c, d, hex) {
+    addTri(tris, a, b, c, hex, null, "emit");
+    addTri(tris, a, c, d, hex, null, "emit");
+  }
   function addHouse(tris, edges, x, z) {
-    addBox(tris, edges, x - 1.15, 0, z - 0.9, x + 1.15, 1.55, z + 0.9, "#d9c7a4");
-    var peak = [x, 2.35, z];
-    var a = [x - 1.25, 1.5, z - 1.0], b = [x + 1.25, 1.5, z - 1.0];
-    var c = [x + 1.25, 1.5, z + 1.0], d = [x - 1.25, 1.5, z + 1.0];
+    addBox(tris, edges, x - 1.2, 0, z - 0.95, x + 1.2, 1.55, z + 0.95, "#d9c7a4");
+    var peak = [x, 2.45, z];
+    var a = [x - 1.35, 1.48, z - 1.05], b = [x + 1.35, 1.48, z - 1.05];
+    var c = [x + 1.35, 1.48, z + 1.05], d = [x - 1.35, 1.48, z + 1.05];
     addTri(tris, a, b, peak, "#8d4038", [0, 0.4, -1]);
-    addTri(tris, b, c, peak, "#8d4038", [1, 0.4, 0]);
+    addTri(tris, b, c, peak, "#7a342e", [1, 0.4, 0]);
     addTri(tris, c, d, peak, "#8d4038", [0, 0.4, 1]);
-    addTri(tris, d, a, peak, "#8d4038", [-1, 0.4, 0]);
+    addTri(tris, d, a, peak, "#7a342e", [-1, 0.4, 0]);
+    addBox(tris, null, x + 0.55, 1.7, z - 0.15, x + 0.85, 2.55, z + 0.18, "#6e5848");
+    var fz = z + 0.97;
+    addEmitQuad(tris, [x - 0.72, 0.85, fz], [x - 0.28, 0.85, fz], [x - 0.28, 1.25, fz], [x - 0.72, 1.25, fz], "#ffe7a3");
+    addEmitQuad(tris, [x + 0.28, 0.85, fz], [x + 0.72, 0.85, fz], [x + 0.72, 1.25, fz], [x + 0.28, 1.25, fz], "#ffe7a3");
+    addEmitQuad(tris, [x - 0.22, 0.95, fz], [x + 0.22, 0.95, fz], [x + 0.22, 1.22, fz], [x - 0.22, 1.22, fz], "#fff2c4");
+    addQuad(tris, [x - 0.28, 0, fz], [x + 0.28, 0, fz], [x + 0.28, 0.78, fz], [x - 0.28, 0.78, fz], "#5c3a28");
+    addEmitQuad(tris, [x + 1.22, 0.7, z - 0.25], [x + 1.22, 0.7, z + 0.25], [x + 1.22, 1.15, z + 0.25], [x + 1.22, 1.15, z - 0.25], "#ffe7a3");
     if (edges) edges.push([a, peak], [b, peak], [c, peak], [d, peak]);
+  }
+  function addLamp(tris, x, z) {
+    addBox(tris, null, x - 0.04, 0, z - 0.04, x + 0.04, 2.15, z + 0.04, "#3a4148");
+    addBox(tris, null, x - 0.04, 2.05, z - 0.04, x + 0.28, 2.12, z + 0.04, "#3a4148");
+    addOcta(tris, [x + 0.28, 1.98, z], 0.09, "#fff1c2", "emit");
+  }
+  function addFenceRun(tris, edges, x0, x1, z) {
+    var i, x, n = 5;
+    for (i = 0; i < n; i++) {
+      x = x0 + (x1 - x0) * (i / (n - 1));
+      addBox(tris, edges, x - 0.04, 0, z - 0.04, x + 0.04, 0.85, z + 0.04, "#8a6a42");
+    }
+    addBox(tris, edges, x0, 0.38, z - 0.03, x1, 0.46, z + 0.03, "#a68455");
+    addBox(tris, edges, x0, 0.62, z - 0.03, x1, 0.7, z + 0.03, "#a68455");
+  }
+  function addBow(tris, x, y, z, s) {
+    var gold = "#f4d56a";
+    var top = [x, y + s * 0.62, z];
+    var L = [x - s * 0.62, y + s * 0.12, z];
+    var R = [x + s * 0.62, y + s * 0.12, z];
+    var F = [x, y + s * 0.18, z + s * 0.32];
+    var B = [x, y + s * 0.18, z - s * 0.32];
+    addTri(tris, top, L, F, gold, [0, 1, 1], "spec");
+    addTri(tris, top, F, R, gold, [0, 1, 1], "spec");
+    addTri(tris, top, R, B, gold, [0, 1, -1], "spec");
+    addTri(tris, top, B, L, gold, [0, 1, -1], "spec");
   }
   function addGift(tris, edges, x, y, z, s, hex) {
     addBox(tris, edges, x - s, y, z - s, x + s, y + s * 1.15, z + s, hex);
-    addBox(tris, null, x - s * 0.16, y, z - s * 1.02, x + s * 0.16, y + s * 1.15, z + s * 1.02, "#f2d56a");
-    addBox(tris, null, x - s * 1.02, y + s * 0.42, z - s * 0.16, x + s * 1.02, y + s * 0.72, z + s * 0.16, "#f2d56a");
+    addBox(tris, null, x - s * 0.14, y, z - s * 1.04, x + s * 0.14, y + s * 1.15, z + s * 1.04, "#f2d56a");
+    addBox(tris, null, x - s * 1.04, y + s * 0.42, z - s * 0.14, x + s * 1.04, y + s * 0.68, z + s * 0.14, "#f2d56a");
+    addBow(tris, x, y + s * 1.15, z, s);
+  }
+  function tileHash(i, j) {
+    var n = (i * 374761393 + j * 668265263) | 0;
+    n = Math.imul(n ^ (n >> 13), 1274126177);
+    return ((n ^ (n >> 16)) >>> 0) / 4294967295;
   }
   function scene() {
     var tris = [], edges = [], main = [];
-    addTree(tris, main, [0, 0, 0], 1, 0.2);
-    addTree(tris, edges, [2.5, 0, -9.5], 0.58, 1.2);
-    addTree(tris, edges, [-1.7, 0, -15.5], 0.46, 2.1);
-    addTree(tris, edges, [4.3, 0, -19], 0.4, 0.7);
+    addTree(tris, main, [0, 0, 0], 1, 0.2, 2);
+    addTree(tris, edges, [2.7, 0, -8.6], 0.52, 1.1, 1);
+    addTree(tris, edges, [-4.5, 0, -10.2], 0.48, 2.4, 1);
+    addTree(tris, edges, [-1.9, 0, -16.2], 0.4, 0.7, 0);
+    addTree(tris, edges, [4.5, 0, -17.5], 0.36, 1.8, 0);
+    addTree(tris, edges, [3.6, 0, -6.6], 0.3, 0.4, 0);
     addHouse(tris, edges, -3.2, -14);
-    addGift(tris, edges, -0.5, 1.55, 4.35, 0.16, "#c4473a");
-    addGift(tris, edges, -0.95, 1.42, 4.05, 0.13, "#2a6fbf");
-    addBox(tris, edges, -0.56, 1.15, 4.31, -0.44, 1.55, 4.39, "#6b4423");
-    addBox(tris, edges, -1.01, 1.05, 4.01, -0.89, 1.42, 4.09, "#6b4423");
-    addBox(tris, edges, -1.15, 1.15, 3.95, -1.02, 1.85, 4.08, "#8a6a42");
-    addBox(tris, edges, -0.28, 1.15, 4.15, -0.15, 1.85, 4.28, "#8a6a42");
-    addBox(tris, edges, -1.15, 1.48, 3.95, -0.15, 1.6, 4.08, "#a68455");
-    var gx, gz, x0, z0, span = 2;
-    for (gx = -4; gx < 4; gx++) for (gz = -8; gz < 3; gz++) {
+    addFenceRun(tris, edges, -5.5, -1.3, -12.3);
+    addLamp(tris, -5.3, -11.2);
+    addGift(tris, edges, 0.58, 1.48, 4.22, 0.12, "#c4473a");
+    addGift(tris, edges, 0.95, 1.36, 3.9, 0.1, "#2a6fbf");
+    addBox(tris, edges, 0.54, 1.15, 4.18, 0.62, 1.48, 4.26, "#6b4423");
+    addBox(tris, edges, 0.91, 1.08, 3.86, 0.99, 1.36, 3.94, "#6b4423");
+    var gx, gz, x0, z0, span = 1.6;
+    for (gx = -5; gx < 5; gx++) for (gz = -11; gz < 4; gz++) {
       x0 = gx * span; z0 = gz * span;
-      var tile = ((gx + gz) & 1) ? "#7ea362" : "#6d9256";
+      var h = tileHash(gx + 9, gz + 20);
+      var tile = h > 0.84 ? "#e8eef3" : h > 0.62 ? "#8eb56e" : h > 0.35 ? "#6f9456" : "#5c8448";
       var cx = x0 + span / 2, cz = z0 + span / 2;
       var dist = Math.hypot(cx, cz);
-      var shadow = dist < 1.2 ? 0.62 + 0.38 * (dist / 1.2) : 1;
+      var t = dist < 2.3 ? dist / 2.3 : 1;
+      var smooth = t * t * (3 - 2 * t);
+      var shadow = 0.55 + 0.45 * smooth;
       var rgb = hexToRgb(tile);
       var col = "rgb(" + (rgb[0] * shadow | 0) + "," + (rgb[1] * shadow | 0) + "," + (rgb[2] * shadow | 0) + ")";
-      var y = 0, pad = 0.04;
+      var y = 0, pad = 0.03;
       var xA = x0 - pad, xB = x0 + span + pad, zA = z0 - pad, zB = z0 + span + pad;
       tris.push({ p: [[xA, y, zA], [xB, y, zA], [xB, y, zB]], color: col });
       tris.push({ p: [[xA, y, zA], [xB, y, zB], [xA, y, zB]], color: col });

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
     <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
-    <link rel="stylesheet" href="camera-projection.css?v=4" />
+    <link rel="stylesheet" href="camera-projection.css?v=6" />
     <script>
       (function () {
         var theme = "light";
@@ -26,7 +26,7 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="camera-projection.js?v=5" defer></script>
+    <script src="camera-projection.js?v=6" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -104,7 +104,7 @@
               </math>
             </div>
             <h3>Lens and field of view</h3>
-            <p>H<sub>x</sub> and H<sub>y</sub> are the sensor width and height, and f is the focal length. All three are in millimetres. The image is W × N<sub>v</sub> pixels, here 640 × 480. H is the sensor size, not the image height.</p>
+            <p>H<sub>x</sub> and H<sub>y</sub> are the sensor width and height, and f is the focal length. All three are in millimetres. The photograph is W × N<sub>v</sub> pixels, here 720 × 480, the same 3:2 shape as the reset sensor 36 mm × 24 mm. At that reset, p<sub>x</sub> = p<sub>y</sub> and f<sub>x</sub> = f<sub>y</sub>. H is the sensor size, not the image height.</p>
             <div class="math-scroll">
               <math aria-label="Horizontal and vertical angular fields of view.">
                 <mrow>
@@ -120,6 +120,7 @@
             </div>
             <p>Pixel pitch is p<sub>x</sub> = H<sub>x</sub> / W and p<sub>y</sub> = H<sub>y</sub> / N<sub>v</sub>. Then f<sub>x</sub> = f / p<sub>x</sub> and f<sub>y</sub> = f / p<sub>y</sub>, so H<sub>x</sub> / (2f) = W / (2 f<sub>x</sub>). The pixel formula 2 arctan(W / (2 f<sub>x</sub>)) is the same ratio. It assumes s = 0 and a principal point at the centre. If the principal point is not centred, the angle about the optical axis is arctan(u<sub>0</sub> / f<sub>x</sub>) + arctan((W − u<sub>0</sub>) / f<sub>x</sub>), and likewise for v and N<sub>v</sub>. Those angles ignore skew.</p>
             <p>A non-square sensor, H<sub>x</sub> / H<sub>y</sub> different from W / N<sub>v</sub>, changes the aspect of the picture and makes the horizontal and vertical fields of view differ. Non-square pixels, p<sub>x</sub> ≠ p<sub>y</sub>, are what make f<sub>x</sub> ≠ f<sub>y</sub>. Dragging f<sub>x</sub> or f<sub>y</sub> changes the shared f, so the other focal length follows. The full-frame equivalent f × 36 / H<sub>x</sub> is only a label. In the world view the lens-to-sensor gap is drawn 28 times life size so the millimetres can be seen. The angle is the true field of view.</p>
+            <p id="fov-read">AFOV<sub>x</sub> and AFOV<sub>y</sub> at the current f, H<sub>x</sub> and H<sub>y</sub>, and the full-frame equivalent, are shown here.</p>
             <h3>Rotation around the coordinate axes, counter-clockwise</h3>
             <p>Positive angles are counter-clockwise about the axis. α, β and γ are sometimes called pitch, yaw and roll. The sliders use only R<sub>x</sub>(α), R<sub>y</sub>(β) and R<sub>z</sub>(γ).</p>
             <div class="math-scroll">
@@ -194,6 +195,10 @@
               </math>
             </div>
             <p>The photograph turns c into pixels with the horizontal pitch, c / p<sub>x</sub>, and blurs each depth band with a Gaussian whose radius is about half that diameter, capped at 16 px. Brightness is not scaled by aperture area: a factor A² would make the picture black as A → 0, so the closed aperture would not match the pinhole colours. With that choice, A → 0 reproduces the K[R | t] image exactly. Approximations: one depth per face, a few depth bands, a Gaussian rather than a uniform disc, no distortion, and d taken as z<sub>cam</sub>.</p>
+            <p id="coc-read">At the current aperture and focus, the circle of confusion is listed here for the tree, the near gifts, and the house.</p>
+            <h3>Reading the two views</h3>
+            <p>Drag the world view to orbit it. The box and cylinder are the camera. The rectangle is the sensor, drawn 28 times life size at distance f in front of the lens. The amber arc is the field of view. A few rays run from the scene through that plane to the lens. Red, green and blue segments are the world x, y and z axes.</p>
+            <p>The photograph is filled and lit in pixel coordinates (u, v). Grey lines, drawn when the pose or K differs from the reset, are the reset K and the reset [R | t]. Blur follows the circle of confusion and does not move a point’s centre. The red cross is the principal point. The near gifts sit to the side of the tree so the trunk stays visible while they are still close enough to blur at f/1.8.</p>
             <h3>Symbols and degrees of freedom</h3>
             <p>f<sub>x</sub>, f<sub>y</sub>, s, u<sub>0</sub> and v<sub>0</sub> are the five intrinsic degrees of freedom. R<sub>x</sub>(α), R<sub>y</sub>(β), R<sub>z</sub>(γ) and the three entries of t are the six extrinsic degrees of freedom. Dragging the left view changes none of them. The count of eleven, and the split into five plus six, follows the lecture “Degrees of freedom” by James Hays, as used in the FAU course. The worked example is the tip of the main tree.</p>
           </div>
@@ -206,14 +211,13 @@
           <div class="pl-param"><div class="pl-param-head"><label for="fmm">f (mm)</label><output id="fmm-out" for="fmm">50.0</output></div><input id="fmm" type="range" min="14" max="200" step="0.5" value="50" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="hx">H<sub>x</sub> (mm)</label><output id="hx-out" for="hx">36.0</output></div><input id="hx" type="range" min="12" max="60" step="0.5" value="36" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="hy">H<sub>y</sub> (mm)</label><output id="hy-out" for="hy">24.0</output></div><input id="hy" type="range" min="8" max="45" step="0.5" value="24" /></div>
-          <p id="fov-read" class="cam-note">AFOV<sub>x</sub> = 39.6° · AFOV<sub>y</sub> = 27.0°</p>
         </section>
         <section class="cam-group" aria-labelledby="k-title">
           <h2 id="k-title">Intrinsic K (5 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub></label><output id="fx-out" for="fx">888.9</output></div><input id="fx" type="range" min="200" max="2200" step="0.1" value="888.9" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub></label><output id="fy-out" for="fy">1000</output></div><input id="fy" type="range" min="200" max="2200" step="0.1" value="1000" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub></label><output id="fx-out" for="fx">1000.0</output></div><input id="fx" type="range" min="200" max="2200" step="0.1" value="1000" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub></label><output id="fy-out" for="fy">1000.0</output></div><input id="fy" type="range" min="200" max="2200" step="0.1" value="1000" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="s">s (skew)</label><output id="s-out" for="s">0</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub></label><output id="u0-out" for="u0">320</output></div><input id="u0" type="range" min="0" max="640" step="1" value="320" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub></label><output id="u0-out" for="u0">360</output></div><input id="u0" type="range" min="0" max="720" step="1" value="360" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub></label><output id="v0-out" for="v0">240</output></div><input id="v0" type="range" min="0" max="480" step="1" value="240" /></div>
         </section>
         <section class="cam-group" aria-labelledby="rt-title">
@@ -229,7 +233,6 @@
           <h2 id="ap-title">Aperture (beyond the pinhole model)</h2>
           <div class="pl-param"><div class="pl-param-head"><label for="fn">f-number N</label><output id="fn-out" for="fn">f/1.8</output></div><input id="fn" type="range" min="1.4" max="22" step="0.1" value="1.8" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="focus">Focus d<sub>f</sub> (m)</label><output id="focus-out" for="focus">6.32 m</output></div><input id="focus" type="range" min="0.5" max="40" step="0.05" value="6.3" /></div>
-          <p id="coc-read" class="cam-note">Circle of confusion</p>
         </section>
       </div>
       <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>
@@ -237,11 +240,9 @@
       <div class="cam-views">
         <figure>
           <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the shaded tree, ground, house, and the camera"></canvas>
-          <figcaption><strong>World</strong><span>Drag to orbit. The box and cylinder are the camera. The rectangle is the sensor, drawn 28 times life size at distance f in front of the lens; the amber arc is the field of view. A few rays run from the scene through that plane to the lens. Red, green and blue are the world x, y and z axes.</span></figcaption>
         </figure>
         <figure>
-          <canvas id="view-photo" width="640" height="480" aria-label="Shaded photograph. Grey outlines are the reset pose. The red cross is the principal point."></canvas>
-          <figcaption><strong>Photograph in pixels (u, v)</strong><span>Filled and lit. Grey lines are the reset K and reset [R | t]. Blur follows the circle of confusion and does not move a point’s centre. The red cross is the principal point.</span></figcaption>
+          <canvas id="view-photo" width="720" height="480" aria-label="Shaded 3:2 photograph. The red cross is the principal point."></canvas>
         </figure>
       </div>
 

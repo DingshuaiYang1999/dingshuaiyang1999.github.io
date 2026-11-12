@@ -140,4 +140,22 @@ function so3(R) {
   near(C.asymAngle(80, C.N_V, fy), Math.atan(80 / fy) + Math.atan((C.N_V - 80) / fy));
 }
 
+{
+  assert.strictEqual(C.IMG_W, 720);
+  assert.strictEqual(C.N_V, 480);
+  near(C.DEFAULTS.fx, C.DEFAULTS.fy);
+  near(C.DEFAULTS.u0, 360);
+  near(C.DEFAULTS.v0, 240);
+  near(C.DEFAULTS.Hx / C.IMG_W, C.DEFAULTS.Hy / C.N_V);
+  const page = fs.readFileSync(path.join(__dirname, "camera-projection.html"), "utf8");
+  assert.ok(page.includes("720 × 480"));
+  assert.ok(!page.includes("<figcaption><strong>World"));
+  assert.ok(!page.includes('id="fov-read" class="cam-note"'));
+  const tree = C.project(C.ANCHORS.tree, C.DEFAULTS);
+  const nearG = C.project(C.ANCHORS.near, C.DEFAULTS);
+  assert.ok(nearG.inFront && nearG.u > tree.u + 140, "gifts sit to the side of the tree");
+  assert.ok(C.cocPixels(C.DEFAULTS, nearG.Xc[2]) > 5);
+  assert.ok(C.cocPixels(C.DEFAULTS, tree.Xc[2]) < 0.5);
+}
+
 console.log("camera projection tests passed");
