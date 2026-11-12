@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.mjs";
 
 const core = window.CameraCore;
 const $ = (id) => document.getElementById(id);
@@ -99,27 +100,50 @@ function showOutputs(p) {
   const blurAt = (hit) => hit.inFront ? core.cocPixels(p, hit.Xc[2]) : 0;
   $("coc-read").textContent = "Circle of confusion: tree " + blurAt(tree).toFixed(1) + " px · near dog " + blurAt(near).toFixed(1) + " px · house " + blurAt(far).toFixed(1) + " px";
 }
-function fmtCompact(x) {
-  if (!isFinite(x)) return "—";
-  const r = Math.round(x * 100) / 100;
-  if (r === 0) return "0";
-  if (Math.abs(r - Math.round(r)) < 1e-9) return String(Math.round(r));
-  return String(r);
+function fixedCell(x, decimals) {
+  const scale = 10 ** decimals;
+  let r = Math.round(x * scale) / scale;
+  if (r === 0) r = 0;
+  return (r < 0 ? "-" : "") + Math.abs(r).toFixed(decimals);
 }
-function bracketMatrix(rows) {
-  const cols = rows[0].length;
-  const cells = rows.map((row) => row.map((c) => "<span>" + fmtCompact(c) + "</span>").join("")).join("");
-  return '<span class="mx" style="--mx-cols:' + cols + '"><span class="mx-br" aria-hidden="true"></span><span class="mx-cells">' + cells + "</span><span class=\"mx-br mx-br-r\" aria-hidden=\"true\"></span></span>";
+function intCell(x, decimals) {
+  const n = Math.round(x);
+  return (n < 0 ? "-" : "") + Math.abs(n) + "\\phantom{." + "0".repeat(decimals) + "}";
 }
+function bmatrix(cols, body) {
+  return "\\left[\\begin{array}{" + cols + "}" + body + "\\end{array}\\right]";
+}
+function texK(p) {
+  const K = core.Kof(p);
+  const px = (v) => fixedCell(v, 1);
+  const body = [
+    [px(K[0][0]), px(K[0][1]), px(K[0][2])].join(" & "),
+    [px(K[1][0]), px(K[1][1]), px(K[1][2])].join(" & "),
+    [intCell(0, 1), intCell(0, 1), intCell(1, 1)].join(" & ")
+  ].join(" \\\\ ");
+  return "\\mathbf{K}=" + bmatrix("rrr", body);
+}
+function texRt(R, p) {
+  const t = [p.tx, p.ty, p.tz];
+  const body = [0, 1, 2].map((i) => [
+    fixedCell(R[i][0], 3), fixedCell(R[i][1], 3), fixedCell(R[i][2], 3), fixedCell(t[i], 2)
+  ].join(" & ")).join(" \\\\ ");
+  return "[\\mathbf{R}\\,|\\,\\mathbf{t}]=" + bmatrix("rrrr", body);
+}
+const katexOpts = { throwOnError: false, displayMode: false };
+let readoutQueued = 0;
+let lastTex = "";
 function updateReadout(p) {
   const ang = core.angles(p);
   const R = core.rotation(ang.beta, ang.alpha, ang.gamma);
-  $("mat-k").innerHTML = bracketMatrix(core.Kof(p));
-  $("mat-r").innerHTML = bracketMatrix([
-    [R[0][0], R[0][1], R[0][2], p.tx],
-    [R[1][0], R[1][1], R[1][2], p.ty],
-    [R[2][0], R[2][1], R[2][2], p.tz]
-  ]);
+  const kTex = texK(p);
+  const rtTex = texRt(R, p);
+  const key = kTex + "\n" + rtTex;
+  if (key !== lastTex) {
+    lastTex = key;
+    katex.render(kTex, $("mat-k"), katexOpts);
+    katex.render(rtTex, $("mat-r"), katexOpts);
+  }
   const pr = core.project(core.TIP, p);
   let rows = "<p><span>Tree tip in the world</span> " + mathVec("X", [core.TIP[0], core.TIP[1], core.TIP[2], 1]) + "</p>";
   rows += "<p><span>In the camera</span> " + mathVec("Xcam", [pr.Xc[0], pr.Xc[1], pr.Xc[2]]) + "</p>";
@@ -1048,7 +1072,12 @@ function frame(now) {
 function refreshReadouts() {
   const p = params();
   showOutputs(p);
-  updateReadout(p);
+  if (!readoutQueued) {
+    readoutQueued = requestAnimationFrame(() => {
+      readoutQueued = 0;
+      updateReadout(params());
+    });
+  }
   if (reduceMotion) {
     poseRig(p);
     renderWorld();
