@@ -26,7 +26,7 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="camera-projection.js?v=6" defer></script>
+    <script src="camera-projection.js?v=8" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -68,7 +68,7 @@
           <h2>Try this</h2>
           <ul>
             <li>Lower <strong>f</strong>. The field of view widens and the tree gets smaller. f<sub>x</sub> and f<sub>y</sub> move with it.</li>
-            <li>Change only <strong>H<sub>x</sub></strong>. The horizontal angle and f<sub>x</sub> change. f<sub>y</sub> stays, because the pixels are no longer square.</li>
+            <li>Change only <strong>S<sub>w</sub></strong>. The horizontal angle and f<sub>x</sub> change. f<sub>y</sub> stays, because the pixels are no longer square.</li>
             <li>Set <strong>s</strong> away from zero. Vertical lines of the tree lean: that is shear.</li>
             <li>Open the aperture (a smaller f-number). The tree stays sharp. The gifts in front and the house behind go soft. Move the focus distance onto the house to sharpen the far objects.</li>
           </ul>
@@ -104,23 +104,36 @@
               </math>
             </div>
             <h3>Lens and field of view</h3>
-            <p>H<sub>x</sub> and H<sub>y</sub> are the sensor width and height, and f is the focal length. All three are in millimetres. The photograph is W × N<sub>v</sub> pixels, here 720 × 480, the same 3:2 shape as the reset sensor 36 mm × 24 mm. At that reset, p<sub>x</sub> = p<sub>y</sub> and f<sub>x</sub> = f<sub>y</sub>. H is the sensor size, not the image height.</p>
+            <p>S<sub>w</sub> and S<sub>h</sub> are the sensor width and height, and f is the focal length. All three are in millimetres. The photograph is W × H pixels, here 720 × 480, the same 3:2 shape as the reset sensor 36 mm × 24 mm. At that reset, p<sub>x</sub> = p<sub>y</sub> and f<sub>x</sub> = f<sub>y</sub>.</p>
             <div class="math-scroll">
               <math aria-label="Horizontal and vertical angular fields of view.">
                 <mrow>
-                  <msub><mi>AFOV</mi><mi>x</mi></msub>
+                  <msub><mi>AFOV</mi><mi>h</mi></msub>
                   <mo>=</mo><mn>2</mn><mi>arctan</mi>
-                  <mo>(</mo><mfrac><msub><mi>H</mi><mi>x</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
+                  <mo>(</mo><mfrac><msub><mi>S</mi><mi>w</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
                   <mo>,</mo>
-                  <msub><mi>AFOV</mi><mi>y</mi></msub>
+                  <msub><mi>AFOV</mi><mi>v</mi></msub>
                   <mo>=</mo><mn>2</mn><mi>arctan</mi>
-                  <mo>(</mo><mfrac><msub><mi>H</mi><mi>y</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
+                  <mo>(</mo><mfrac><msub><mi>S</mi><mi>h</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
                 </mrow>
               </math>
             </div>
-            <p>Pixel pitch is p<sub>x</sub> = H<sub>x</sub> / W and p<sub>y</sub> = H<sub>y</sub> / N<sub>v</sub>. Then f<sub>x</sub> = f / p<sub>x</sub> and f<sub>y</sub> = f / p<sub>y</sub>, so H<sub>x</sub> / (2f) = W / (2 f<sub>x</sub>). The pixel formula 2 arctan(W / (2 f<sub>x</sub>)) is the same ratio. It assumes s = 0 and a principal point at the centre. If the principal point is not centred, the angle about the optical axis is arctan(u<sub>0</sub> / f<sub>x</sub>) + arctan((W − u<sub>0</sub>) / f<sub>x</sub>), and likewise for v and N<sub>v</sub>. Those angles ignore skew.</p>
-            <p>A non-square sensor, H<sub>x</sub> / H<sub>y</sub> different from W / N<sub>v</sub>, changes the aspect of the picture and makes the horizontal and vertical fields of view differ. Non-square pixels, p<sub>x</sub> ≠ p<sub>y</sub>, are what make f<sub>x</sub> ≠ f<sub>y</sub>. Dragging f<sub>x</sub> or f<sub>y</sub> changes the shared f, so the other focal length follows. The full-frame equivalent f × 36 / H<sub>x</sub> is only a label. In the world view the lens-to-sensor gap is drawn 28 times life size so the millimetres can be seen. The angle is the true field of view.</p>
-            <p id="fov-read">AFOV<sub>x</sub> and AFOV<sub>y</sub> at the current f, H<sub>x</sub> and H<sub>y</sub>, and the full-frame equivalent, are shown here.</p>
+            <div class="math-scroll">
+              <math aria-label="Pixel pitch and focal lengths in pixels.">
+                <mrow>
+                  <msub><mi>p</mi><mi>x</mi></msub><mo>=</mo><mfrac><msub><mi>S</mi><mi>w</mi></msub><mi>W</mi></mfrac>
+                  <mo>,</mo>
+                  <msub><mi>p</mi><mi>y</mi></msub><mo>=</mo><mfrac><msub><mi>S</mi><mi>h</mi></msub><mi>H</mi></mfrac>
+                  <mo>,</mo>
+                  <msub><mi>f</mi><mi>x</mi></msub><mo>=</mo><mfrac><mrow><mi>f</mi><mi>W</mi></mrow><msub><mi>S</mi><mi>w</mi></msub></mfrac>
+                  <mo>,</mo>
+                  <msub><mi>f</mi><mi>y</mi></msub><mo>=</mo><mfrac><mrow><mi>f</mi><mi>H</mi></mrow><msub><mi>S</mi><mi>h</mi></msub></mfrac>
+                </mrow>
+              </math>
+            </div>
+            <p>So S<sub>w</sub> / (2f) = W / (2 f<sub>x</sub>) and S<sub>h</sub> / (2f) = H / (2 f<sub>y</sub>). The centred pixel formula is the same ratio. It assumes s = 0 and a principal point at the centre. If the principal point is not centred, the angle about the optical axis is arctan(u<sub>0</sub> / f<sub>x</sub>) + arctan((W − u<sub>0</sub>) / f<sub>x</sub>), and likewise arctan(v<sub>0</sub> / f<sub>y</sub>) + arctan((H − v<sub>0</sub>) / f<sub>y</sub>). Those angles ignore skew.</p>
+            <p>W and H are adjustable. Changing W sets f<sub>x</sub> = f W / S<sub>w</sub> and puts u<sub>0</sub> back at W/2. Changing H sets f<sub>y</sub> = f H / S<sub>h</sub> and puts v<sub>0</sub> back at H/2. AFOV<sub>h</sub> and AFOV<sub>v</sub> do not change, because they depend only on S<sub>w</sub>, S<sub>h</sub> and f. A W:H ratio different from S<sub>w</sub>:S<sub>h</sub> makes p<sub>x</sub> ≠ p<sub>y</sub> and therefore f<sub>x</sub> ≠ f<sub>y</sub>. Dragging f<sub>x</sub> or f<sub>y</sub> changes the shared f, so the other focal length follows. The full-frame equivalent f × 36 / S<sub>w</sub> is only a label. In the world view the lens-to-sensor gap is drawn 28 times life size so the millimetres can be seen. The angle is the true field of view.</p>
+            <p id="fov-read">AFOV<sub>h</sub> and AFOV<sub>v</sub> at the current f, S<sub>w</sub> and S<sub>h</sub>, and the full-frame equivalent, are shown here.</p>
             <h3>Rotation around the coordinate axes, counter-clockwise</h3>
             <p>Positive angles are counter-clockwise about the axis. α, β and γ are sometimes called pitch, yaw and roll. The sliders use only R<sub>x</sub>(α), R<sub>y</sub>(β) and R<sub>z</sub>(γ).</p>
             <div class="math-scroll">
@@ -170,12 +183,12 @@
               <div class="rig-top">
                 <canvas id="rig-view" width="360" height="240" aria-label="Axes, a point p, its rotate-then-translate image, and an arc for each angle"></canvas>
                 <div class="rig-controls">
-                  <div class="pl-param"><div class="pl-param-head"><label for="rig-alpha">R<sub>x</sub>(α)</label><output id="rig-alpha-out" for="rig-alpha">0°</output></div><input id="rig-alpha" type="range" min="-180" max="180" step="1" value="0" /></div>
-                  <div class="pl-param"><div class="pl-param-head"><label for="rig-beta">R<sub>y</sub>(β)</label><output id="rig-beta-out" for="rig-beta">0°</output></div><input id="rig-beta" type="range" min="-180" max="180" step="1" value="0" /></div>
-                  <div class="pl-param"><div class="pl-param-head"><label for="rig-gamma">R<sub>z</sub>(γ)</label><output id="rig-gamma-out" for="rig-gamma">0°</output></div><input id="rig-gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
-                  <div class="pl-param"><div class="pl-param-head"><label for="rig-tx">t<sub>x</sub></label><output id="rig-tx-out" for="rig-tx">0.00</output></div><input id="rig-tx" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
-                  <div class="pl-param"><div class="pl-param-head"><label for="rig-ty">t<sub>y</sub></label><output id="rig-ty-out" for="rig-ty">0.00</output></div><input id="rig-ty" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
-                  <div class="pl-param"><div class="pl-param-head"><label for="rig-tz">t<sub>z</sub></label><output id="rig-tz-out" for="rig-tz">0.00</output></div><input id="rig-tz" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-alpha">R<sub>x</sub>(α) (°)</label><output id="rig-alpha-out" for="rig-alpha">0°</output></div><input id="rig-alpha" type="range" min="-180" max="180" step="1" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-beta">R<sub>y</sub>(β) (°)</label><output id="rig-beta-out" for="rig-beta">0°</output></div><input id="rig-beta" type="range" min="-180" max="180" step="1" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-gamma">R<sub>z</sub>(γ) (°)</label><output id="rig-gamma-out" for="rig-gamma">0°</output></div><input id="rig-gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-tx">t<sub>x</sub> (m)</label><output id="rig-tx-out" for="rig-tx">0.00 m</output></div><input id="rig-tx" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-ty">t<sub>y</sub> (m)</label><output id="rig-ty-out" for="rig-ty">0.00 m</output></div><input id="rig-ty" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
+                  <div class="pl-param"><div class="pl-param-head"><label for="rig-tz">t<sub>z</sub> (m)</label><output id="rig-tz-out" for="rig-tz">0.00 m</output></div><input id="rig-tz" type="range" min="-1.2" max="1.2" step="0.05" value="0" /></div>
                 </div>
               </div>
               <p id="rig-text">rotated alpha=0° about x, beta=0° about y, gamma=0° about z</p>
@@ -208,31 +221,33 @@
       <div class="cam-groups" aria-label="Camera parameters">
         <section class="cam-group" aria-labelledby="lens-title">
           <h2 id="lens-title">Lens</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fmm">f (mm)</label><output id="fmm-out" for="fmm">50.0</output></div><input id="fmm" type="range" min="14" max="200" step="0.5" value="50" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="hx">H<sub>x</sub> (mm)</label><output id="hx-out" for="hx">36.0</output></div><input id="hx" type="range" min="12" max="60" step="0.5" value="36" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="hy">H<sub>y</sub> (mm)</label><output id="hy-out" for="hy">24.0</output></div><input id="hy" type="range" min="8" max="45" step="0.5" value="24" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fmm">f (mm)</label><output id="fmm-out" for="fmm">50.0 mm</output></div><input id="fmm" type="range" min="14" max="200" step="0.5" value="50" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="sw">S<sub>w</sub> (mm)</label><output id="sw-out" for="sw">36.0 mm</output></div><input id="sw" type="range" min="12" max="60" step="0.5" value="36" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="sh">S<sub>h</sub> (mm)</label><output id="sh-out" for="sh">24.0 mm</output></div><input id="sh" type="range" min="8" max="45" step="0.5" value="24" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="imgw">W (px)</label><output id="imgw-out" for="imgw">720 px</output></div><input id="imgw" type="range" min="240" max="1920" step="10" value="720" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="imgh">H (px)</label><output id="imgh-out" for="imgh">480 px</output></div><input id="imgh" type="range" min="160" max="1280" step="10" value="480" /></div>
         </section>
         <section class="cam-group" aria-labelledby="k-title">
           <h2 id="k-title">Intrinsic K (5 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub></label><output id="fx-out" for="fx">1000.0</output></div><input id="fx" type="range" min="200" max="2200" step="0.1" value="1000" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub></label><output id="fy-out" for="fy">1000.0</output></div><input id="fy" type="range" min="200" max="2200" step="0.1" value="1000" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="s">s (skew)</label><output id="s-out" for="s">0</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub></label><output id="u0-out" for="u0">360</output></div><input id="u0" type="range" min="0" max="720" step="1" value="360" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub></label><output id="v0-out" for="v0">240</output></div><input id="v0" type="range" min="0" max="480" step="1" value="240" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fx">f<sub>x</sub> (px)</label><output id="fx-out" for="fx">1000.0 px</output></div><input id="fx" type="range" min="200" max="8000" step="0.1" value="1000" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fy">f<sub>y</sub> (px)</label><output id="fy-out" for="fy">1000.0 px</output></div><input id="fy" type="range" min="200" max="8000" step="0.1" value="1000" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="s">s (px)</label><output id="s-out" for="s">0 px</output></div><input id="s" type="range" min="-250" max="250" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="u0">u<sub>0</sub> (px)</label><output id="u0-out" for="u0">360 px</output></div><input id="u0" type="range" min="0" max="1920" step="1" value="360" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="v0">v<sub>0</sub> (px)</label><output id="v0-out" for="v0">240 px</output></div><input id="v0" type="range" min="0" max="1280" step="1" value="240" /></div>
         </section>
         <section class="cam-group" aria-labelledby="rt-title">
           <h2 id="rt-title">Extrinsic [R | t] (6 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α)</label><output id="alpha-out" for="alpha">4°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="4" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="beta">R<sub>y</sub>(β)</label><output id="beta-out" for="beta">0°</output></div><input id="beta" type="range" min="-180" max="180" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="gamma">R<sub>z</sub>(γ)</label><output id="gamma-out" for="gamma">0°</output></div><input id="gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub></label><output id="tx-out" for="tx">0.00</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub></label><output id="ty-out" for="ty">1.45</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="1.45" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub></label><output id="tz-out" for="tz">6.40</output></div><input id="tz" type="range" min="0.8" max="12" step="0.05" value="6.4" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α) (°)</label><output id="alpha-out" for="alpha">4°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="4" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="beta">R<sub>y</sub>(β) (°)</label><output id="beta-out" for="beta">0°</output></div><input id="beta" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="gamma">R<sub>z</sub>(γ) (°)</label><output id="gamma-out" for="gamma">0°</output></div><input id="gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub> (m)</label><output id="tx-out" for="tx">0.00 m</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub> (m)</label><output id="ty-out" for="ty">1.45 m</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="1.45" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub> (m)</label><output id="tz-out" for="tz">6.40 m</output></div><input id="tz" type="range" min="0.8" max="12" step="0.05" value="6.4" /></div>
         </section>
         <section class="cam-group" aria-labelledby="ap-title">
           <h2 id="ap-title">Aperture (beyond the pinhole model)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="fn">f-number N</label><output id="fn-out" for="fn">f/1.8</output></div><input id="fn" type="range" min="1.4" max="22" step="0.1" value="1.8" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="focus">Focus d<sub>f</sub> (m)</label><output id="focus-out" for="focus">6.32 m</output></div><input id="focus" type="range" min="0.5" max="40" step="0.05" value="6.3" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="fn">N</label><output id="fn-out" for="fn">f/1.8</output></div><input id="fn" type="range" min="1.4" max="22" step="0.1" value="1.8" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="focus">d<sub>f</sub> (m)</label><output id="focus-out" for="focus">6.32 m</output></div><input id="focus" type="range" min="0.5" max="40" step="0.05" value="6.3" /></div>
         </section>
       </div>
       <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>

@@ -7,13 +7,13 @@
 (function (root) {
   "use strict";
 
-  var IMG_W = 720, N_V = 480, IMG_H = N_V;
+  var IMG_W = 720, IMG_H = 480;
   var R0 = [[1, 0, 0], [0, -1, 0], [0, 0, -1]];
   var SENSOR_SCALE = 28;
   var DEFAULTS = {
-    f: 50, Hx: 36, Hy: 24,
-    fx: 50 * IMG_W / 36, fy: 50 * N_V / 24,
-    s: 0, u0: IMG_W / 2, v0: N_V / 2,
+    f: 50, Sw: 36, Sh: 24, W: IMG_W, H: IMG_H,
+    fx: 50 * IMG_W / 36, fy: 50 * IMG_H / 24,
+    s: 0, u0: IMG_W / 2, v0: IMG_H / 2,
     alpha: 4, beta: 0, gamma: 0,
     tx: 0, ty: 1.45, tz: 6.4,
     fn: 1.8, focus: 6.3
@@ -80,13 +80,16 @@
     if (Z <= 1e-6) return { R: R, Xc: Xc, inhom: inhom, u: null, v: null, inFront: false };
     return { R: R, Xc: Xc, inhom: inhom, u: inhom[0] / Z, v: inhom[1] / Z, inFront: true };
   }
+  function imageSize(p) {
+    return { W: p && p.W != null ? p.W : IMG_W, H: p && p.H != null ? p.H : IMG_H };
+  }
   function focalMm(p) {
     if (p.f != null && isFinite(p.f)) return p.f;
-    var Hx = p.Hx != null ? p.Hx : 36;
-    return p.fx * Hx / IMG_W;
+    var Sw = p.Sw != null ? p.Sw : 36;
+    return p.fx * Sw / imageSize(p).W;
   }
-  function fxFromLens(f, Hx, W) { return f * (W || IMG_W) / Hx; }
-  function fyFromLens(f, Hy, Nv) { return f * (Nv || N_V) / Hy; }
+  function fxFromLens(f, Sw, W) { return f * (W || IMG_W) / Sw; }
+  function fyFromLens(f, Sh, H) { return f * (H || IMG_H) / Sh; }
   function afov(sensorMm, focal) { return 2 * Math.atan(sensorMm / (2 * focal)); }
   function asymAngle(principal, size, focalPx) {
     return Math.atan(principal / focalPx) + Math.atan((size - principal) / focalPx);
@@ -104,8 +107,8 @@
     return Math.abs(A * f * (d - df) / den);
   }
   function cocPixels(p, dMetres) {
-    var Hx = p.Hx != null ? p.Hx : 36;
-    return circleOfConfusion(p, dMetres) / (Hx / IMG_W);
+    var Sw = p.Sw != null ? p.Sw : 36;
+    return circleOfConfusion(p, dMetres) / (Sw / imageSize(p).W);
   }
 
   function norm(v) {
@@ -370,7 +373,7 @@
 
   DEFAULTS.focus = 0;
   var core = {
-    IMG_W: IMG_W, IMG_H: IMG_H, N_V: N_V, DEFAULTS: DEFAULTS, TIP: TIP, ANCHORS: ANCHORS, R0: R0,
+    IMG_W: IMG_W, IMG_H: IMG_H, DEFAULTS: DEFAULTS, TIP: TIP, ANCHORS: ANCHORS, R0: R0,
     rotation: rotation, elementary: elementary, rotX: rotX, rotY: rotY, rotZ: rotZ,
     Kof: Kof, project: project, scene: scene, mul: mul, mulV: mulV,
     circleOfConfusion: circleOfConfusion, cocPixels: cocPixels,
@@ -386,7 +389,7 @@
   var wctx = world.getContext("2d"), pctx = photo.getContext("2d"), rctx = rig.getContext("2d");
   var built = scene();
   var scratch = document.createElement("canvas");
-  scratch.width = IMG_W; scratch.height = N_V;
+  scratch.width = IMG_W; scratch.height = IMG_H;
   var sctx = scratch.getContext("2d");
   var view = { az: 0.58, el: 0.34, dist: 9.2, tgt: [0.1, 1.55, 4.15] };
   var dragging = false, lastX = 0, lastY = 0;
@@ -394,7 +397,8 @@
 
   function params() {
     return {
-      f: Number($("fmm").value), Hx: Number($("hx").value), Hy: Number($("hy").value),
+      f: Number($("fmm").value), Sw: Number($("sw").value), Sh: Number($("sh").value),
+      W: Number($("imgw").value), H: Number($("imgh").value),
       fx: Number($("fx").value), fy: Number($("fy").value), s: Number($("s").value),
       u0: Number($("u0").value), v0: Number($("v0").value),
       alpha: Number($("alpha").value), beta: Number($("beta").value), gamma: Number($("gamma").value),
@@ -403,7 +407,9 @@
     };
   }
   function writeControls(p) {
-    $("fmm").value = p.f; $("hx").value = p.Hx; $("hy").value = p.Hy;
+    $("fmm").value = p.f; $("sw").value = p.Sw; $("sh").value = p.Sh;
+    $("imgw").value = p.W; $("imgh").value = p.H;
+    $("u0").max = p.W; $("v0").max = p.H;
     $("fx").value = p.fx; $("fy").value = p.fy; $("s").value = p.s;
     $("u0").value = p.u0; $("v0").value = p.v0;
     $("alpha").value = p.alpha; $("beta").value = p.beta; $("gamma").value = p.gamma;
@@ -411,31 +417,34 @@
     $("fn").value = p.fn; $("focus").value = p.focus;
   }
   function showOutputs(p) {
-    $("fmm-out").textContent = p.f.toFixed(1);
-    $("hx-out").textContent = p.Hx.toFixed(1);
-    $("hy-out").textContent = p.Hy.toFixed(1);
-    $("fx-out").textContent = p.fx.toFixed(1);
-    $("fy-out").textContent = p.fy.toFixed(1);
-    $("s-out").textContent = p.s.toFixed(0);
-    $("u0-out").textContent = p.u0.toFixed(0);
-    $("v0-out").textContent = p.v0.toFixed(0);
+    var wh = imageSize(p);
+    $("fmm-out").textContent = p.f.toFixed(1) + " mm";
+    $("sw-out").textContent = p.Sw.toFixed(1) + " mm";
+    $("sh-out").textContent = p.Sh.toFixed(1) + " mm";
+    $("imgw-out").textContent = p.W.toFixed(0) + " px";
+    $("imgh-out").textContent = p.H.toFixed(0) + " px";
+    $("fx-out").textContent = p.fx.toFixed(1) + " px";
+    $("fy-out").textContent = p.fy.toFixed(1) + " px";
+    $("s-out").textContent = p.s.toFixed(0) + " px";
+    $("u0-out").textContent = p.u0.toFixed(0) + " px";
+    $("v0-out").textContent = p.v0.toFixed(0) + " px";
     $("alpha-out").textContent = p.alpha.toFixed(0) + "°";
     $("beta-out").textContent = p.beta.toFixed(0) + "°";
     $("gamma-out").textContent = p.gamma.toFixed(0) + "°";
-    $("tx-out").textContent = p.tx.toFixed(2);
-    $("ty-out").textContent = p.ty.toFixed(2);
-    $("tz-out").textContent = p.tz.toFixed(2);
+    $("tx-out").textContent = p.tx.toFixed(2) + " m";
+    $("ty-out").textContent = p.ty.toFixed(2) + " m";
+    $("tz-out").textContent = p.tz.toFixed(2) + " m";
     $("fn-out").textContent = "f/" + p.fn.toFixed(1);
     $("focus-out").textContent = p.focus.toFixed(2) + " m";
-    var ax = afov(p.Hx, p.f) * 180 / Math.PI;
-    var ay = afov(p.Hy, p.f) * 180 / Math.PI;
-    var eq = p.f * 36 / p.Hx;
-    var centred = Math.abs(p.u0 - IMG_W / 2) < 0.5 && Math.abs(p.v0 - N_V / 2) < 0.5 && Math.abs(p.s) < 0.5;
-    var line = "AFOV_x = " + ax.toFixed(1) + "° · AFOV_y = " + ay.toFixed(1) + "° · full-frame equivalent " + eq.toFixed(1) + " mm";
+    var ah = afov(p.Sw, p.f) * 180 / Math.PI;
+    var av = afov(p.Sh, p.f) * 180 / Math.PI;
+    var eq = p.f * 36 / p.Sw;
+    var centred = Math.abs(p.u0 - wh.W / 2) < 0.5 && Math.abs(p.v0 - wh.H / 2) < 0.5 && Math.abs(p.s) < 0.5;
+    var line = "AFOV_h = " + ah.toFixed(1) + "° · AFOV_v = " + av.toFixed(1) + "° · full-frame equivalent " + eq.toFixed(1) + " mm";
     if (!centred) {
-      var hx = asymAngle(p.u0, IMG_W, p.fx) * 180 / Math.PI;
-      var hy = asymAngle(p.v0, N_V, p.fy) * 180 / Math.PI;
-      line += ". About the optical axis: " + hx.toFixed(1) + "° by " + hy.toFixed(1) + "° (skew ignored).";
+      var horiz = asymAngle(p.u0, wh.W, p.fx) * 180 / Math.PI;
+      var vert = asymAngle(p.v0, wh.H, p.fy) * 180 / Math.PI;
+      line += ". About the optical axis: " + horiz.toFixed(1) + "° by " + vert.toFixed(1) + "° (skew ignored).";
     }
     $("fov-read").textContent = line;
     var tree = project(ANCHORS.tree, p);
@@ -465,20 +474,30 @@
     el.value = value;
   }
   function syncLens(which) {
-    var f = Number($("fmm").value), Hx = Number($("hx").value), Hy = Number($("hy").value);
+    var f = Number($("fmm").value);
+    var Sw = Number($("sw").value), Sh = Number($("sh").value);
+    var W = Number($("imgw").value), H = Number($("imgh").value);
     if (which === "fx") {
-      f = Number($("fx").value) * Hx / IMG_W;
+      f = Number($("fx").value) * Sw / W;
       if (f < 14) f = 14;
       if (f > 200) f = 200;
       $("fmm").value = f;
     } else if (which === "fy") {
-      f = Number($("fy").value) * Hy / N_V;
+      f = Number($("fy").value) * Sh / H;
       if (f < 14) f = 14;
       if (f > 200) f = 200;
       $("fmm").value = f;
     }
-    if (which !== "hy") putSlider("fx", fxFromLens(f, Hx, IMG_W));
-    if (which !== "hx") putSlider("fy", fyFromLens(f, Hy, N_V));
+    if (which === "imgw") {
+      $("u0").max = W;
+      $("u0").value = W / 2;
+    }
+    if (which === "imgh") {
+      $("v0").max = H;
+      $("v0").value = H / 2;
+    }
+    if (which !== "sh" && which !== "imgh") putSlider("fx", fxFromLens(f, Sw, W));
+    if (which !== "sw" && which !== "imgw") putSlider("fy", fyFromLens(f, Sh, H));
   }
 
   function look(P, eye, tgt, w, h, focalScale) {
@@ -523,7 +542,8 @@
   }
   function frustumCorners(p, depth) {
     var B = basis(p);
-    return [[0, 0], [IMG_W, 0], [IMG_W, N_V], [0, N_V]].map(function (px) {
+    var wh = imageSize(p);
+    return [[0, 0], [wh.W, 0], [wh.W, wh.H], [0, wh.H]].map(function (px) {
       var Y = (px[1] - p.v0) * depth / p.fy;
       var X = ((px[0] - p.u0) - p.s * (px[1] - p.v0) / p.fy) * depth / p.fx;
       return add(B.C, add(scl(B.right, X), add(scl(B.down, Y), scl(B.fwd, depth))));
@@ -619,8 +639,9 @@
         prev = pt;
       }
     }
-    arc("h", -Math.atan(p.u0 / p.fx), Math.atan((IMG_W - p.u0) / p.fx));
-    arc("v", -Math.atan(p.v0 / p.fy), Math.atan((N_V - p.v0) / p.fy));
+    var whArc = imageSize(p);
+    arc("h", -Math.atan(p.u0 / p.fx), Math.atan((whArc.W - p.u0) / p.fx));
+    arc("v", -Math.atan(p.v0 / p.fy), Math.atan((whArc.H - p.v0) / p.fy));
     function onPlane(P) {
       var hit = project(P, p);
       if (!hit.inFront) return null;
@@ -636,15 +657,21 @@
   }
 
   function drawPhoto(p) {
+    var wh = imageSize(p);
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    photo.width = Math.round(IMG_W * dpr); photo.height = Math.round(N_V * dpr);
+    if (wh.W * wh.H * dpr * dpr > 1920 * 1280) dpr = 1;
+    if (scratch.width !== wh.W || scratch.height !== wh.H) {
+      scratch.width = wh.W;
+      scratch.height = wh.H;
+    }
+    photo.width = Math.round(wh.W * dpr); photo.height = Math.round(wh.H * dpr);
     pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var sky = pctx.createLinearGradient(0, 0, 0, N_V);
+    var sky = pctx.createLinearGradient(0, 0, 0, wh.H);
     sky.addColorStop(0, "#8ebbe0");
     sky.addColorStop(0.45, "#d7e8f6");
     sky.addColorStop(1, "#d5e4c4");
     pctx.fillStyle = sky;
-    pctx.fillRect(0, 0, IMG_W, N_V);
+    pctx.fillRect(0, 0, wh.W, wh.H);
     var bins = [];
     for (var bi = 0; bi < 10; bi++) bins.push([]);
     built.tris.forEach(function (t) {
@@ -678,11 +705,11 @@
       var rad = n ? cocPixels(p, depth / n) : 0;
       if (rad < 0.8) bins[b].forEach(function (t) { fillOn(pctx, t); });
       else {
-        sctx.clearRect(0, 0, IMG_W, N_V);
+        sctx.clearRect(0, 0, wh.W, wh.H);
         bins[b].forEach(function (t) { fillOn(sctx, t); });
         pctx.save();
         pctx.filter = "blur(" + Math.min(16, rad * 0.5).toFixed(2) + "px)";
-        pctx.drawImage(scratch, 0, 0, IMG_W, N_V);
+        pctx.drawImage(scratch, 0, 0, wh.W, wh.H);
         pctx.restore();
       }
     }
@@ -700,7 +727,7 @@
     }
     pctx.strokeStyle = "#8b9098";
     pctx.lineWidth = 2;
-    pctx.strokeRect(1, 1, IMG_W - 2, N_V - 2);
+    pctx.strokeRect(1, 1, wh.W - 2, wh.H - 2);
     pctx.strokeStyle = "#c4473a";
     pctx.lineWidth = 1.25;
     pctx.beginPath();
@@ -709,7 +736,7 @@
     pctx.stroke();
     pctx.fillStyle = "#5c6570";
     pctx.font = "14px system-ui, sans-serif";
-    pctx.fillText("u", IMG_W - 18, N_V - 10);
+    pctx.fillText("u", wh.W - 18, wh.H - 10);
     pctx.fillText("v", 8, 16);
   }
 
@@ -814,9 +841,9 @@
     $("rig-alpha-out").textContent = alpha.toFixed(0) + "°";
     $("rig-beta-out").textContent = beta.toFixed(0) + "°";
     $("rig-gamma-out").textContent = gamma.toFixed(0) + "°";
-    $("rig-tx-out").textContent = t[0].toFixed(2);
-    $("rig-ty-out").textContent = t[1].toFixed(2);
-    $("rig-tz-out").textContent = t[2].toFixed(2);
+    $("rig-tx-out").textContent = t[0].toFixed(2) + " m";
+    $("rig-ty-out").textContent = t[1].toFixed(2) + " m";
+    $("rig-tz-out").textContent = t[2].toFixed(2) + " m";
     $("rig-text").textContent = "rotated alpha=" + alpha.toFixed(0) + "° about x, beta=" + beta.toFixed(0) + "° about y, gamma=" + gamma.toFixed(0) + "° about z";
     $("rig-math").innerHTML = "<p>R = R<sub>z</sub>(γ) R<sub>x</sub>(α) R<sub>y</sub>(β)</p>" + mathMatrix(R) +
       "<p>p′ = R p + t</p>" + mathVec("p'", pp);
@@ -830,11 +857,13 @@
     updateReadout(p);
   }
 
-  ["fmm", "hx", "hy", "fx", "fy", "s", "u0", "v0", "alpha", "beta", "gamma", "tx", "ty", "tz", "fn", "focus"].forEach(function (id) {
+  ["fmm", "sw", "sh", "imgw", "imgh", "fx", "fy", "s", "u0", "v0", "alpha", "beta", "gamma", "tx", "ty", "tz", "fn", "focus"].forEach(function (id) {
     $(id).addEventListener("input", function () {
       if (id === "fmm") syncLens("f");
-      else if (id === "hx") syncLens("hx");
-      else if (id === "hy") syncLens("hy");
+      else if (id === "sw") syncLens("sw");
+      else if (id === "sh") syncLens("sh");
+      else if (id === "imgw") syncLens("imgw");
+      else if (id === "imgh") syncLens("imgh");
       else if (id === "fx") syncLens("fx");
       else if (id === "fy") syncLens("fy");
       draw();

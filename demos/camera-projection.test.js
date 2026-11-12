@@ -124,31 +124,39 @@ function so3(R) {
 }
 
 {
-  const f = 50, Hx = 36, Hy = 24;
-  near(C.afov(Hx, f), 2 * Math.atan(Hx / (2 * f)));
-  near(C.afov(Hy, f), 2 * Math.atan(Hy / (2 * f)));
-  const fx = C.fxFromLens(f, Hx, C.IMG_W);
-  const fy = C.fyFromLens(f, Hy, C.N_V);
-  near(fx, f * C.IMG_W / Hx);
-  near(fy, f * C.N_V / Hy);
-  near(Hx / (2 * f), C.IMG_W / (2 * fx));
-  near(Hy / (2 * f), C.N_V / (2 * fy));
-  near(C.DEFAULTS.fx, C.fxFromLens(C.DEFAULTS.f, C.DEFAULTS.Hx, C.IMG_W));
-  near(C.DEFAULTS.fy, C.fyFromLens(C.DEFAULTS.f, C.DEFAULTS.Hy, C.N_V));
+  const f = 50, Sw = 36, Sh = 24;
+  near(C.afov(Sw, f), 2 * Math.atan(Sw / (2 * f)));
+  near(C.afov(Sh, f), 2 * Math.atan(Sh / (2 * f)));
+  const fx = C.fxFromLens(f, Sw, C.IMG_W);
+  const fy = C.fyFromLens(f, Sh, C.IMG_H);
+  near(fx, f * C.IMG_W / Sw);
+  near(fy, f * C.IMG_H / Sh);
+  near(Sw / (2 * f), C.IMG_W / (2 * fx));
+  near(Sh / (2 * f), C.IMG_H / (2 * fy));
+  near(C.DEFAULTS.fx, C.fxFromLens(C.DEFAULTS.f, C.DEFAULTS.Sw, C.DEFAULTS.W));
+  near(C.DEFAULTS.fy, C.fyFromLens(C.DEFAULTS.f, C.DEFAULTS.Sh, C.DEFAULTS.H));
+  const fxOther = C.fxFromLens(f, Sw, 1440);
+  near(C.afov(Sw, f), 2 * Math.atan(1440 / (2 * fxOther)));
+  assert.ok(Math.abs(C.fxFromLens(f, Sw, 720) - C.fyFromLens(f, Sh, 360)) > 1);
   near(C.asymAngle(C.IMG_W / 2, C.IMG_W, fx), 2 * Math.atan(C.IMG_W / (2 * fx)));
   near(C.asymAngle(100, C.IMG_W, 400), Math.atan(100 / 400) + Math.atan((C.IMG_W - 100) / 400));
-  near(C.asymAngle(80, C.N_V, fy), Math.atan(80 / fy) + Math.atan((C.N_V - 80) / fy));
+  near(C.asymAngle(80, C.IMG_H, fy), Math.atan(80 / fy) + Math.atan((C.IMG_H - 80) / fy));
 }
 
 {
   assert.strictEqual(C.IMG_W, 720);
-  assert.strictEqual(C.N_V, 480);
+  assert.strictEqual(C.IMG_H, 480);
+  near(C.DEFAULTS.W, 720);
+  near(C.DEFAULTS.H, 480);
   near(C.DEFAULTS.fx, C.DEFAULTS.fy);
-  near(C.DEFAULTS.u0, 360);
-  near(C.DEFAULTS.v0, 240);
-  near(C.DEFAULTS.Hx / C.IMG_W, C.DEFAULTS.Hy / C.N_V);
+  near(C.DEFAULTS.u0, C.DEFAULTS.W / 2);
+  near(C.DEFAULTS.v0, C.DEFAULTS.H / 2);
+  near(C.DEFAULTS.Sw / C.DEFAULTS.W, C.DEFAULTS.Sh / C.DEFAULTS.H);
   const page = fs.readFileSync(path.join(__dirname, "camera-projection.html"), "utf8");
   assert.ok(page.includes("720 × 480"));
+  assert.ok(page.includes("S<sub>w</sub>"));
+  assert.ok(page.includes("W (px)"));
+  assert.ok(page.includes("H (px)"));
   assert.ok(!page.includes("<figcaption><strong>World"));
   assert.ok(!page.includes('id="fov-read" class="cam-note"'));
   const tree = C.project(C.ANCHORS.tree, C.DEFAULTS);
