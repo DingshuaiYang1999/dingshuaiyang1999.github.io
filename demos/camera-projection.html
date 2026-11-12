@@ -26,7 +26,7 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="camera-projection.js?v=8" defer></script>
+    <script src="camera-projection.js?v=11" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -212,6 +212,7 @@
             <h3>Reading the two views</h3>
             <p>Drag the world view to orbit it. The box and cylinder are the camera. The rectangle is the sensor, drawn 28 times life size at distance f in front of the lens. The amber arc is the field of view. A few rays run from the scene through that plane to the lens. Red, green and blue segments are the world x, y and z axes.</p>
             <p>The photograph is filled and lit in pixel coordinates (u, v). Grey lines, drawn when the pose or K differs from the reset, are the reset K and the reset [R | t]. Blur follows the circle of confusion and does not move a point’s centre. The red cross is the principal point. The near gifts sit to the side of the tree so the trunk stays visible while they are still close enough to blur at f/1.8.</p>
+            <p>Snowflakes are points in the world, a centimetre or two across, drifting downward. Both views draw those same points. The photograph projects each flake with K[R | t] and widens it by its circle of confusion, so near flakes blur and the flakes at the focus distance stay small. The sliders never move on their own. If the browser asks for reduced motion, the flakes stay where they are.</p>
             <h3>Symbols and degrees of freedom</h3>
             <p>f<sub>x</sub>, f<sub>y</sub>, s, u<sub>0</sub> and v<sub>0</sub> are the five intrinsic degrees of freedom. R<sub>x</sub>(α), R<sub>y</sub>(β), R<sub>z</sub>(γ) and the three entries of t are the six extrinsic degrees of freedom. Dragging the left view changes none of them. The count of eleven, and the split into five plus six, follows the lecture “Degrees of freedom” by James Hays, as used in the FAU course. The worked example is the tip of the main tree.</p>
           </div>
@@ -237,12 +238,12 @@
         </section>
         <section class="cam-group" aria-labelledby="rt-title">
           <h2 id="rt-title">Extrinsic [R | t] (6 DOF)</h2>
-          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α) (°)</label><output id="alpha-out" for="alpha">4°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="4" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="alpha">R<sub>x</sub>(α) (°)</label><output id="alpha-out" for="alpha">5°</output></div><input id="alpha" type="range" min="-75" max="75" step="1" value="5" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="beta">R<sub>y</sub>(β) (°)</label><output id="beta-out" for="beta">0°</output></div><input id="beta" type="range" min="-180" max="180" step="1" value="0" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="gamma">R<sub>z</sub>(γ) (°)</label><output id="gamma-out" for="gamma">0°</output></div><input id="gamma" type="range" min="-180" max="180" step="1" value="0" /></div>
           <div class="pl-param"><div class="pl-param-head"><label for="tx">t<sub>x</sub> (m)</label><output id="tx-out" for="tx">0.00 m</output></div><input id="tx" type="range" min="-3" max="3" step="0.05" value="0" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub> (m)</label><output id="ty-out" for="ty">1.45 m</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="1.45" /></div>
-          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub> (m)</label><output id="tz-out" for="tz">6.40 m</output></div><input id="tz" type="range" min="0.8" max="12" step="0.05" value="6.4" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="ty">t<sub>y</sub> (m)</label><output id="ty-out" for="ty">0.65 m</output></div><input id="ty" type="range" min="-1" max="4" step="0.05" value="0.65" /></div>
+          <div class="pl-param"><div class="pl-param-head"><label for="tz">t<sub>z</sub> (m)</label><output id="tz-out" for="tz">10.60 m</output></div><input id="tz" type="range" min="0.8" max="14" step="0.05" value="10.6" /></div>
         </section>
         <section class="cam-group" aria-labelledby="ap-title">
           <h2 id="ap-title">Aperture (beyond the pinhole model)</h2>
