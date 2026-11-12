@@ -78,9 +78,10 @@ function fill(w, h, v) {
   assert.ok(page.includes("not a probability"));
   assert.ok(page.includes("id=\"stale-note\""));
   assert.ok(!page.includes("autoplay"));
-  const edge = home.indexOf("demos/edge-detection.html");
-  const harris = home.indexOf("demos/harris.html");
-  const nn = home.indexOf("demos/neural-network.html");
+  const projects = home.indexOf('id="projects-cv"');
+  const edge = home.indexOf("demos/edge-detection.html", projects);
+  const harris = home.indexOf("demos/harris.html", projects);
+  const nn = home.indexOf("demos/neural-network.html", projects);
   assert.ok(edge > 0 && harris > edge && harris < nn, "Harris card sits immediately after Edge Detection");
 }
 

@@ -76,9 +76,10 @@ function eye() {
   assert.ok(page.includes("Savarese"));
   assert.ok(page.includes("AFOV"));
   assert.ok(!page.includes("<label for=\"alpha\">Yaw"));
-  const harris = home.indexOf("demos/harris.html");
-  const cam = home.indexOf("demos/camera-projection.html");
-  const nn = home.indexOf("demos/neural-network.html");
+  const projects = home.indexOf('id="projects-cv"');
+  const harris = home.indexOf("demos/harris.html", projects);
+  const cam = home.indexOf("demos/camera-projection.html", projects);
+  const nn = home.indexOf("demos/neural-network.html", projects);
   assert.ok(harris > 0 && cam > harris && cam < nn);
 }
 
