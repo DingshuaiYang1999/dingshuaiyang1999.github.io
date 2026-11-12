@@ -176,4 +176,34 @@ function so3(R) {
   assert.ok(C.cocPixels(C.DEFAULTS, tree.Xc[2]) < 0.5);
 }
 
+{
+  assert.ok(C.poseClear(C.DEFAULTS), "default pose is outside every collider");
+  assert.ok(C.cameraCenter(C.DEFAULTS)[1] > C.MIN_CAM_Y);
+  const level = Object.assign({}, C.DEFAULTS, { alpha: 0, beta: 0, gamma: 0, tx: 0, ty: 1.5, tz: 4 });
+  assert.ok(C.poseClear(level));
+  const underground = Object.assign({}, level, { ty: -1 });
+  assert.strictEqual(C.poseBlocked(underground), "ground");
+  const ty = C.clampExtrinsic(level, underground, "ty");
+  assert.ok(ty < level.ty && ty > underground.ty, "ty stops between the last valid value and the request");
+  const atGround = Object.assign({}, level, { ty: ty });
+  assert.ok(C.poseClear(atGround));
+  assert.ok(C.cameraCenter(atGround)[1] >= C.MIN_CAM_Y - 1e-6);
+  assert.ok(!C.poseClear(Object.assign({}, level, { ty: ty - 0.02 })));
+  const intoTree = Object.assign({}, level, { tz: 0 });
+  assert.strictEqual(C.poseBlocked(intoTree), "tree");
+  const tz = C.clampExtrinsic(level, intoTree, "tz");
+  assert.ok(tz < level.tz && tz > intoTree.tz);
+  const atTree = Object.assign({}, level, { tz: tz });
+  assert.ok(C.poseClear(atTree));
+  assert.ok(!C.poseClear(Object.assign({}, level, { tz: tz - 0.02 })));
+  const dipped = Object.assign({}, level, { ty: 0.4, tz: 8, alpha: -40 });
+  assert.strictEqual(C.poseBlocked(dipped), "ground");
+  const baseTilt = Object.assign({}, level, { ty: 0.4, tz: 8, alpha: 0 });
+  assert.ok(C.poseClear(baseTilt));
+  const alpha = C.clampExtrinsic(baseTilt, dipped, "alpha");
+  assert.ok(alpha < 0 && alpha > -40, "a rotation stops at the ground instead of jumping");
+  assert.ok(C.poseClear(Object.assign({}, baseTilt, { alpha: alpha })));
+  assert.strictEqual(C.poseBlocked(Object.assign({}, C.DEFAULTS, { alpha: 0, beta: 0, gamma: 0, tx: 9, ty: 1.5, tz: -32 })), "house");
+}
+
 console.log("camera projection tests passed");

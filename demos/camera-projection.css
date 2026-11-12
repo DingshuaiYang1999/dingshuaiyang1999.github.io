@@ -1,12 +1,38 @@
 .cam-page .stage { margin-top: 6px; }
-.cam-views { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 14px; margin: 8px 0 12px; }
+.cam-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.9fr);
+  gap: 14px;
+  align-items: start;
+  margin: 8px 0 12px;
+}
+.cam-views {
+  position: sticky;
+  top: calc(var(--header-h) + 8px);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 10px;
+  margin: 0;
+  padding-bottom: 4px;
+  background: var(--bg);
+}
 .cam-views figure { margin: 0; min-width: 0; }
 .cam-views canvas { display: block; width: 100%; background: #d5e8f4; border: 1px solid var(--rule-strong); border-radius: 6px; touch-action: none; }
-#view-world { height: 480px; }
+#view-world { height: min(420px, calc(100dvh - var(--header-h) - 28px)); }
 #view-photo { height: auto; }
+.cam-controls {
+  position: sticky;
+  top: calc(var(--header-h) + 8px);
+  max-height: calc(100dvh - var(--header-h) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+}
 .cam-views figcaption { margin-top: 6px; font-size: 14px; line-height: 1.4; color: var(--muted); }
 .cam-views figcaption strong { display: block; color: var(--text); font-size: 15px; }
-.cam-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 14px; }
+.cam-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 8px; }
+.cam-controls .cam-groups { grid-template-columns: 1fr; }
 .cam-group { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px 8px; background: var(--accent-soft); min-width: 0; }
 .cam-group h2 { font-size: 16px; margin: 0 0 8px; }
 .cam-note { margin: 6px 0 2px; font-size: 13px; line-height: 1.4; color: var(--muted); }
@@ -23,7 +49,22 @@
 #rig-text { margin: 8px 0 4px; font-size: 14px; }
 #rig-math p { margin: 6px 0 2px; font-size: 14px; }
 @media (max-width: 860px) {
-  .cam-views, .cam-groups, .cam-readout, .rig-top, .rig-controls { grid-template-columns: 1fr; }
-  #view-world { height: 320px; }
+  .cam-workspace, .cam-groups, .cam-readout, .rig-top, .rig-controls { grid-template-columns: 1fr; }
+  .cam-views {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 4;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 6px 0 8px;
+    background: var(--bg);
+  }
+  .cam-controls {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+  #view-world { height: 148px; }
   .rig canvas { height: 240px; }
 }

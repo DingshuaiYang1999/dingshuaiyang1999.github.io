@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
     <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
-    <link rel="stylesheet" href="camera-projection.css?v=7" />
+    <link rel="stylesheet" href="camera-projection.css?v=8" />
     <script>
       (function () {
         var theme = "light";
@@ -26,11 +26,11 @@
       })();
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
-    <script src="camera-projection.js?v=12" defer></script>
+    <script src="camera-projection.js?v=13" defer></script>
     <script type="importmap">
       { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
     </script>
-    <script type="module" src="camera-projection-view.js?v=7"></script>
+    <script type="module" src="camera-projection-view.js?v=9"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -214,7 +214,7 @@
             <p>The photograph turns c into pixels with the horizontal pitch, c / p<sub>x</sub>, and blurs each depth band with a Gaussian whose radius is about half that diameter, capped at 16 px. Brightness is not scaled by aperture area: a factor A² would make the picture black as A → 0, so the closed aperture would not match the pinhole colours. With that choice, A → 0 reproduces the K[R | t] image exactly. Approximations: one depth per face, a few depth bands, a Gaussian rather than a uniform disc, no distortion, and d taken as z<sub>cam</sub>.</p>
             <p id="coc-read">At the current aperture and focus, the circle of confusion is listed here for the tree, the near gifts, and the house.</p>
             <h3>Reading the two views</h3>
-            <p>Drag the world view to orbit it. The camera on the left is a real-scale body; a small inset shows it up close. The rectangle in front of the lens is an empty image plane: it shows where the sensor plane sits and how large the field is, and it carries no picture. The picture is only the photograph on the right, rendered from the same K and [R | t], including skew. Red, green and blue are the world axes.</p>
+            <p>Drag the world view to orbit it. The camera on the left is a real-scale body on a tripod. Three legs stay on the ground, the centre column lengthens or shortens with the camera height, and the head follows R. A small inset shows the head up close. The tripod is not in the photograph. The rectangle in front of the lens is an empty image plane: it shows where the sensor plane sits and how large the field is, and it carries no picture. The picture is only the photograph on the right, rendered from the same K and [R | t], including skew. Red, green and blue are the world axes. The centre C = −R<sup>T</sup> t stays at least 0.3 m above the ground and outside the tree, house, figures, gifts, fence and lamp; a slider that would cross that boundary stops there.</p>
             <p>The photograph is filled and lit in pixel coordinates (u, v). Grey lines, drawn when the pose or K differs from the reset, are the reset K and the reset [R | t]. Blur follows the circle of confusion and does not move a point’s centre. The red cross is the principal point. The near gifts sit to the side of the tree so the trunk stays visible while they are still close enough to blur at f/1.8.</p>
             <p>Snowflakes are points in the world, a centimetre or two across, drifting downward. Both views draw those same points. The photograph projects each flake with K[R | t] and widens it by its circle of confusion, so near flakes blur and the flakes at the focus distance stay small. The sliders never move on their own. If the browser asks for reduced motion, the flakes stay where they are.</p>
             <h3>Symbols and degrees of freedom</h3>
@@ -223,6 +223,16 @@
         </details>
       </div>
 
+      <div class="cam-workspace">
+      <div class="cam-views">
+        <figure>
+          <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the shaded tree, ground, house, and the camera"></canvas>
+        </figure>
+        <figure>
+          <canvas id="view-photo" width="720" height="480" aria-label="Shaded 3:2 photograph. The red cross is the principal point."></canvas>
+        </figure>
+      </div>
+      <div class="cam-controls">
       <div class="cam-groups" aria-label="Camera parameters">
         <section class="cam-group" aria-labelledby="lens-title">
           <h2 id="lens-title">Lens</h2>
@@ -256,14 +266,7 @@
         </section>
       </div>
       <p class="runbar"><button type="button" class="button secondary small" id="btn-reset">Reset</button></p>
-
-      <div class="cam-views">
-        <figure>
-          <canvas id="view-world" width="640" height="420" aria-label="Orbitable world view of the shaded tree, ground, house, and the camera"></canvas>
-        </figure>
-        <figure>
-          <canvas id="view-photo" width="720" height="480" aria-label="Shaded 3:2 photograph. The red cross is the principal point."></canvas>
-        </figure>
+      </div>
       </div>
 
       <div class="cam-readout" aria-label="Live matrices">
