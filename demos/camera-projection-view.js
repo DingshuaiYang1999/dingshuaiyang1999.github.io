@@ -59,7 +59,7 @@ function mathMatrix(M) {
   return matrixMarkup("", M, 2, "matrix-rig");
 }
 function mathVec(name, v) {
-  return "<math><mrow><mi>" + name + "</mi><mo>=</mo><mo>[</mo>" + v.map((c) => "<mn>" + fmt(c) + "</mn>").join("<mo>,</mo>") + "<mo>]</mo></mrow></math>";
+  return '<span class="cam-vector"><span>' + name + ' = [</span><span>' + v.map(fmt).join(", ") + "]</span></span>";
 }
 function showOutputs(p) {
   $("fmm-out").textContent = p.f.toFixed(1) + " mm";
@@ -1133,7 +1133,7 @@ const RIG_P = [0.9, 0.5, 0.45];
 function drawRig() {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const rect = rigEl.getBoundingClientRect();
-  const w = Math.max(280, rect.width || 360), h = Math.max(220, rect.height || 240);
+  const w = Math.max(1, rect.width || 360), h = Math.max(180, rect.height || 240);
   rigEl.width = Math.round(w * dpr); rigEl.height = Math.round(h * dpr);
   rctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   rctx.fillStyle = "#f4f7fb";
@@ -1201,6 +1201,11 @@ function drawRig() {
 ["rig-alpha", "rig-beta", "rig-gamma", "rig-tx", "rig-ty", "rig-tz"].forEach((id) => $(id).addEventListener("input", drawRig));
 const how = document.querySelector(".how-it-works");
 if (how) how.addEventListener("toggle", () => { if (how.open) drawRig(); });
+if ("ResizeObserver" in window) {
+  new ResizeObserver(() => { if (how && how.open) drawRig(); }).observe(rigEl);
+} else {
+  window.addEventListener("resize", drawRig, { passive: true });
+}
 
 writeControls(core.DEFAULTS);
 rememberPose(params());
