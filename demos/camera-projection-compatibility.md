@@ -5,6 +5,7 @@ This note records the mobile compatibility work for `camera-projection.html` so 
 ## Changes
 
 - Removed the remote KaTeX dependency from the demo. The live camera matrices are rendered as HTML tables, avoiding external math-font loading and improving readability on narrow screens.
+- Removed the import-map requirement for loading Three.js and bumped the camera CSS/module cache versions so mobile browsers do not keep stale math and rendering assets.
 - Adjusted the demo styles for small viewports and touch interaction. Touch scrolling remains available outside the interactive world canvas.
 - Reduced rendering cost on compact screens by disabling antialiasing and shadows, limiting pixel ratio and frame rate, and pausing rendering while the page is hidden.
 - Added pointer-cancel handling and corrected matrix value formatting, including translation precision and the rig matrix label.
