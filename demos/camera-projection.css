@@ -96,15 +96,22 @@
 .cam-readout figcaption, .cam-work h2 { font-size: 13px; font-weight: 650; color: var(--muted); margin: 0 0 4px; }
 .cam-matrix { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font: 15px/1.35 Georgia, "Times New Roman", serif; }
 .cam-matrix-name { white-space: nowrap; }
-.cam-matrix-bracket { display: inline-block; padding: 2px 5px; border-left: 1.5px solid currentColor; border-right: 1.5px solid currentColor; }
+.cam-matrix-bracket { display: inline-flex; align-items: center; gap: 3px; }
+.cam-matrix-delimiter { font: 2.15em/1 Georgia, "Times New Roman", serif; font-weight: 300; }
 .cam-matrix table { border-collapse: collapse; font: inherit; }
 .cam-matrix td { min-width: 4.2em; padding: 1px 5px; text-align: right; white-space: nowrap; }
 .cam-matrix.matrix-rt td { min-width: 3.8em; }
 .rotation-matrices { display: grid; gap: 10px; margin: 12px 0; }
 .rotation-matrix { width: max-content; max-width: 100%; }
 .rotation-matrix td { min-width: 4.4em; }
-.rotation-matrix .cam-matrix-bracket { padding: 4px 7px; }
+.rotation-matrix .cam-matrix-bracket { gap: 4px; }
 .cam-page math { color: var(--text); font-size: 1.02rem; }
+.math-display { max-width: 100%; margin: 12px 0; overflow-x: auto; overflow-y: hidden; color: var(--text); }
+.math-display mjx-container[display="true"] { margin: 0.35em 0 !important; max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.math-display mjx-container svg { max-width: none; }
+.mathjax-unavailable .math-display { font-family: Georgia, "Times New Roman", serif; font-size: 0.92em; line-height: 1.5; }
+.graphics-note { margin: 10px 0; padding: 12px 14px; border-left: 3px solid var(--accent); border-radius: 6px; background: var(--accent-soft); color: var(--text); line-height: 1.5; }
+.graphics-note[hidden] { display: none; }
 .cam-work p { margin: 6px 0; }
 .cam-work p span { display: block; font-size: 13px; color: var(--muted); }
 .rig { margin: 8px 0 4px; }
@@ -140,6 +147,7 @@
   .rotation-matrices { gap: 8px; }
   .rotation-matrix { font-size: 14px; }
   .rotation-matrix td { min-width: 4em; }
+  .math-display { font-size: 0.94em; }
   .cam-matrix.matrix-rt td { min-width: 2.8em; }
   .rig canvas { height: clamp(180px, 62vw, 240px); }
 }

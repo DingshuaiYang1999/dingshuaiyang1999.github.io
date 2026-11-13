@@ -84,11 +84,11 @@ function showOutputs(p) {
   const av = core.afov(p.Sh, p.f) * 180 / Math.PI;
   const eq = p.f * 36 / p.Sw;
   const centred = Math.abs(p.u0 - p.W / 2) < 0.5 && Math.abs(p.v0 - p.H / 2) < 0.5 && Math.abs(p.s) < 0.5;
-  let line = "AFOV_h = " + ah.toFixed(1) + "° · AFOV_v = " + av.toFixed(1) + "° · full-frame equivalent " + eq.toFixed(1) + " mm";
+  let line = "Horizontal field of view " + ah.toFixed(1) + "° · vertical field of view " + av.toFixed(1) + "° · full-frame equivalent " + eq.toFixed(1) + " mm";
   if (!centred) {
     const horiz = core.asymAngle(p.u0, p.W, p.fx) * 180 / Math.PI;
     const vert = core.asymAngle(p.v0, p.H, p.fy) * 180 / Math.PI;
-    line += ". About the optical axis: " + horiz.toFixed(1) + "° by " + vert.toFixed(1) + "° (skew ignored).";
+    line += ". From the optical axis: " + horiz.toFixed(1) + "° by " + vert.toFixed(1) + "° (skew ignored).";
   }
   $("fov-read").textContent = line;
   const tree = core.project(core.ANCHORS.tree, p);
@@ -106,7 +106,7 @@ function fixedCell(x, decimals) {
 function matrixMarkup(name, rows, decimals, className) {
   const cells = rows.map((row) => "<tr>" + row.map((value, index) => "<td>" + fixedCell(value, Array.isArray(decimals) ? decimals[index] : decimals) + "</td>").join("") + "</tr>").join("");
   return '<span class="cam-matrix ' + (className || "") + '"><span class="cam-matrix-name">' + name +
-    '</span><span class="cam-matrix-bracket"><table aria-label="' + name + '"><tbody>' + cells + "</tbody></table></span></span>";
+    '</span><span class="cam-matrix-bracket" role="img" aria-label="matrix"><span class="cam-matrix-delimiter" aria-hidden="true">[</span><table aria-label="' + name + '"><tbody>' + cells + "</tbody></table><span class="cam-matrix-delimiter" aria-hidden="true">]</span></span></span>";
 }
 function liveK(p) {
   const K = core.Kof(p);
@@ -673,17 +673,35 @@ function makeTripod() {
 const worldEl = $("view-world");
 const photoEl = $("view-photo");
 const compactDisplay = window.matchMedia("(max-width: 860px)").matches;
-const worldRenderer = new THREE.WebGLRenderer({ canvas: worldEl, antialias: !compactDisplay, alpha: false, powerPreference: "low-power" });
-worldRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, compactDisplay ? 1 : 1.5));
-worldRenderer.shadowMap.enabled = !compactDisplay;
-worldRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-worldRenderer.outputColorSpace = THREE.SRGBColorSpace;
-const photoRenderer = new THREE.WebGLRenderer({ canvas: photoEl, antialias: !compactDisplay, alpha: false, powerPreference: "low-power" });
-photoRenderer.setPixelRatio(1);
-photoRenderer.shadowMap.enabled = !compactDisplay;
-photoRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-photoRenderer.outputColorSpace = THREE.SRGBColorSpace;
-photoRenderer.autoClear = false;
+let worldRenderer = null;
+let photoRenderer = null;
+let graphicsAvailable = false;
+function showGraphicsNote() {
+  const note = $("graphics-note");
+  if (note) note.hidden = false;
+}
+try {
+  worldRenderer = new THREE.WebGLRenderer({ canvas: worldEl, antialias: !compactDisplay, alpha: false, powerPreference: "low-power" });
+  worldRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, compactDisplay ? 1 : 1.5));
+  worldRenderer.shadowMap.enabled = !compactDisplay;
+  worldRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  worldRenderer.outputColorSpace = THREE.SRGBColorSpace;
+  photoRenderer = new THREE.WebGLRenderer({ canvas: photoEl, antialias: !compactDisplay, alpha: false, powerPreference: "low-power" });
+  photoRenderer.setPixelRatio(1);
+  photoRenderer.shadowMap.enabled = !compactDisplay;
+  photoRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  photoRenderer.outputColorSpace = THREE.SRGBColorSpace;
+  photoRenderer.autoClear = false;
+  graphicsAvailable = true;
+} catch (error) {
+  if (worldRenderer) worldRenderer.dispose();
+  if (photoRenderer) photoRenderer.dispose();
+  worldRenderer = null;
+  photoRenderer = null;
+  showGraphicsNote();
+}
+worldEl.addEventListener("webglcontextlost", (event) => { event.preventDefault(); graphicsAvailable = false; showGraphicsNote(); });
+photoEl.addEventListener("webglcontextlost", (event) => { event.preventDefault(); graphicsAvailable = false; showGraphicsNote(); });
 
 const worldScene = new THREE.Scene();
 worldScene.background = new THREE.Color(0xc5dff2);
@@ -981,6 +999,7 @@ function resizeWorld() {
   orbitCam.updateProjectionMatrix();
 }
 function renderPhoto(p) {
+  if (!graphicsAvailable) return;
   const W = Math.max(64, Math.round(p.W));
   const H = Math.max(64, Math.round(p.H));
   resizePhotoTarget(W, H);
@@ -1003,6 +1022,7 @@ function renderPhoto(p) {
   photoRenderer.render(dofScene, dofCam);
 }
 function renderWorld() {
+  if (!graphicsAvailable) return;
   resizeWorld();
   updateOrbit();
   const buf = worldRenderer.getSize(new THREE.Vector2());
@@ -1211,5 +1231,5 @@ writeControls(core.DEFAULTS);
 rememberPose(params());
 refreshReadouts();
 drawRig();
-if (!reduceMotion) requestAnimationFrame(frame);
-else { poseRig(params()); renderWorld(); renderPhoto(params()); }
+  if (!reduceMotion && graphicsAvailable) requestAnimationFrame(frame);
+  else if (graphicsAvailable) { poseRig(params()); renderWorld(); renderPhoto(params()); }

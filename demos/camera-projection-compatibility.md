@@ -9,7 +9,9 @@ This note records the mobile compatibility work for `camera-projection.html` so 
 - Adjusted the demo styles for small viewports and touch interaction. Touch scrolling remains available outside the interactive world canvas.
 - Reduced rendering cost on compact screens by disabling antialiasing and shadows, limiting pixel ratio and frame rate, and pausing rendering while the page is hidden.
 - Added pointer-cancel handling and corrected matrix value formatting, including translation precision and the rig matrix label.
-- Replaced the static x/y/z rotation matrices and the live rotation vector MathML with ordinary HTML tables/text so iOS browsers do not depend on MathML layout for this section.
+- Typeset the technical-detail equations and static rotation matrices with LaTeX rendered to SVG by MathJax, loaded only when the disclosure is opened. The live numeric matrices remain HTML so they update without a math-rendering dependency.
+- Changed the live matrix delimiters to explicit square brackets; the previous plain vertical rules looked like determinant notation.
+- Added a visible status note when WebGL renderer creation fails or its context is lost. This keeps the rotation readout and controls available and explains that browser restrictions such as iPhone Lockdown Mode can prevent the 3D scene from rendering.
 - Made the rotation visualizer canvas use its rendered width (including narrow phone widths) and redraw when its expanded panel changes size.
 
 ## Verification
@@ -18,7 +20,7 @@ This note records the mobile compatibility work for `camera-projection.html` so 
 - `node --check demos/camera-projection-view.js`
 - `node --test demos/camera-projection.test.js`
 - `git diff --check`
-- Manually checked the page in desktop Chrome and a 400 × 759 mobile viewport using Chrome device emulation. Controls updated the displayed matrices and projected point in both layouts; no page errors appeared in the console.
-- The added HTML rotation-matrix rendering and narrow-canvas sizing still require a mobile viewport check; physical iPhone Safari and Chrome checks remain necessary.
+- Manually checked MathJax SVG rendering in desktop Chrome at a 390 px viewport. Equations and rotation matrices rendered without horizontal page overflow, and the console had no errors.
+- Physical iPhone Safari and Chrome checks remain necessary. Lockdown Mode/WebGL behavior cannot be confirmed by desktop emulation.
 
 Chrome device emulation is not a substitute for testing on a physical iPhone. Please verify Safari on iOS and at least one Android browser when a device is available.
