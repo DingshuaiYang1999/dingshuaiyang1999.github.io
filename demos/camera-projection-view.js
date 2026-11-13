@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import katex from "https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.mjs";
 
 const core = window.CameraCore;
 const $ = (id) => document.getElementById(id);
@@ -57,9 +56,7 @@ function fmt(x) {
   return s === "-0.00" ? "0.00" : s;
 }
 function mathMatrix(M) {
-  return "<math><mrow><mo>[</mo><mtable>" + M.map((row) =>
-    "<mtr>" + row.map((c) => "<mtd><mn>" + fmt(c) + "</mn></mtd>").join("") + "</mtr>"
-  ).join("") + "</mtable><mo>]</mo></mrow></math>";
+  return matrixMarkup("", M, 2, "matrix-rig");
 }
 function mathVec(name, v) {
   return "<math><mrow><mi>" + name + "</mi><mo>=</mo><mo>[</mo>" + v.map((c) => "<mn>" + fmt(c) + "</mn>").join("<mo>,</mo>") + "<mo>]</mo></mrow></math>";
@@ -106,43 +103,31 @@ function fixedCell(x, decimals) {
   if (r === 0) r = 0;
   return (r < 0 ? "-" : "") + Math.abs(r).toFixed(decimals);
 }
-function intCell(x, decimals) {
-  const n = Math.round(x);
-  return (n < 0 ? "-" : "") + Math.abs(n) + "\\phantom{." + "0".repeat(decimals) + "}";
+function matrixMarkup(name, rows, decimals, className) {
+  const cells = rows.map((row) => "<tr>" + row.map((value, index) => "<td>" + fixedCell(value, Array.isArray(decimals) ? decimals[index] : decimals) + "</td>").join("") + "</tr>").join("");
+  return '<span class="cam-matrix ' + (className || "") + '"><span class="cam-matrix-name">' + name +
+    '</span><span class="cam-matrix-bracket"><table aria-label="' + name + '"><tbody>' + cells + "</tbody></table></span></span>";
 }
-function bmatrix(cols, body) {
-  return "\\left[\\begin{array}{" + cols + "}" + body + "\\end{array}\\right]";
-}
-function texK(p) {
+function liveK(p) {
   const K = core.Kof(p);
-  const px = (v) => fixedCell(v, 1);
-  const body = [
-    [px(K[0][0]), px(K[0][1]), px(K[0][2])].join(" & "),
-    [px(K[1][0]), px(K[1][1]), px(K[1][2])].join(" & "),
-    [intCell(0, 1), intCell(0, 1), intCell(1, 1)].join(" & ")
-  ].join(" \\\\ ");
-  return "\\mathbf{K}=" + bmatrix("rrr", body);
+  return matrixMarkup("K =", K, 1, "matrix-k");
 }
-function texRt(R, p) {
+function liveRt(R, p) {
   const t = [p.tx, p.ty, p.tz];
-  const body = [0, 1, 2].map((i) => [
-    fixedCell(R[i][0], 3), fixedCell(R[i][1], 3), fixedCell(R[i][2], 3), fixedCell(t[i], 2)
-  ].join(" & ")).join(" \\\\ ");
-  return "[\\mathbf{R}\\,|\\,\\mathbf{t}]=" + bmatrix("rrrr", body);
+  return matrixMarkup("[R | t] =", R.map((row, i) => row.concat([t[i]])), [3, 3, 3, 2], "matrix-rt");
 }
-const katexOpts = { throwOnError: false, displayMode: false };
 let readoutQueued = 0;
-let lastTex = "";
+let lastMatrix = "";
 function updateReadout(p) {
   const ang = core.angles(p);
   const R = core.rotation(ang.beta, ang.alpha, ang.gamma);
-  const kTex = texK(p);
-  const rtTex = texRt(R, p);
-  const key = kTex + "\n" + rtTex;
-  if (key !== lastTex) {
-    lastTex = key;
-    katex.render(kTex, $("mat-k"), katexOpts);
-    katex.render(rtTex, $("mat-r"), katexOpts);
+  const kHtml = liveK(p);
+  const rtHtml = liveRt(R, p);
+  const key = kHtml + rtHtml;
+  if (key !== lastMatrix) {
+    lastMatrix = key;
+    $("mat-k").innerHTML = kHtml;
+    $("mat-r").innerHTML = rtHtml;
   }
   const pr = core.project(core.TIP, p);
   let rows = "<p><span>Tree tip in the world</span> " + mathVec("X", [core.TIP[0], core.TIP[1], core.TIP[2], 1]) + "</p>";
@@ -687,14 +672,15 @@ function makeTripod() {
 
 const worldEl = $("view-world");
 const photoEl = $("view-photo");
-const worldRenderer = new THREE.WebGLRenderer({ canvas: worldEl, antialias: true, alpha: false });
-worldRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
-worldRenderer.shadowMap.enabled = true;
+const compactDisplay = window.matchMedia("(max-width: 860px)").matches;
+const worldRenderer = new THREE.WebGLRenderer({ canvas: worldEl, antialias: !compactDisplay, alpha: false, powerPreference: "low-power" });
+worldRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, compactDisplay ? 1 : 1.5));
+worldRenderer.shadowMap.enabled = !compactDisplay;
 worldRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
 worldRenderer.outputColorSpace = THREE.SRGBColorSpace;
-const photoRenderer = new THREE.WebGLRenderer({ canvas: photoEl, antialias: true, alpha: false });
+const photoRenderer = new THREE.WebGLRenderer({ canvas: photoEl, antialias: !compactDisplay, alpha: false, powerPreference: "low-power" });
 photoRenderer.setPixelRatio(1);
-photoRenderer.shadowMap.enabled = true;
+photoRenderer.shadowMap.enabled = !compactDisplay;
 photoRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
 photoRenderer.outputColorSpace = THREE.SRGBColorSpace;
 photoRenderer.autoClear = false;
@@ -1059,9 +1045,15 @@ function stepSnow(dt) {
 let reduceMotion = false;
 try { reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
 let last = 0;
+let lastRender = 0;
 function frame(now) {
+  if (document.hidden || (compactDisplay && now - lastRender < 1000 / 30)) {
+    requestAnimationFrame(frame);
+    return;
+  }
   const dt = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
   last = now;
+  lastRender = now;
   if (!reduceMotion) stepSnow(dt);
   const p = params();
   poseRig(p);
@@ -1127,6 +1119,7 @@ window.addEventListener("resize", () => { if (reduceMotion) refreshReadouts(); }
 let dragging = false, lx = 0, ly = 0;
 worldEl.addEventListener("pointerdown", (e) => { dragging = true; lx = e.clientX; ly = e.clientY; try { worldEl.setPointerCapture(e.pointerId); } catch (err) {} });
 worldEl.addEventListener("pointerup", () => { dragging = false; });
+worldEl.addEventListener("pointercancel", () => { dragging = false; });
 worldEl.addEventListener("pointermove", (e) => {
   if (!dragging) return;
   orbit.az += (e.clientX - lx) * 0.008;
