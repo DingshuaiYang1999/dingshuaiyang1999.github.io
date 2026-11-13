@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
     <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
-    <link rel="stylesheet" href="camera-projection.css?v=12" />
+    <link rel="stylesheet" href="camera-projection.css?v=13" />
     <script>
       (function () {
         var theme = "light";
@@ -27,7 +27,7 @@
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
     <script src="camera-projection.js?v=13" defer></script>
-    <script type="module" src="camera-projection-view.js?v=13"></script>
+    <script type="module" src="camera-projection-view.js?v=14"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -137,47 +137,28 @@
             <p id="fov-read">AFOV<sub>h</sub> and AFOV<sub>v</sub> at the current f, S<sub>w</sub> and S<sub>h</sub>, and the full-frame equivalent, are shown here.</p>
             <h3>Rotation around the coordinate axes, counter-clockwise</h3>
             <p>Positive angles are counter-clockwise about the axis. α, β and γ are sometimes called pitch, yaw and roll. The sliders use only R<sub>x</sub>(α), R<sub>y</sub>(β) and R<sub>z</sub>(γ).</p>
-            <div class="math-scroll">
-              <math aria-label="R x of alpha.">
-                <mrow>
-                  <msub><mi>R</mi><mi>x</mi></msub><mo>(</mo><mi>α</mi><mo>)</mo><mo>=</mo>
-                  <mo>[</mo>
-                  <mtable>
-                    <mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr>
-                    <mtr><mtd><mn>0</mn></mtd><mtd><mi>cos</mi><mi>α</mi></mtd><mtd><mo>−</mo><mi>sin</mi><mi>α</mi></mtd></mtr>
-                    <mtr><mtd><mn>0</mn></mtd><mtd><mi>sin</mi><mi>α</mi></mtd><mtd><mi>cos</mi><mi>α</mi></mtd></mtr>
-                  </mtable>
-                  <mo>]</mo>
-                </mrow>
-              </math>
-            </div>
-            <div class="math-scroll">
-              <math aria-label="R y of beta.">
-                <mrow>
-                  <msub><mi>R</mi><mi>y</mi></msub><mo>(</mo><mi>β</mi><mo>)</mo><mo>=</mo>
-                  <mo>[</mo>
-                  <mtable>
-                    <mtr><mtd><mi>cos</mi><mi>β</mi></mtd><mtd><mn>0</mn></mtd><mtd><mi>sin</mi><mi>β</mi></mtd></mtr>
-                    <mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr>
-                    <mtr><mtd><mo>−</mo><mi>sin</mi><mi>β</mi></mtd><mtd><mn>0</mn></mtd><mtd><mi>cos</mi><mi>β</mi></mtd></mtr>
-                  </mtable>
-                  <mo>]</mo>
-                </mrow>
-              </math>
-            </div>
-            <div class="math-scroll">
-              <math aria-label="R z of gamma.">
-                <mrow>
-                  <msub><mi>R</mi><mi>z</mi></msub><mo>(</mo><mi>γ</mi><mo>)</mo><mo>=</mo>
-                  <mo>[</mo>
-                  <mtable>
-                    <mtr><mtd><mi>cos</mi><mi>γ</mi></mtd><mtd><mo>−</mo><mi>sin</mi><mi>γ</mi></mtd><mtd><mn>0</mn></mtd></mtr>
-                    <mtr><mtd><mi>sin</mi><mi>γ</mi></mtd><mtd><mi>cos</mi><mi>γ</mi></mtd><mtd><mn>0</mn></mtd></mtr>
-                    <mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
-                  </mtable>
-                  <mo>]</mo>
-                </mrow>
-              </math>
+            <div class="rotation-matrices" aria-label="Rotation matrices">
+              <div class="cam-matrix rotation-matrix" role="img" aria-label="R x of alpha equals the x-axis rotation matrix">
+                <span class="cam-matrix-name">R<sub>x</sub>(α) =</span><span class="cam-matrix-bracket"><table><tbody>
+                  <tr><td>1</td><td>0</td><td>0</td></tr>
+                  <tr><td>0</td><td>cos α</td><td>−sin α</td></tr>
+                  <tr><td>0</td><td>sin α</td><td>cos α</td></tr>
+                </tbody></table></span>
+              </div>
+              <div class="cam-matrix rotation-matrix" role="img" aria-label="R y of beta equals the y-axis rotation matrix">
+                <span class="cam-matrix-name">R<sub>y</sub>(β) =</span><span class="cam-matrix-bracket"><table><tbody>
+                  <tr><td>cos β</td><td>0</td><td>sin β</td></tr>
+                  <tr><td>0</td><td>1</td><td>0</td></tr>
+                  <tr><td>−sin β</td><td>0</td><td>cos β</td></tr>
+                </tbody></table></span>
+              </div>
+              <div class="cam-matrix rotation-matrix" role="img" aria-label="R z of gamma equals the z-axis rotation matrix">
+                <span class="cam-matrix-name">R<sub>z</sub>(γ) =</span><span class="cam-matrix-bracket"><table><tbody>
+                  <tr><td>cos γ</td><td>−sin γ</td><td>0</td></tr>
+                  <tr><td>sin γ</td><td>cos γ</td><td>0</td></tr>
+                  <tr><td>0</td><td>0</td><td>1</td></tr>
+                </tbody></table></span>
+              </div>
             </div>
             <p>The widget below uses R = R<sub>z</sub>(γ) R<sub>x</sub>(α) R<sub>y</sub>(β) and p′ = R p + t. The photograph uses that same product on the right by R<sub>0</sub> = diag(1, −1, −1), so X<sub>cam</sub> = R R<sub>0</sub> X + t. That sends world y up to camera y down and world z toward the viewer to camera z forward. The matrices match the counter-clockwise rotations in Silvio Savarese’s lecture, as used at FAU.</p>
             <div class="rig" aria-label="Rotation and translation visualizer">

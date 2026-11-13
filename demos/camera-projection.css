@@ -100,6 +100,10 @@
 .cam-matrix table { border-collapse: collapse; font: inherit; }
 .cam-matrix td { min-width: 4.2em; padding: 1px 5px; text-align: right; white-space: nowrap; }
 .cam-matrix.matrix-rt td { min-width: 3.8em; }
+.rotation-matrices { display: grid; gap: 10px; margin: 12px 0; }
+.rotation-matrix { width: max-content; max-width: 100%; }
+.rotation-matrix td { min-width: 4.4em; }
+.rotation-matrix .cam-matrix-bracket { padding: 4px 7px; }
 .cam-page math { color: var(--text); font-size: 1.02rem; }
 .cam-work p { margin: 6px 0; }
 .cam-work p span { display: block; font-size: 13px; color: var(--muted); }
@@ -109,6 +113,7 @@
 .rig-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; min-width: 0; }
 #rig-text { margin: 8px 0 4px; font-size: 14px; }
 #rig-math p { margin: 6px 0 2px; font-size: 14px; }
+.cam-vector { display: inline-flex; gap: 4px; font: 14px/1.4 Georgia, "Times New Roman", serif; }
 @media (max-width: 860px) {
   .cam-workspace, .cam-readout, .rig-top, .rig-controls,
   #tab-rt:checked ~ .panel-rt,
@@ -132,6 +137,9 @@
   #view-world { height: 148px; }
   .cam-matrix { gap: 5px; font-size: 13px; }
   .cam-matrix td { min-width: 3.2em; padding: 1px 3px; }
+  .rotation-matrices { gap: 8px; }
+  .rotation-matrix { font-size: 14px; }
+  .rotation-matrix td { min-width: 4em; }
   .cam-matrix.matrix-rt td { min-width: 2.8em; }
-  .rig canvas { height: 240px; }
+  .rig canvas { height: clamp(180px, 62vw, 240px); }
 }
