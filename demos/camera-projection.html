@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../styles.css?v=2b473dc4" />
     <link rel="stylesheet" href="path-planning.css?v=faff707a" />
     <link rel="stylesheet" href="demo-common.css?v=ba4905ae" />
-    <link rel="stylesheet" href="camera-projection.css?v=13" />
+    <link rel="stylesheet" href="camera-projection.css?v=14" />
     <script>
       (function () {
         var theme = "light";
@@ -27,7 +27,14 @@
     </script>
     <script src="../script.js?v=98f308e2" defer></script>
     <script src="camera-projection.js?v=13" defer></script>
-    <script type="module" src="camera-projection-view.js?v=14"></script>
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+        svg: { fontCache: "global" },
+        startup: { typeset: false }
+      };
+    </script>
+    <script type="module" src="camera-projection-view.js?v=15"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -78,89 +85,35 @@
           <summary>How it works (technical details)</summary>
           <div class="how-body">
             <h3>Principle</h3>
-            <p>A scene point is a 4-vector. The camera writes it in camera axes, multiplies by K, and divides by the third entry. Points with z<sub>cam</sub> ≤ 0 are behind the camera and are not drawn. Lens distortion is ignored.</p>
+            <p>A scene point is a 4-vector. The camera writes it in camera axes, multiplies by K, and divides by the third entry. Points with \(z_{\mathrm{cam}} \le 0\) are behind the camera and are not drawn. Lens distortion is ignored.</p>
             <h3>Formulas</h3>
-            <div class="math-scroll">
-              <math aria-label="w times u, v, 1 equals K times R, t, times x, y, z, 1.">
-                <mrow>
-                  <mi>w</mi>
-                  <msup><mrow><mo>[</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>,</mo><mn>1</mn><mo>]</mo></mrow><mi>T</mi></msup>
-                  <mo>=</mo><mi>K</mi><mo>[</mo><mi>R</mi><mo>∣</mo><mi>t</mi><mo>]</mo>
-                  <msup><mrow><mo>[</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mn>1</mn><mo>]</mo></mrow><mi>T</mi></msup>
-                </mrow>
-              </math>
+            <div class="math-display" aria-label="Homogeneous pinhole-camera projection equation">
+              \[ w\begin{bmatrix}u \\ v \\ 1\end{bmatrix} = K\begin{bmatrix}R & t\end{bmatrix}\begin{bmatrix}x \\ y \\ z \\ 1\end{bmatrix} \]
             </div>
-            <div class="math-scroll">
-              <math aria-label="K is f x, s, u 0; 0, f y, v 0; 0, 0, 1.">
-                <mrow>
-                  <mi>K</mi><mo>=</mo>
-                  <mo>[</mo>
-                  <mtable>
-                    <mtr><mtd><msub><mi>f</mi><mi>x</mi></msub></mtd><mtd><mi>s</mi></mtd><mtd><msub><mi>u</mi><mn>0</mn></msub></mtd></mtr>
-                    <mtr><mtd><mn>0</mn></mtd><mtd><msub><mi>f</mi><mi>y</mi></msub></mtd><mtd><msub><mi>v</mi><mn>0</mn></msub></mtd></mtr>
-                    <mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr>
-                  </mtable>
-                  <mo>]</mo>
-                </mrow>
-              </math>
+            <div class="math-display" aria-label="Camera intrinsic matrix">
+              \[ K = \begin{bmatrix} f_x & s & u_0 \\ 0 & f_y & v_0 \\ 0 & 0 & 1 \end{bmatrix} \]
             </div>
             <h3>Lens and field of view</h3>
             <p>S<sub>w</sub> and S<sub>h</sub> are the sensor width and height, and f is the focal length. All three are in millimetres. The photograph is W × H pixels, here 720 × 480, the same 3:2 shape as the reset sensor 36 mm × 24 mm. At that reset, p<sub>x</sub> = p<sub>y</sub> and f<sub>x</sub> = f<sub>y</sub>.</p>
-            <div class="math-scroll">
-              <math aria-label="Horizontal and vertical angular fields of view.">
-                <mrow>
-                  <msub><mi>AFOV</mi><mi>h</mi></msub>
-                  <mo>=</mo><mn>2</mn><mi>arctan</mi>
-                  <mo>(</mo><mfrac><msub><mi>S</mi><mi>w</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
-                  <mo>,</mo>
-                  <msub><mi>AFOV</mi><mi>v</mi></msub>
-                  <mo>=</mo><mn>2</mn><mi>arctan</mi>
-                  <mo>(</mo><mfrac><msub><mi>S</mi><mi>h</mi></msub><mrow><mn>2</mn><mi>f</mi></mrow></mfrac><mo>)</mo>
-                </mrow>
-              </math>
+            <div class="math-display" aria-label="Horizontal and vertical angular fields of view">
+              \[ \begin{aligned} \operatorname{AFOV}_h &= 2\arctan\!\left(\frac{S_w}{2f}\right), \\ \operatorname{AFOV}_v &= 2\arctan\!\left(\frac{S_h}{2f}\right). \end{aligned} \]
             </div>
-            <div class="math-scroll">
-              <math aria-label="Pixel pitch and focal lengths in pixels.">
-                <mrow>
-                  <msub><mi>p</mi><mi>x</mi></msub><mo>=</mo><mfrac><msub><mi>S</mi><mi>w</mi></msub><mi>W</mi></mfrac>
-                  <mo>,</mo>
-                  <msub><mi>p</mi><mi>y</mi></msub><mo>=</mo><mfrac><msub><mi>S</mi><mi>h</mi></msub><mi>H</mi></mfrac>
-                  <mo>,</mo>
-                  <msub><mi>f</mi><mi>x</mi></msub><mo>=</mo><mfrac><mrow><mi>f</mi><mi>W</mi></mrow><msub><mi>S</mi><mi>w</mi></msub></mfrac>
-                  <mo>,</mo>
-                  <msub><mi>f</mi><mi>y</mi></msub><mo>=</mo><mfrac><mrow><mi>f</mi><mi>H</mi></mrow><msub><mi>S</mi><mi>h</mi></msub></mfrac>
-                </mrow>
-              </math>
+            <div class="math-display" aria-label="Pixel pitch and focal lengths in pixels">
+              \[ \begin{aligned} p_x &= \frac{S_w}{W}, & p_y &= \frac{S_h}{H}, \\ f_x &= \frac{fW}{S_w}, & f_y &= \frac{fH}{S_h}. \end{aligned} \]
             </div>
-            <p>So S<sub>w</sub> / (2f) = W / (2 f<sub>x</sub>) and S<sub>h</sub> / (2f) = H / (2 f<sub>y</sub>). The centred pixel formula is the same ratio. It assumes s = 0 and a principal point at the centre. If the principal point is not centred, the angle about the optical axis is arctan(u<sub>0</sub> / f<sub>x</sub>) + arctan((W − u<sub>0</sub>) / f<sub>x</sub>), and likewise arctan(v<sub>0</sub> / f<sub>y</sub>) + arctan((H − v<sub>0</sub>) / f<sub>y</sub>). Those angles ignore skew.</p>
-            <p>W and H are adjustable. Changing W sets f<sub>x</sub> = f W / S<sub>w</sub> and puts u<sub>0</sub> back at W/2. Changing H sets f<sub>y</sub> = f H / S<sub>h</sub> and puts v<sub>0</sub> back at H/2. AFOV<sub>h</sub> and AFOV<sub>v</sub> do not change, because they depend only on S<sub>w</sub>, S<sub>h</sub> and f. A W:H ratio different from S<sub>w</sub>:S<sub>h</sub> makes p<sub>x</sub> ≠ p<sub>y</sub> and therefore f<sub>x</sub> ≠ f<sub>y</sub>. Dragging f<sub>x</sub> or f<sub>y</sub> changes the shared f, so the other focal length follows. The full-frame equivalent f × 36 / S<sub>w</sub> is only a label. In the world view the lens-to-sensor gap is drawn 28 times life size so the millimetres can be seen. The angle is the true field of view.</p>
+            <p>So \(\frac{S_w}{2f}=\frac{W}{2f_x}\) and \(\frac{S_h}{2f}=\frac{H}{2f_y}\). The centred pixel formula is the same ratio. It assumes \(s=0\) and a principal point at the centre. If the principal point is not centred, the horizontal angle about the optical axis is \(\arctan\!\left(\frac{u_0}{f_x}\right)+\arctan\!\left(\frac{W-u_0}{f_x}\right)\), and the vertical angle is \(\arctan\!\left(\frac{v_0}{f_y}\right)+\arctan\!\left(\frac{H-v_0}{f_y}\right)\). These angles ignore skew.</p>
+            <p>W and H are adjustable. Changing W sets \(f_x=\frac{fW}{S_w}\) and puts \(u_0=W/2\). Changing H sets \(f_y=\frac{fH}{S_h}\) and puts \(v_0=H/2\). \(\operatorname{AFOV}_h\) and \(\operatorname{AFOV}_v\) stay constant because they depend only on \(S_w\), \(S_h\) and \(f\). If \(W/H\ne S_w/S_h\), then \(p_x\ne p_y\), and therefore \(f_x\ne f_y\). Changing either focal-length slider changes the shared \(f\), so the other focal length follows. The full-frame equivalent \(36f/S_w\) is only a label. In the world view, the lens-to-sensor gap is drawn 28 times life size so the millimetres can be seen. The angle is the true field of view.</p>
             <p id="fov-read">AFOV<sub>h</sub> and AFOV<sub>v</sub> at the current f, S<sub>w</sub> and S<sub>h</sub>, and the full-frame equivalent, are shown here.</p>
             <h3>Rotation around the coordinate axes, counter-clockwise</h3>
             <p>Positive angles are counter-clockwise about the axis. α, β and γ are sometimes called pitch, yaw and roll. The sliders use only R<sub>x</sub>(α), R<sub>y</sub>(β) and R<sub>z</sub>(γ).</p>
-            <div class="rotation-matrices" aria-label="Rotation matrices">
-              <div class="cam-matrix rotation-matrix" role="img" aria-label="R x of alpha equals the x-axis rotation matrix">
-                <span class="cam-matrix-name">R<sub>x</sub>(α) =</span><span class="cam-matrix-bracket"><table><tbody>
-                  <tr><td>1</td><td>0</td><td>0</td></tr>
-                  <tr><td>0</td><td>cos α</td><td>−sin α</td></tr>
-                  <tr><td>0</td><td>sin α</td><td>cos α</td></tr>
-                </tbody></table></span>
-              </div>
-              <div class="cam-matrix rotation-matrix" role="img" aria-label="R y of beta equals the y-axis rotation matrix">
-                <span class="cam-matrix-name">R<sub>y</sub>(β) =</span><span class="cam-matrix-bracket"><table><tbody>
-                  <tr><td>cos β</td><td>0</td><td>sin β</td></tr>
-                  <tr><td>0</td><td>1</td><td>0</td></tr>
-                  <tr><td>−sin β</td><td>0</td><td>cos β</td></tr>
-                </tbody></table></span>
-              </div>
-              <div class="cam-matrix rotation-matrix" role="img" aria-label="R z of gamma equals the z-axis rotation matrix">
-                <span class="cam-matrix-name">R<sub>z</sub>(γ) =</span><span class="cam-matrix-bracket"><table><tbody>
-                  <tr><td>cos γ</td><td>−sin γ</td><td>0</td></tr>
-                  <tr><td>sin γ</td><td>cos γ</td><td>0</td></tr>
-                  <tr><td>0</td><td>0</td><td>1</td></tr>
-                </tbody></table></span>
-              </div>
+            <div class="math-display math-rotation" aria-label="Rotation matrices around the x, y and z axes">
+              \[ \begin{aligned}
+              R_x(\alpha) &= \begin{bmatrix}1&0&0\\0&\cos\alpha&-\sin\alpha\\0&\sin\alpha&\cos\alpha\end{bmatrix}, \\[5pt]
+              R_y(\beta) &= \begin{bmatrix}\cos\beta&0&\sin\beta\\0&1&0\\-\sin\beta&0&\cos\beta\end{bmatrix}, \\[5pt]
+              R_z(\gamma) &= \begin{bmatrix}\cos\gamma&-\sin\gamma&0\\\sin\gamma&\cos\gamma&0\\0&0&1\end{bmatrix}.
+              \end{aligned} \]
             </div>
-            <p>The widget below uses R = R<sub>z</sub>(γ) R<sub>x</sub>(α) R<sub>y</sub>(β) and p′ = R p + t. The photograph uses that same product on the right by R<sub>0</sub> = diag(1, −1, −1), so X<sub>cam</sub> = R R<sub>0</sub> X + t. That sends world y up to camera y down and world z toward the viewer to camera z forward. The matrices match the counter-clockwise rotations in Silvio Savarese’s lecture, as used at FAU.</p>
+            <p>The widget below uses \(R=R_z(\gamma)R_x(\alpha)R_y(\beta)\) and \(\mathbf p'=R\mathbf p+\mathbf t\). The photograph uses that same product on the right by \(R_0=\operatorname{diag}(1,-1,-1)\), so \(X_{\mathrm{cam}}=RR_0X+\mathbf t\). That sends world y up to camera y down and world z toward the viewer to camera z forward. The matrices match the counter-clockwise rotations in Silvio Savarese’s lecture, as used at FAU.</p>
             <div class="rig" aria-label="Rotation and translation visualizer">
               <div class="rig-top">
                 <canvas id="rig-view" width="360" height="240" aria-label="Axes, a point p, its rotate-then-translate image, and an arc for each angle"></canvas>
@@ -177,19 +130,11 @@
               <div id="rig-math"></div>
             </div>
             <h3>Aperture, beyond the pinhole model</h3>
-            <p>The f-number and the focus distance are not among the eleven parameters of K[R | t]. They do not move the centre of a point’s image. Blur uses the thin-lens circle of confusion, with A = f / N the aperture diameter, d = z<sub>cam</sub> and d<sub>f</sub> the focus distance, f, d and d<sub>f</sub> in the same unit:</p>
-            <div class="math-scroll">
-              <math aria-label="Circle of confusion c equals A f times the absolute difference of d and d f, divided by d times d f minus f.">
-                <mrow>
-                  <mi>c</mi><mo>=</mo>
-                  <mfrac>
-                    <mrow><mi>A</mi><mi>f</mi><mo>|</mo><mi>d</mi><mo>−</mo><msub><mi>d</mi><mi>f</mi></msub><mo>|</mo></mrow>
-                    <mrow><mi>d</mi><mo>(</mo><msub><mi>d</mi><mi>f</mi></msub><mo>−</mo><mi>f</mi><mo>)</mo></mrow>
-                  </mfrac>
-                </mrow>
-              </math>
+            <p>The f-number and the focus distance are not among the eleven parameters of K[R | t]. They do not move the centre of a point’s image. Blur uses the thin-lens circle of confusion, with \(A=f/N\) the aperture diameter, \(d=z_{\mathrm{cam}}\) and \(d_f\) the focus distance, with \(f,d,d_f\) in the same unit:</p>
+            <div class="math-display" aria-label="Circle of confusion equation">
+              \[ c=\frac{Af\left|d-d_f\right|}{d\left(d_f-f\right)} \]
             </div>
-            <p>The photograph turns c into pixels with the horizontal pitch, c / p<sub>x</sub>, and blurs each depth band with a Gaussian whose radius is about half that diameter, capped at 16 px. Brightness is not scaled by aperture area: a factor A² would make the picture black as A → 0, so the closed aperture would not match the pinhole colours. With that choice, A → 0 reproduces the K[R | t] image exactly. Approximations: one depth per face, a few depth bands, a Gaussian rather than a uniform disc, no distortion, and d taken as z<sub>cam</sub>.</p>
+            <p>The photograph turns c into pixels with the horizontal pitch, \(c/p_x\), and blurs each depth band with a Gaussian whose radius is about half that diameter, capped at 16 px. Brightness is not scaled by aperture area: a factor \(A^2\) would make the picture black as \(A\to0\), so the closed aperture would not match the pinhole colours. With that choice, \(A\to0\) reproduces the \(K[R\mid t]\) image exactly. Approximations: one depth per face, a few depth bands, a Gaussian rather than a uniform disc, no distortion, and \(d=z_{\mathrm{cam}}\).</p>
             <p id="coc-read">At the current aperture and focus, the circle of confusion is listed here for the tree, the near gifts, and the house.</p>
             <h3>Reading the two views</h3>
             <p>Drag the world view to orbit it. The camera on the left is a real-scale body on a tripod. Three legs stay on the ground, the centre column lengthens or shortens with the camera height, and the head follows R. A small inset shows the head up close. The tripod is not in the photograph. The rectangle in front of the lens is an empty image plane: it shows where the sensor plane sits and how large the field is, and it carries no picture. The picture is only the photograph on the right, rendered from the same K and [R | t], including skew. Red, green and blue are the world axes. The centre C = −R<sup>T</sup> t stays at least 0.3 m above the ground and outside the tree, house, figures, gifts, fence and lamp; a slider that would cross that boundary stops there.</p>
@@ -210,6 +155,9 @@
           <canvas id="view-photo" width="720" height="480" aria-label="Shaded 3:2 photograph. The red cross is the principal point."></canvas>
         </figure>
       </div>
+      <p id="graphics-note" class="graphics-note" role="status" hidden>
+        The 3D view could not start because this browser restricted WebGL. On iPhone, if Lockdown Mode is enabled, you can add this trusted site as a Safari website exception, then reload. The setting applies only to this site; Lockdown Mode can stay on for the rest of your browsing.
+      </p>
       <div class="cam-controls">
       <div class="cam-tabs">
         <input class="cam-tab-input" type="radio" name="cam-tab" id="tab-rt" checked />
@@ -258,6 +206,35 @@
         <div id="worked"></div>
       </section>
     </main>
+    <script>
+      (function () {
+        var details = document.querySelector(".how-it-works");
+        var loaded = false;
+        function loadMath() {
+          if (loaded) return;
+          loaded = true;
+          var script = document.createElement("script");
+          script.src = "https://cdn.jsdelivr.net/npm/mathjax@4.0.0/tex-svg.js";
+          script.onload = function () {
+            window.MathJax.startup.promise
+              .then(function () { return window.MathJax.typesetPromise([details.querySelector(".how-body")]); })
+              .catch(function () { details.classList.add("mathjax-unavailable"); });
+          };
+          script.onerror = function () {
+            details.classList.add("mathjax-unavailable");
+          };
+          document.head.appendChild(script);
+        }
+        if (details) details.addEventListener("toggle", function () { if (details.open) loadMath(); });
+        var graphicsNote = document.getElementById("graphics-note");
+        function showGraphicsNote() { if (graphicsNote) graphicsNote.hidden = false; }
+        var viewModule = document.querySelector('script[type="module"][src*="camera-projection-view"]');
+        if (viewModule) viewModule.addEventListener("error", showGraphicsNote);
+        window.addEventListener("unhandledrejection", function (event) {
+          if (String(event.reason || "").match(/webgl|renderer|context/i)) showGraphicsNote();
+        });
+      })();
+    </script>
     <footer class="site-footer">
       <p>© 2026 Dingshuai Yang · <a href="https://github.com/DingshuaiYang1999/dingshuaiyang1999.github.io" target="_blank" rel="noopener">Source</a></p>
       <p><a href="#top">Back to top</a></p>

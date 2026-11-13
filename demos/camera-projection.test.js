@@ -71,8 +71,8 @@ function eye() {
   assert.ok(page.includes("Extrinsic [R|t]"));
   assert.ok(page.includes("James Hays"));
   assert.ok(page.includes(">Aperture<"));
-  assert.ok(page.includes("R<sub>x</sub>(α)"));
-  assert.ok(page.includes("R<sub>z</sub>(γ) R<sub>x</sub>(α) R<sub>y</sub>(β)"));
+  assert.ok(page.includes("R_x(\\alpha) &= \\begin{bmatrix}"));
+  assert.ok(page.includes("R_z(\\gamma)R_x(\\alpha)R_y(\\beta)"));
   assert.ok(page.includes("Savarese"));
   assert.ok(page.includes("AFOV"));
   assert.ok(!page.includes("<label for=\"alpha\">Yaw"));
