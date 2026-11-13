@@ -106,7 +106,8 @@ function fixedCell(x, decimals) {
 function matrixMarkup(name, rows, decimals, className) {
   const cells = rows.map((row) => "<tr>" + row.map((value, index) => "<td>" + fixedCell(value, Array.isArray(decimals) ? decimals[index] : decimals) + "</td>").join("") + "</tr>").join("");
   return '<span class="cam-matrix ' + (className || "") + '"><span class="cam-matrix-name">' + name +
-    '</span><span class="cam-matrix-bracket" role="img" aria-label="matrix"><span class="cam-matrix-delimiter" aria-hidden="true">[</span><table aria-label="' + name + '"><tbody>' + cells + "</tbody></table><span class="cam-matrix-delimiter" aria-hidden="true">]</span></span></span>";
+    '</span><span class="cam-matrix-bracket" role="img" aria-label="matrix"><span class="cam-matrix-delimiter" aria-hidden="true">[</span><table aria-label="' + name + '"><tbody>' + cells +
+    '</tbody></table><span class="cam-matrix-delimiter" aria-hidden="true">]</span></span></span>';
 }
 function liveK(p) {
   const K = core.Kof(p);

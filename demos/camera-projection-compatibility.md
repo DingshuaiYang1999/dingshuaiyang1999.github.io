@@ -17,7 +17,7 @@ This note records the mobile compatibility work for `camera-projection.html` so 
 ## Verification
 
 - `node --check demos/camera-projection.js`
-- `node --check demos/camera-projection-view.js`
+- Module parse check: `node --input-type=module --check < demos/camera-projection-view.js` (also enforced by the demo test)
 - `node --test demos/camera-projection.test.js`
 - `git diff --check`
 - Manually checked MathJax SVG rendering in desktop Chrome at a 390 px viewport. Equations and rotation matrices rendered without horizontal page overflow, and the console had no errors.

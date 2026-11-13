@@ -1,6 +1,7 @@
 /* node demos/camera-projection.test.js */
 "use strict";
 const assert = require("assert");
+const { execFileSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const C = require("./camera-projection.js");
@@ -66,6 +67,8 @@ function eye() {
   assert.ok(tip.inFront, "the tree tip is in front of the default camera");
   assert.ok(tip.u > 0 && tip.u < C.IMG_W && tip.v > 0 && tip.v < C.IMG_H);
   const page = fs.readFileSync(path.join(__dirname, "camera-projection.html"), "utf8");
+  const viewModule = fs.readFileSync(path.join(__dirname, "camera-projection-view.js"), "utf8");
+  execFileSync(process.execPath, ["--input-type=module", "--check"], { input: viewModule, stdio: ["pipe", "ignore", "pipe"] });
   const home = fs.readFileSync(path.join(__dirname, "../index.html"), "utf8");
   assert.ok(page.includes("Intrinsic K"));
   assert.ok(page.includes("Extrinsic [R|t]"));
